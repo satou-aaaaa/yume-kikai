@@ -1,0 +1,2163 @@
+<!doctype html>
+<html lang="ja" class="fs2">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'">
+<title>夢の機械、入る？</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="入れば望む体験がつづく夢の機械。入る？ もう中にいたら出る？ ノージックの経験機械に答えて、答えを変える条件と、いまの暮らしびいき（現状維持）を研究の数字とくらべる学習ゲーム。">
+<meta name="theme-color" content="#f1eefa">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="夢の機械、入る？">
+<meta property="og:title" content="夢の機械、入る？：もう中にいたら、出る？">
+<meta property="og:description" content="経験機械の問いに答えて、答えを変える条件を研究の数字とくらべる。">
+<meta property="og:url" content="https://satou-aaaaa.github.io/yume-kikai/">
+<meta property="og:image" content="https://satou-aaaaa.github.io/yume-kikai/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="夢の機械、入る？：経験機械の問いに答えるゲーム">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+/* 夜の紙：うす紫の地に濃い藍の字。機械は藍、選ぶ所は紅 */
+:root{
+  --bg:#f1eefa; --paper:#fffdfb; --ink:#1f1d3a; --ink2:#4b4a66; --line:#1f1d3a26;
+  --ai:#3d3a8c; --ai2:#26245e; --shu:#a8325e; --shu2:#7d2246; --ok:#21704a; --ok2:#164f33; --gold:#8a6400;
+  --f-body:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Hiragino Sans","Yu Gothic",sans-serif;
+  color-scheme:light;
+}
+html.a11y-fs1{font-size:17px}html.a11y-fs2{font-size:19px}html.a11y-fs3{font-size:23px}
+html{height:100%}body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-weight:500;-webkit-tap-highlight-color:transparent;line-height:1.6}
+.wrap{max-width:540px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 88px;display:flex;flex-direction:column;gap:14px;min-height:100vh;box-sizing:border-box}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:52px}
+h1{font-weight:900;font-size:1.15rem;margin:0;letter-spacing:.04em;flex:1;min-width:0}
+h1 small{display:block;font-size:.75rem;letter-spacing:0;color:var(--ink2);font-weight:500;line-height:1.3}
+.icon{all:unset;cursor:pointer;font-size:1.2rem;min-width:52px;height:52px;display:grid;place-items:center;border-radius:12px;border:2px solid var(--line);box-sizing:border-box;padding:0 10px;background:var(--paper);font-weight:700}
+button.main,a.main{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;min-height:60px;border-radius:16px;background:var(--shu);color:#fff;font-weight:900;font-size:1.08rem;padding:8px 18px;text-align:center;box-shadow:0 5px 0 var(--shu2);line-height:1.35;flex-wrap:wrap}
+button.main:active{transform:translateY(3px);box-shadow:0 2px 0 var(--shu2)}
+button.main.alt{background:var(--ai);box-shadow:0 5px 0 var(--ai2)}
+button.main.ok{background:var(--ok);box-shadow:0 5px 0 var(--ok2)}
+button.main small{font-weight:500;font-size:.8rem}
+button.sub,a.sub{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;min-height:54px;border-radius:14px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font-weight:700;font-size:.95rem;padding:4px 12px;text-align:center;line-height:1.3}
+button.sub:disabled,button.main:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:10px}.row>.sub,.row>.main{flex:1 1 0}
+.note{color:var(--ink2);font-size:.85rem;line-height:1.7;margin:0;text-align:center}
+.note a,.about a,.src a{color:var(--shu2);display:inline-flex;align-items:center;min-height:44px}
+.big{font-weight:900;font-size:1.45rem;text-align:center;margin:0;line-height:1.35}
+.title{font-weight:900;font-size:2rem;letter-spacing:.1em;text-align:center;margin:6px 0 0;color:var(--ai2);line-height:1.3;flex:none}
+.title span{color:var(--shu)}
+.lead{text-align:center;color:var(--ink2);margin:0;font-size:.95rem;line-height:1.7}
+.fsrow{display:flex;gap:6px;align-items:center;justify-content:center;font-size:.85rem;color:var(--ink2)}
+.fsrow button{all:unset;box-sizing:border-box;cursor:pointer;min-width:52px;min-height:48px;display:grid;place-items:center;border-radius:10px;border:2px solid var(--line);background:var(--paper);font-weight:900;color:var(--ink)}
+.fsrow button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tip{background:var(--paper);border:2px dashed var(--gold);border-radius:14px;padding:.6rem .9rem;font-size:.9rem;line-height:1.7;text-align:left}
+.tip b{color:var(--shu2)}
+/* 問題のカード */
+.sky{display:block;width:100%;height:auto;border-bottom:2px solid var(--ink)}
+.sky svg{display:block;width:100%;height:auto}
+.ad{position:relative;background:var(--paper);border:2px solid var(--ink);border-radius:6px;box-shadow:0 8px 18px #1f1d3a22;overflow:hidden}
+.ad .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:.35rem .8rem;background:var(--ink);color:#fff;font-size:.78rem;font-weight:700}
+.ad .bar span:last-child{opacity:.9}
+.ad .name{margin:0;padding:.7rem .9rem .3rem;font-weight:900;font-size:1.3rem;color:var(--ai2);letter-spacing:.04em;line-height:1.35}
+.ad .name small{display:block;font-size:.72rem;font-weight:500;color:var(--ink2);letter-spacing:0}
+.ad.m1{border-radius:16px}.ad.m1 .bar{background:#3b4a63}
+.ad.m2 .bar{background:#4a3b2c}
+.ad.m3{border-color:#123554}.ad.m3 .bar{background:#123554}
+.ad.act{border-style:dashed}.ad.act .bar{background:var(--ok2)}
+.sit{margin:0;padding:.7rem .9rem .2rem;font-weight:900;font-size:1.1rem;line-height:1.6}
+.q{margin:0;padding:.1rem .9rem .5rem;font-weight:700;font-size:.92rem;color:var(--ink2)}
+.choices{display:flex;flex-direction:column;gap:8px;padding:0 .7rem .8rem}
+.ch{all:unset;box-sizing:border-box;cursor:pointer;position:relative;min-height:56px;display:flex;align-items:center;border-radius:10px;background:#fff;border:2px solid #1f1d3a55;font-weight:700;font-size:1rem;line-height:1.5;color:var(--ink);padding:.5rem 4.8rem .5rem .8rem;text-align:left}
+.ch:active{transform:translateY(2px)}
+.ch.ng{opacity:.55;border-color:var(--shu);border-style:dashed;cursor:default;animation:shake .4s}
+.ch.ng::after{content:"✕ ちがう";position:absolute;top:50%;right:8px;transform:translateY(-50%);font-size:.78rem;font-weight:900;color:var(--shu2)}
+.ch.ok{border-color:var(--shu);border-width:3px;background:#fff4f0;opacity:1}
+.ad.act .ch.ok{border-color:var(--ok);background:#eef7f0}
+.ch.ok::after{content:"正解";position:absolute;top:50%;right:6px;transform:translateY(-50%) rotate(-8deg);font-size:.78rem;font-weight:900;color:var(--shu2);border:2.5px solid var(--shu2);border-radius:6px;padding:1px 5px;background:#fff;animation:stamp .35s ease-out}
+.ad.act .ch.ok::after{content:"✓ 正解";color:var(--ok2);border-color:var(--ok2)}
+.ch:disabled{cursor:default}
+.sure-row{display:flex;justify-content:flex-end;padding:0 .9rem .4rem}
+.why{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.why button{all:unset;box-sizing:border-box;cursor:pointer;position:relative;min-height:56px;padding:8px 12px;border-radius:12px;border:2px solid var(--ai);background:var(--paper);font-weight:800;color:var(--ink)}
+.why button small{display:block;font-weight:400;font-size:.78rem;color:var(--ink2)}
+.why button.ng{border-style:dashed;border-color:var(--shu);opacity:.6;cursor:default}
+.why button.ng::after{content:"✕ ちがう";position:absolute;top:-10px;right:6px;background:var(--shu2);color:#fff;font-size:.72rem;font-weight:900;padding:1px 6px;border-radius:6px}
+.why button.ok{border-color:var(--ok);border-width:3px}
+.why button.ok::after{content:"✓ 正解";position:absolute;top:-10px;right:6px;background:var(--ok2);color:#fff;font-size:.72rem;font-weight:900;padding:1px 6px;border-radius:6px}
+.why button:disabled{cursor:default}
+.sure-res{margin:.3rem 0;font-weight:700}
+.fic{margin:0;padding:0 .9rem .6rem;font-size:.72rem;color:var(--ink2)}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+@keyframes stamp{from{transform:translateY(-50%) rotate(-8deg) scale(1.8);opacity:0}to{transform:translateY(-50%) rotate(-8deg) scale(1);opacity:1}}
+@keyframes up{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+.msg{min-height:1.6rem;text-align:center;font-weight:700;font-size:1rem;margin:0}
+.msg.bad{color:var(--shu2)}
+.verdict{background:var(--paper);border:2px solid var(--ok);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:0 6px 0 #1f1d3a20;animation:up .35s ease-out}
+.verdict .hd{display:flex;justify-content:center;align-items:baseline;gap:10px;font-size:1.3rem;font-weight:900;flex-wrap:wrap}
+.verdict .why{font-size:1rem;line-height:1.75;margin:0;text-align:left}
+.verdict .why b{color:var(--ok2)}
+.src{font-size:.78rem;color:var(--ink2);margin:0;line-height:1.4;text-align:left}
+.src a{min-height:44px;padding:6px 0}
+.hint{background:var(--paper);border:2px solid var(--gold);border-radius:14px;padding:.6rem .9rem;font-size:.95rem;line-height:1.7}
+.stars{color:var(--gold);letter-spacing:.08em;font-size:1.2rem}
+.stars .off{color:#1f1d3a33}
+.dots{display:flex;gap:6px;flex:1;max-width:200px;align-items:center}
+.dots i{flex:1;height:8px;border-radius:4px;background:transparent;border:1.5px solid var(--ink2);box-sizing:border-box}
+.dots i.on{background:var(--shu);border-color:var(--shu);height:12px}.dots i.done{background:var(--ai);border-color:var(--ai)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats div{background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center}
+.stats b{display:block;font-size:1.3rem}
+.stats small{color:var(--ink2);font-size:.75rem}
+.share{background:var(--paper);border-radius:12px;padding:12px;white-space:pre-line;font-size:1rem;line-height:1.6;text-align:center;border:2px solid var(--line)}
+.shares{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.shares a,.shares button{display:flex;align-items:center;justify-content:center;min-height:52px;border-radius:12px;border:2px solid var(--line);background:var(--paper);color:var(--ink);font-size:.9rem;font-weight:700;text-decoration:none;padding:0 6px;box-sizing:border-box;font-family:inherit;cursor:pointer}
+.rlist{display:flex;flex-direction:column;gap:8px}
+.rlist div{display:flex;align-items:center;gap:10px;background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:8px 12px;font-size:.88rem;line-height:1.5}
+.rlist .w{flex:1;min-width:0}
+.rlist .w b{display:block;font-size:.95rem}
+.achnext{text-align:center;font-size:.9rem;color:var(--ink2);margin:0}
+.achnew{text-align:center;font-size:.95rem;font-weight:700;color:var(--shu2);margin:0;animation:up .35s ease-out}
+.badge{background:var(--shu);color:#fff;border-radius:9px;padding:1px 7px;font-size:.75rem}
+.lv{display:flex;flex-direction:column;gap:10px}
+.book{display:flex;flex-direction:column;gap:8px}
+.book button,.book .no{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:2.2rem 1fr auto;align-items:center;gap:10px;min-height:56px;border-radius:12px;padding:6px 12px;background:var(--paper);border:2px solid var(--line);font-size:.95rem}
+.book .no{cursor:default;color:var(--ink2);border-style:dashed}
+.book .mk{font-size:1.2rem;text-align:center}
+.book .ct{font-size:.8rem;color:var(--ink2);white-space:nowrap}
+.agrp{font-size:.85rem;color:var(--ink2);margin:4px 0 -6px;font-weight:700;letter-spacing:.1em}
+.alist{display:flex;flex-direction:column;gap:8px}
+.ach{display:grid;grid-template-columns:1.8rem 1fr auto;grid-template-areas:"ic nm pg" "ic cd cd" "ic br br";align-items:center;gap:3px 10px;background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:8px 12px}
+.ach .ic{grid-area:ic;font-size:1.2rem;text-align:center}
+.ach b{grid-area:nm;font-size:.95rem}.ach small{grid-area:cd;color:var(--ink2);font-size:.8rem;line-height:1.4}
+.ach .pg{grid-area:pg;font-size:.8rem;color:var(--ink2);white-space:nowrap}
+.ach .bar{grid-area:br;height:6px;border-radius:3px;background:var(--line);overflow:hidden}.ach .bar i{display:block;height:100%;background:var(--ai)}
+.ach.got{background:#eef3fb;border-color:var(--ai)}
+.ach:not(.got) .ic{filter:grayscale(1);opacity:.5}
+.calnav{display:flex;align-items:center;gap:8px}.calnav b{flex:1;text-align:center;font-size:1.05rem}.calnav .sub{flex:0 0 72px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .wd{font-size:.7rem;color:var(--ink2);text-align:center}
+.cal .c{all:unset;box-sizing:border-box;min-height:48px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.9rem;background:var(--paper);border:1px solid var(--line);position:relative;line-height:1.1}
+.cal .c i{font-style:normal;font-size:.55rem;letter-spacing:-.05em;color:var(--gold)}
+.cal .c.p1{background:#eef3fb}.cal .c.p2{background:#d5e1f3}.cal .c.p3{background:var(--ai);color:#fff;border-color:var(--ai2)}.cal .c.p3 i{color:#ffe9a8}
+.cal .c.late{background:transparent;border:1.5px dashed var(--ai);color:var(--ai2)}
+.cal .c.miss{cursor:pointer;border:2px dotted var(--shu);color:var(--shu2);background:#fff}
+.cal .c.miss i{color:var(--shu)}
+.cal .c.today{border:2px solid var(--ink)}
+.cal .c .hd{position:absolute;right:2px;top:1px;font-size:.55rem;color:var(--shu);font-weight:900}
+.cal .c.p3 .hd{color:#ffe9a8}
+.cal .c.off{visibility:hidden}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;justify-content:center;font-size:.75rem;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:4px}.legend em{display:inline-block;width:14px;height:14px;border-radius:4px;font-style:normal}
+.about h3{font-size:1rem;margin:.6rem 0 .2rem;color:var(--ai2)}
+.about p,.about li{font-size:.92rem;line-height:1.8;text-align:left}
+.about ul{padding-left:1.2em;margin:0}
+dialog#howto{border:none;border-radius:16px;background:var(--paper);color:var(--ink);max-width:440px;width:calc(100% - 32px);padding:20px;box-sizing:border-box;font-size:1rem}
+dialog#howto::backdrop{background:#000000aa}
+dialog#howto h2{margin:0 0 10px;letter-spacing:.1em}
+dialog#howto ol{padding-left:1.3em;margin:0 0 12px;line-height:1.8}
+dialog#howto p{margin:0 0 10px;font-size:.9rem;line-height:1.7;color:var(--ink2)}
+dialog#howto a{color:var(--shu2);min-height:44px;display:inline-flex;align-items:center}
+.toast{pointer-events:none;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-weight:700;z-index:9;box-shadow:0 6px 20px #0005;max-width:90%;text-align:center;font-size:1rem}
+footer{margin-top:auto;text-align:center;font-size:.8rem;color:var(--ink2);display:flex;gap:4px 14px;justify-content:center;flex-wrap:wrap}
+footer a{color:var(--ink2);min-height:44px;display:inline-flex;align-items:center}
+/* 色の見分けを助ける：判と ✕ を大きく、正解の行は太い二重線の枠に */
+html.a11y-cvd .ch.ng::after,html.a11y-cvd .ch.ok::after{font-size:.95rem}
+html.a11y-cvd .ch.ok{border-style:double;border-width:5px}
+html.a11y-cvd .ch.ng{border-width:3px}
+/* 夢の機械の画面：絵・問い・3つの答え（色に加えて記号・枠の形でも分ける） */
+.mc{background:var(--paper);border:2px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:0 8px 18px #1f1d3a22}
+.mc .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:.35rem .8rem;background:var(--ai2);color:#fff;font-size:.78rem;font-weight:700}
+.mc .pic{display:block;background:#26245e}
+.mc .pic svg{display:block;width:100%;height:auto}
+.mc .sit{margin:0;padding:.7rem .9rem .2rem;font-weight:700;font-size:1.05rem;line-height:1.7}
+.mc .ask{margin:0;padding:.2rem .9rem .5rem;text-align:center;font-weight:900;font-size:1.3rem}
+.hans{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 .7rem .8rem}
+.hans button{all:unset;box-sizing:border-box;cursor:pointer;min-height:64px;border-radius:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:900;font-size:1rem;text-align:center;line-height:1.2;padding:4px}
+.hans button .mk{font-size:1.3rem}
+.hans button[data-a="0"]{background:#eeecfb;border-color:var(--ai)}
+.hans button[data-a="1"]{border-style:dashed}
+.hans button[data-a="2"]{border-style:dotted;border-width:3px}
+.hans button:active{transform:translateY(2px)}
+.lines{display:flex;flex-direction:column;gap:8px}
+.lines>div{background:var(--paper);border:2px solid var(--line);border-radius:12px;padding:8px 12px;font-size:.9rem;line-height:1.6;text-align:left}
+.lines>div.me{border-color:var(--ai);border-width:3px}
+.lines b{display:block;font-size:.98rem}
+.lines a{color:var(--shu2);display:inline-flex;align-items:center;min-height:44px}
+.cmp .you{font-weight:900;color:var(--ai2)}
+.meter{display:flex;height:22px;border-radius:6px;overflow:hidden;border:1.5px solid var(--ink);margin:4px 0}
+.meter i{display:block;height:100%;background:var(--ai);background-image:repeating-linear-gradient(45deg,#ffffff33 0 4px,transparent 4px 8px)}
+.meter u{display:block;height:100%;flex:1;background:#fff;text-decoration:none}
+.score{display:flex;gap:6px;justify-content:center;font-size:1.6rem}
+.score span{width:2.2rem;height:2.2rem;border-radius:50%;border:2px solid var(--ai);display:grid;place-items:center;font-size:1rem;font-weight:900}
+.score span.on{background:var(--ai);color:#fff}
+.hrow{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;font-size:.8rem}
+.hrow span{border:1.5px solid var(--line);border-radius:6px;padding:2px 6px;background:var(--paper)}
+.sit2{white-space:pre-line}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+:is(.icon,button,a):focus-visible{outline:3px solid var(--shu)!important;outline-offset:2px}
+</style>
+<!-- a11y:begin 見やすさの設定 v10（shared-workflows template/a11y/a11y.html の写し。ここでは直さず、ひな形を直して全部のゲームへ写す。drift-check と qa/a11y.mjs が同じ中身か見る） -->
+<style id="a11y-css">
+/* だれでも：キーボードで選んだ所に太い枠（WCAG 2.4.7・2.4.13） */
+:is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid #1a5fd0!important;outline-offset:2px!important;box-shadow:0 0 0 5px #fff!important}
+/* 読みやすい文字：UD フォント・行間 1.7・字間を少し広げる・斜体にしない（BDA Dyslexia Style Guide） */
+html.a11y-read body{line-height:1.7}
+html.a11y-read body,html.a11y-read body :where(*:not(svg):not(svg *):not([data-a11y-keepfont]):not([data-a11y-keepfont] *)){font-family:"BIZ UDPGothic","BIZ UDGothic","UD デジタル 教科書体 NK-R","UD Digi Kyokasho NK-R","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI",Meiryo,sans-serif!important;font-style:normal!important}
+html.a11y-read :is(p,li,dd,dt,blockquote,[data-a11y-say]){line-height:1.8!important;letter-spacing:.04em!important}
+html.a11y-read em,html.a11y-read i:not([aria-hidden]){font-style:normal!important;font-weight:700}
+/* 動きを減らす：揺れ・点滅・すべる動きを止める（WCAG 2.3.3。端末の「視差効果を減らす」でも自動で入る） */
+html.a11y-calm *,html.a11y-calm *::before,html.a11y-calm *::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+/* 色の見分けを助ける：ゲームごとの形・模様は各ゲームが html.a11y-cvd の下に書く。ここではリンクに下線 */
+html.a11y-cvd a{text-decoration:underline!important}
+/* ふりがな：ゲームが <ruby class="a11y-rb"> を置いた所だけ。選んだときだけ出す */
+html:not(.a11y-ruby) ruby.a11y-rb>rt{display:none}
+/* 設定の画面（どのゲームでも同じ見た目・同じ濃さ。白地に黒で 15:1） */
+.a11y-dlg{max-width:min(420px,calc(100vw - 32px));width:100%;box-sizing:border-box;border:2px solid #1d2320;border-radius:14px;padding:18px 16px 14px;background:#fffdf8;color:#1d2320;font:500 16px/1.6 "BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;letter-spacing:0}
+.a11y-dlg::backdrop{background:#0008}
+.a11y-dlg:not([open]){display:none}
+.a11y-dlg h2{font-size:19px;margin:0 0 4px;font-weight:700;line-height:1.4}
+.a11y-dlg p{margin:4px 0 10px;font-size:14px;color:#3d4440;line-height:1.6}
+.a11y-dlg label{display:flex;gap:12px;align-items:center;min-height:48px;padding:6px 4px;border-top:1px solid #1d232022;cursor:pointer;line-height:1.4}
+.a11y-dlg label small{display:block;font-size:13px;color:#3d4440}
+.a11y-dlg input[type=checkbox]{width:26px;height:26px;flex:none;accent-color:#1a5fd0;margin:0}
+.a11y-dlg .a11y-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.a11y-dlg button,.a11y-btn,.a11y-saybtn{min-height:44px;min-width:44px;border-radius:10px;border:2px solid #1d2320;background:#fff;color:#1d2320;font:700 15px/1.2 "BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;padding:0 14px;cursor:pointer;letter-spacing:0}
+.a11y-dlg button.a11y-ok{background:#1d2320;color:#fff}
+.a11y-btn.a11y-float{position:fixed;left:max(8px,env(safe-area-inset-left,0px));bottom:max(8px,env(safe-area-inset-bottom,0px));z-index:2147483000}
+.a11y-btn.a11y-float[hidden]{display:none!important}
+/* 「Aa」が出ているあいだは、いちばん下の物が「Aa」の下に隠れたままにならないよう下をあける（WCAG 2.4.11） */
+html.a11y-floaton body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))!important}
+/* 読み上げボタンが、いちばん下のボタン・リンクにかぶらないよう下をあける */
+html.a11y-say body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))!important}
+.a11y-saybtn{position:fixed;right:max(8px,env(safe-area-inset-right,0px));bottom:max(8px,env(safe-area-inset-bottom,0px));z-index:2147483000;box-shadow:0 2px 8px #0003}
+.a11y-saybtn[hidden],.a11y-dlg [hidden]{display:none!important}
+.a11y-note{font-size:13px!important}
+/* 選ぶ行（文字の大きさ・音など。v9）：横に並ぶ大きなボタン。選んだものは濃く */
+.a11y-dlg fieldset{border:0;border-top:1px solid #1d232022;margin:0;padding:8px 4px 10px;min-width:0}
+.a11y-dlg legend{padding:6px 0 4px;float:left;width:100%;line-height:1.4}
+.a11y-dlg legend small{display:block;font-size:13px;color:#3d4440}
+.a11y-dlg .a11y-opts{clear:both;display:flex;gap:6px}
+.a11y-dlg .a11y-opts label{flex:1;border:2px solid #1d2320;border-radius:10px;min-height:44px;padding:0 6px;justify-content:center;gap:6px;font-weight:700}
+.a11y-dlg .a11y-opts label:has(input:checked){background:#1d2320;color:#fff}
+.a11y-dlg .a11y-opts label:focus-within{outline:3px solid #1a5fd0;outline-offset:2px}
+.a11y-dlg .a11y-opts input{width:18px;height:18px;margin:0;accent-color:#1a5fd0;flex:none}
+/* 暗い画面（v10）：設定の画面と「Aa」「🔊 読む」も暗くする（白地に黒と同じ 14:1 前後） */
+html.a11y-dark .a11y-dlg{background:#1c2124;color:#eceae4;border-color:#eceae4}
+html.a11y-dark .a11y-dlg p,html.a11y-dark .a11y-dlg label small,html.a11y-dark .a11y-dlg legend small{color:#c3c8cb}
+html.a11y-dark .a11y-dlg label,html.a11y-dark .a11y-dlg fieldset{border-top-color:#eceae433}
+html.a11y-dark .a11y-dlg button,html.a11y-dark .a11y-btn,html.a11y-dark .a11y-saybtn,html.a11y-dark .a11y-dlg .a11y-opts label{background:#262c30;color:#eceae4;border-color:#eceae4}
+html.a11y-dark .a11y-dlg button.a11y-ok,html.a11y-dark .a11y-dlg .a11y-opts label:has(input:checked){background:#eceae4;color:#1c2124}
+html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline-color:#8ab4ff!important;box-shadow:0 0 0 5px #000!important}
+</style>
+<script id="a11y-script">
+/* 見やすさの設定（色覚・ディスレクシア・弱視・動きに弱い人のため）。外へは何も送らない。
+   設定は localStorage の a11y-v1 に置く。同じサイト（satou-aaaaa.github.io）のゲームは同じ設定を使う。
+   ゲームの側でできること：
+   - 設定を開くボタンに data-a11y-open を付ける（画面に見えている入口が無いあいだだけ、左下に「Aa」のボタンを出す）
+   - 読み上げる文に data-a11y-say を付ける（問題文・知らせなど）
+   - 色の見分けを助ける形・模様は html.a11y-cvd の下に CSS で書く。JS では A11y.on('cvd')
+   - 揺れ・すべる動きを JS で動かすときは、A11y.on('calm') なら止める
+   - 設定が変わると document に a11ychange が届く
+   - 設定の印は html の class「a11y-<設定の名前>」（a11y-read など）。部品の class はこれと重ならない名前にする（2026-11-05 a11y-say がボタンとぶつかった）
+   v9（2026-11-26）：選ぶ行（CHOICES）を足した。いまは「文字の大きさ」（小・中・大。全ゲーム共通）と「音」（なし・小・ふつう。音のあるゲームだけ出る）と「長く遊んだら知らせる」（kiroku のあるゲームだけ出る）。
+   - 文字の大きさは html の class a11y-fs1〜3。ゲームが自分で html.a11y-fs1〜3 の大きさを CSS に書いていればそれを使い、
+     書いていなければ html の文字の大きさを 0.9 倍・1.2 倍にする（rem で書いた所が大きくなる。WCAG 1.4.4・Game Accessibility Guidelines「文字の大きさを変えられる」）。
+     前のゲームごとの設定（〇〇-fs）は A11y.fsFrom("〇〇-fs", 既定の値) で引き継ぐ（共通の設定をまだ選んでいなければ、その値を使う）
+   - 音は Web Audio の出口（AudioContext の destination）に音量のつまみを1つはさむので、ゲームの側は何もしなくてよい
+     （WCAG 1.4.2 Audio Control・Xbox Accessibility Guideline 105）。音量は A11y.get("vol")（0 なし・1 小・2 ふつう）
+   - 選ぶ行を足すときは CHOICES に1行足す（名前・見出し・説明・選択肢・既定の値・出す条件）
+   v10（2026-11-27）：「画面の明るさ」（自動・明るい・暗い）。自動は端末のダークモード（prefers-color-scheme）に合わせる。暗いときは html に a11y-dark。
+   - ゲームごとの色を書き直さずに暗くする（下の「暗い画面」）。:root の色の変数と決め打ちの明るい地の明るさを裏返し（OKLCH の L。色合いは残すので色覚の見分けは崩さない）、
+     字がうしろと 4.5:1（大きい字は 3:1）に足りなければ足りるまで明るくする（WCAG 1.4.3。web.dev「prefers-color-scheme」・Chrome「Dark mode」の指針）。
+   - 色を変えたくない所は data-a11y-keepcolor を付ける。ゲームが自分で html.a11y-dark の色を CSS に書いてもよい（書いた色の上でも字の濃さは合わせる）
+   - A11y.dark() で今が暗い画面か分かる。canvas に描く色はゲームの側で A11y.dark() を見て変える */
+(() => {
+  const KEY = "a11y-v1";
+  const root = document.documentElement;
+  const OPTS = [
+    ["read", "読みやすい文字", "UD フォント・行間と字間を広く"],
+    ["cvd", "色の見分けを助ける", "色に形・模様・記号を足す"],
+    ["calm", "動きを減らす", "揺れ・点滅・すべる動きを止める"],
+    ["say", "読み上げのボタンを出す", "問題や知らせを声で読む（端末の中の声だけ）"],
+    ["ruby", "ふりがなを出す", "むずかしい漢字に読みを付ける"],
+  ];
+  // 選ぶ行：[名前, 見出し, 説明, [[値, 字], …], 既定の値, 出す条件（無ければいつも）]
+  const CHOICES = [
+    ["fs", "文字の大きさ", "画面の文字を小さく・大きく", [[1, "小"], [2, "中"], [3, "大"]], 2],
+    ["theme", "画面の明るさ", "自動は端末のダークモードの設定に合わせる", [[0, "自動"], [1, "明るい"], [2, "暗い"]], 0],
+    ["vol", "音", "効果音の大きさ", [[0, "なし"], [1, "小"], [2, "ふつう"]], 2, () => hasSound()],
+    // 長く遊んだら知らせる（分。0 は知らせない）。数えて知らせるのは共通部品 kiroku（template/kiroku/kiroku.js）。60 分は厚生労働省「情報機器作業における労働衛生管理のためのガイドライン」
+    ["rest", "長く遊んだら知らせる", "続けて遊んだ時間で、ひと休みをすすめる", [[0, "知らせない"], [30, "30分"], [60, "60分"], [90, "90分"]], 60, () => !!window.Kiroku],
+  ];
+  const CH = Object.fromEntries(CHOICES.map((c) => [c[0], c]));
+  const media = (q) => { try { return matchMedia(q).matches; } catch { return false; } };
+  // 保存した値がオブジェクトでなければ（別のページが書いた・手で直した）無かったことにする（2026-11-05 CodeRabbit：true が入ると設定が開けなくなる）
+  const load = () => { try { const v = JSON.parse(localStorage.getItem(KEY) || "{}"); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } };
+  let S = load();
+  // 保存できなかった変更（開いているあいだだけ覚える）。書く前に読み直した値で、まだ保存できていない変更を上書きしない（v7、nenkin-shikumi #1 の CodeRabbit）
+  let unsaved = {};
+  // 決めていないものは端末の設定に合わせる（視差効果を減らす → 動きを減らす）
+  const on = (k) => (k in S ? !!S[k] : k === "calm" ? media("(prefers-reduced-motion: reduce)") : false);
+  // 選ぶ行の今の値（選択肢にない値・壊れた値は既定の値）
+  const get = (k) => { const c = CH[k]; if (!c) return on(k); const v = S[k]; return c[3].some(([x]) => x === v) ? v : k === "fs" ? oldFs() : c[4]; };
+  // 前のゲームごとの文字の大きさ（1〜3）を引き継ぐ。共通の設定をまだ選んでいなければ、その値（無ければゲームの既定の値）を使う
+  let fsKey = null, fsDef = 2;
+  const oldFs = () => { if (fsKey) { try { const v = +localStorage.getItem(fsKey); if (v >= 1 && v <= 3) return v; } catch { /* 読めない */ } } return fsDef; };
+  const fs = () => get("fs");
+  // ゲームから一度だけ：A11y.fsFrom("〇〇-fs", 既定の値)。前のキーを覚えて、今の大きさを効かせ、その値を返す
+  const fsFrom = (k, d) => { fsKey = k || null; fsDef = d === 1 || d === 3 ? d : 2; applyFs(); return fs(); };
+
+  // ---- 文字の大きさ ----
+  const FS_RATE = { 1: 0.9, 2: 1, 3: 1.2 };
+  // ゲームが自分で html.a11y-fs1〜3 の大きさを書いているか（書いていればこちらは倍にしない）
+  const ownFs = () => [...document.querySelectorAll("style:not(#a11y-css)")].some((t) => t.textContent.includes(".a11y-fs"));
+  const applyFs = () => {
+    const v = fs();
+    for (const n of [1, 2, 3]) root.classList.toggle("a11y-fs" + n, n === v);
+    if (root.dataset.a11yFs) { root.style.removeProperty("font-size"); delete root.dataset.a11yFs; }
+    if (v === 2 || ownFs()) return;
+    const base = parseFloat(getComputedStyle(root).fontSize) || 16;
+    root.style.setProperty("font-size", Math.round(base * FS_RATE[v] * 100) / 100 + "px");
+    root.dataset.a11yFs = String(v);
+  };
+
+  // ---- 音 ----
+  // Web Audio の出口に音量のつまみ（GainNode）を1つはさむ。ゲームが ctx.destination へつなぐと、つまみを通って鳴る
+  const VOL = [0, 0.35, 1];
+  const ctxs = [];
+  const level = () => VOL[get("vol")];
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const proto = AC && (window.BaseAudioContext ? BaseAudioContext.prototype : AC.prototype);
+    const d = proto && Object.getOwnPropertyDescriptor(proto, "destination");
+    if (d && d.get && d.configurable) {
+      Object.defineProperty(proto, "destination", { configurable: true, enumerable: d.enumerable, get() {
+        const real = d.get.call(this);
+        if (!(this instanceof AC)) return real; // 音を書き出すだけの OfflineAudioContext は変えない
+        let e = ctxs.find((x) => x.c === this);
+        if (!e) { const g = this.createGain(); g.gain.value = level(); g.connect(real); e = { c: this, g }; ctxs.push(e); }
+        return e.g;
+      } });
+    }
+  } catch { /* Web Audio の無い端末 */ }
+  // <audio>・<video> は「なし」のとき消音にする
+  const applyVol = () => {
+    const v = level();
+    for (const e of ctxs) { try { e.g.gain.cancelScheduledValues(0); } catch { /* 古い端末 */ } e.g.gain.value = v; } // 止まっている AudioContext でもすぐ効くよう値を直に入れる
+    for (const m of document.querySelectorAll("audio,video")) m.muted = v === 0;
+  };
+  // 音を使うページか（Web Audio・<audio>・<video> を使っている）。音の無いゲームでは「音」の行を出さない
+  const hasSound = () => ctxs.length > 0 || !!document.querySelector("audio,video") ||
+    [...document.scripts].some((t) => t.id !== "a11y-script" && /AudioContext|new Audio\(/.test(t.textContent));
+  // ---- 暗い画面（v10）----
+  // 1) :root・html に書いた色の変数のうち、明るい地の色と、暗い無彩色（字の色）の明るさを裏返す（OKLCH の L。色合いとあざやかさは残す）
+  // 2) 決め打ちの明るい地（#fff・明るいグラデーション）を、同じ色合いの暗い地にする
+  // 3) 字の色が、うしろの色（親の opacity も重ねる）と 4.5:1（大きい字は 3:1）に足りなければ、足りるまで明るくする
+  // あざやかなボタンの地（朱・藍など）と白い字はそのまま。絵・svg・canvas・設定の画面は変えない。変えたものは覚えておき、やめたら元に戻す。
+  // 画面が描き変わったら次の描画の前にもう一度合わせる（ゲームの transition で遅れて変わる地のため、変えたものがあれば 0.4 秒後にも）
+
+  const toLin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+  const toSrgb = (v) => { const x = v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055; return Math.round(Math.min(1, Math.max(0, x)) * 255); };
+  const oklch = ([r, g, b]) => {
+    r = toLin(r); g = toLin(g); b = toLin(b);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    const A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, B = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+    return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, Math.hypot(A, B), Math.atan2(B, A)];
+  };
+  const rgb = ([L, C, H]) => {
+    const A = C * Math.cos(H), B = C * Math.sin(H);
+    const l = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3, m = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3, s = (L - 0.0894841775 * A - 1.291485548 * B) ** 3;
+    return [toSrgb(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s), toSrgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s), toSrgb(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s)];
+  };
+  const lum = (c) => 0.2126 * toLin(c[0]) + 0.7152 * toLin(c[1]) + 0.0722 * toLin(c[2]);
+  const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const parse = (c) => { const m = String(c).match(/rgba?\(([^)]+)\)/); if (!m) return null; const p = m[1].split(/[,/\s]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
+  const css = (c, a) => (a == null || a >= 1 ? `rgb(${c[0]},${c[1]},${c[2]})` : `rgba(${c[0]},${c[1]},${c[2]},${a})`);
+  const flip = (c) => { const [L, C, H] = oklch(c); return rgb([Math.min(0.94, Math.max(0.17, 1.1 - L)), C * 0.85, H]); };
+  const over = (t, b) => { const a = t[3] + b[3] * (1 - t[3]); return a === 0 ? [0, 0, 0, 0] : [0, 1, 2].map((i) => (t[i] * t[3] + b[i] * b[3] * (1 - t[3])) / a).concat(a); };
+    const SKIP = "svg,canvas,img,video,picture,iframe,.a11y-dlg,[data-a11y-keepcolor]";
+  let changed = new Map(); // 要素 → 変える前の値と優先（prop ごと。{ prop: [値, 優先] } の形）の表
+  const put = (el, prop, val) => {
+    let o = changed.get(el); if (!o) { o = {}; changed.set(el, o); }
+    if (!(prop in o)) o[prop] = [el.style.getPropertyValue(prop), el.style.getPropertyPriority(prop)];
+    if (el.style.getPropertyValue(prop) !== val) { el.style.setProperty(prop, val, "important"); count++; }
+  };
+  let probe = null;
+  const colorOf = (raw) => { if (!probe) { probe = document.createElement("i"); probe.hidden = true; } probe.style.color = ""; probe.style.color = raw; if (!probe.style.color) return null; (document.body || root).appendChild(probe); const c = parse(getComputedStyle(probe).color); probe.remove(); return c; };
+  function vars() {
+    const names = new Set();
+    const walk = (rules) => { for (const r of rules) { if (r.cssRules && !r.selectorText) { try { walk(r.cssRules); } catch (e) { /* 読めない */ } continue; } if (r.selectorText && /(^|,)\s*(:root|html)\s*(,|$)/.test(r.selectorText)) for (const n of r.style) if (n.startsWith("--")) names.add(n); } };
+    for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch (e) { /* 別のサイトの CSS は読めない */ } }
+    for (const n of names) {
+      const raw = getComputedStyle(root).getPropertyValue(n).trim();
+      if (!raw || /var\(|gradient|url\(/.test(raw)) continue;
+      const c = colorOf(raw); if (!c || c[3] === 0) continue;
+      const [L, C] = oklch(c);
+      if (L > 0.7 || (L < 0.5 && C < 0.05)) put(root, n, css(flip(c), c[3]));
+    }
+  }
+  // うしろの不透明な色（無ければ null。うしろが絵なら測れないので null）
+  function backOf(el) {
+    let acc = [0, 0, 0, 0];
+    for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+      const s = getComputedStyle(n), b = parse(s.backgroundColor);
+      if (s.backgroundImage !== "none" && n !== document.body && n !== root) return null;
+      if (b && b[3] > 0) { acc = over(acc, b); if (acc[3] >= 0.98) return acc; }
+    }
+    return over(acc, [18, 21, 24, 1]);
+  }
+  function grounds() {
+    for (const el of [document.body, ...document.querySelectorAll("body *")]) {
+      if (el.closest(SKIP) || el.id === "core-help") continue;
+      const s = getComputedStyle(el), b = parse(s.backgroundColor);
+      if (b && b[3] > 0.05 && oklch(b)[0] > 0.7) put(el, "background-color", css(flip(b), b[3]));
+      const g = s.backgroundImage;
+      if (g && g !== "none" && !/url\(/.test(g) && /gradient/.test(g)) {
+        const stops = (g.match(/rgba?\([^)]+\)/g) || []).map(parse).filter(Boolean);
+        if (stops.length && stops.reduce((t, c) => t + oklch(c)[0], 0) / stops.length > 0.7) put(el, "background-image", g.replace(/rgba?\([^)]+\)/g, (m) => { const c = parse(m); return css(flip(c), c[3]); }));
+      }
+    }
+  }
+  function texts() {
+    for (const el of document.querySelectorAll("body *")) {
+      if (el.closest(SKIP)) continue;
+      if (![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
+      const s = getComputedStyle(el), fg = parse(s.color), bg = backOf(el);
+      if (!fg || !bg) continue;
+      const size = parseFloat(s.fontSize), need = (size >= 24 || (+s.fontWeight >= 700 && size >= 18.66) ? 3 : 4.5) + 0.2;
+      // 親の opacity も重ねて見る（薄くした字は、薄くしたぶん明るくする）
+      let op = 1; for (let n = el; n && n !== root; n = n.parentElement) op *= +getComputedStyle(n).opacity;
+      if (op < 0.2) continue;
+      const seen = (c) => over([c[0], c[1], c[2], fg[3] * op], bg);
+      if (ratio(seen(fg), bg) >= need) continue;
+      let [L, C, H] = oklch(fg); const up = oklch(bg)[0] < 0.6;
+      let c = fg;
+      for (let i = 0; i < 60 && ratio(seen(c), bg) < need; i++) { L = up ? Math.min(1, L + 0.02) : Math.max(0, L - 0.02); if (L >= 1 || L <= 0) C *= 0.7; c = rgb([L, C, H]); }
+      put(el, "color", css(c, fg[3]));
+    }
+  }
+  let darkOn = false, mo = null, queued = false, busy = false;
+  // 地の色を変えると、ゲームの transition（.15s など）で少し遅れて暗くなる。変えたものがあれば、動きが終わったころにもう一度合わせる
+  let count = 0, again = 0;
+  const run = () => {
+    queued = false; if (!darkOn) return; busy = true;
+    const before = count;
+    try { grounds(); texts(); } finally { mo && mo.takeRecords(); busy = false; }
+    if (count > before && again < 3) { again++; setTimeout(later, 400); } else again = 0;
+  };
+  const later = () => { if (!queued && !busy) { queued = true; requestAnimationFrame(run); } };
+  function darkStart() {
+    if (darkOn) return; darkOn = true;
+    root.classList.add("a11y-dark");
+    put(root, "color-scheme", "dark");
+    vars(); run();
+    mo = new MutationObserver(later);
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "hidden", "open"] });
+  }
+  function darkStop() {
+    if (!darkOn) return; darkOn = false;
+    if (mo) mo.disconnect(); mo = null;
+    for (const [el, o] of changed) for (const p in o) { if (o[p][0]) el.style.setProperty(p, o[p][0], o[p][1]); else el.style.removeProperty(p); }
+    changed = new Map();
+    root.classList.remove("a11y-dark");
+  }
+  
+  // 今は暗い画面か（自動は端末の設定）
+  const dark = () => { const t = get("theme"); return t === 2 || (t === 0 && media("(prefers-color-scheme: dark)")); };
+  const applyTheme = () => { if (!document.body) return; if (dark()) darkStart(); else darkStop(); };
+  let fontLoaded = false;
+  const loadFont = () => {
+    if (fontLoaded) return; fontLoaded = true;
+    // Google Fonts を許しているページだけ取りに行く（許していなければ端末にある UD フォントを使う）
+    const csp = (document.querySelector('meta[http-equiv="Content-Security-Policy"]') || {}).content || "";
+    if (csp && !/fonts\.googleapis\.com/.test(csp)) return;
+    const l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap";
+    document.head.appendChild(l);
+  };
+  const apply = () => {
+    for (const [k] of OPTS) root.classList.toggle("a11y-" + k, on(k));
+    applyFs(); applyVol(); applyTheme();
+    if (on("read")) loadFont();
+    if (sayBtn) sayBtn.hidden = !on("say");
+    if (!on("say")) stop();
+  };
+  const set = (k, v) => {
+    unsaved[k] = CH[k] ? v : !!v;
+    S = { ...S, ...load(), ...unsaved }; // 別のタブで変えた設定を消さないよう、書く前に読み直す（保存できていない変更はこちらを残す）
+    try { localStorage.setItem(KEY, JSON.stringify(S)); unsaved = {}; } catch { /* 保存できなくても今の画面には効かせる */ }
+    apply();
+    document.dispatchEvent(new CustomEvent("a11ychange", { detail: CH[k] ? { key: k, on: !!v, value: get(k) } : { key: k, on: !!v } }));
+  };
+
+  // 読み上げ：端末の中の日本語の声だけを使う（外へ文字を送る声は使わない）
+  const voice = () => { try { return speechSynthesis.getVoices().find((v) => /^ja/i.test(v.lang) && v.localService) || null; } catch { return null; } };
+  const stop = () => { try { speechSynthesis.cancel(); } catch { /* 無い端末 */ } };
+  const visible = (el) => { const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return r.width > 0 && r.height > 0 && cs.visibility !== "hidden" && !el.closest("[hidden],[aria-hidden=true],[inert]"); };
+  const textOf = (sel) => [...document.querySelectorAll(sel)].filter(visible).map((el) => (el.getAttribute("aria-label") || el.innerText || "").trim()).filter(Boolean).join("。");
+  // data-a11y-say が無い画面では、見出しと知らせの場所を読む（2026-11-05 何も読まれず設定が開くだけだった）
+  const sayText = () => textOf("[data-a11y-say]") || textOf("h1,h2,[role=status],[aria-live]");
+  const say = (text) => {
+    const v = voice();
+    if (!v || !text) return false;
+    stop();
+    const u = new SpeechSynthesisUtterance(text.slice(0, 600));
+    u.voice = v; u.lang = v.lang; u.rate = 0.95;
+    speechSynthesis.speak(u);
+    return true;
+  };
+
+  let dlg = null, sayBtn = null, lastFocus = null;
+  const build = () => {
+    dlg = document.createElement("dialog");
+    dlg.className = "a11y-dlg";
+    dlg.setAttribute("aria-labelledby", "a11y-h");
+    const hasRuby = !!document.querySelector("ruby.a11y-rb");
+    dlg.innerHTML = `<h2 id="a11y-h">見やすさ・読みやすさ</h2><p>ほかのゲームにも同じ設定が使われます。</p>` +
+      CHOICES.map(([k, n, d, opts]) => `<fieldset data-c="${k}"><legend>${n}<small>${d}</small></legend><div class="a11y-opts">` +
+        opts.map(([v, t]) => `<label><input type="radio" name="a11y-${k}" data-c="${k}" value="${v}">${t}</label>`).join("") + `</div></fieldset>`).join("") +
+      OPTS.filter(([k]) => k !== "ruby" || hasRuby).map(([k, n, d]) => `<label><input type="checkbox" data-k="${k}"><span>${n}<small>${d}</small></span></label>`).join("") +
+      `<p class="a11y-note" id="a11y-novoice" hidden>この端末には、外へ送らずに読める日本語の声がありません。</p><div class="a11y-row"><button type="button" class="a11y-ok" data-a11y-close>閉じる</button></div>`;
+    document.body.appendChild(dlg);
+    dlg.addEventListener("change", (e) => {
+      const c = e.target.dataset && e.target.dataset.c;
+      if (c) return set(c, +e.target.value);
+      const k = e.target.dataset && e.target.dataset.k;
+      if (!k) return;
+      set(k, e.target.checked);
+      if (k === "say") dlg.querySelector("#a11y-novoice").hidden = !(e.target.checked && !voice());
+    });
+    // dialog を知らないブラウザでは close が無いので、open を外して閉じ、フォーカスを戻す（v6。jitensha-rule #1・sekai-jikoku #1 の CodeRabbit）
+    dlg.querySelector("[data-a11y-close]").addEventListener("click", () => { if (dlg.close) dlg.close(); else { dlg.removeAttribute("open"); if (lastFocus && lastFocus.focus) lastFocus.focus(); } });
+    dlg.addEventListener("close", () => { if (lastFocus && lastFocus.focus) lastFocus.focus(); });
+    sayBtn = document.createElement("button");
+    sayBtn.type = "button"; sayBtn.className = "a11y-saybtn"; sayBtn.textContent = "🔊 読む"; sayBtn.setAttribute("aria-label", "画面の問題を読み上げる");
+    sayBtn.addEventListener("click", () => {
+      try { if (speechSynthesis.speaking) return stop(); } catch { /* 無い端末 */ }
+      if (!say(sayText())) open();
+    });
+    document.body.appendChild(sayBtn);
+    // 左下の「Aa」は、画面に見えている入口（data-a11y-open）がほかに無いときだけ出す。
+    // ゲームの多くはホームのフッターを JS で後から描くので、作った時だけ見ると入口があっても出て、統計の上に重なっていた
+    // （v8。2026-11-22 169本。WCAG 2.4.11 Focus Not Obscured・3.2.4 Consistent Identification。incidents/2026-11-22-a11y-float-over-home.md）
+    const float = document.createElement("button");
+    float.type = "button"; float.className = "a11y-btn a11y-float"; float.textContent = "Aa"; float.setAttribute("data-a11y-open", ""); float.setAttribute("aria-label", "見やすさの設定");
+    float.hidden = true;
+    document.body.appendChild(float);
+    const seen = (e) => e !== float && e.getClientRects().length > 0 && !e.closest("[hidden],dialog:not([open])");
+    let queued = false;
+    const place = () => {
+      queued = false;
+      const need = ![...document.querySelectorAll("[data-a11y-open]")].some(seen);
+      if (float.hidden === need) float.hidden = !need;
+      document.documentElement.classList.toggle("a11y-floaton", need);
+    };
+    const later = () => { if (!queued) { queued = true; requestAnimationFrame(place); } };
+    new MutationObserver(later).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden", "class", "style", "open"] });
+    place();
+    document.addEventListener("click", (e) => { const t = e.target.closest && e.target.closest("[data-a11y-open]"); if (t) { e.preventDefault(); open(); } });
+    apply();
+  };
+  const open = () => {
+    if (!dlg) build();
+    lastFocus = document.activeElement;
+    for (const c of dlg.querySelectorAll("input[data-k]")) c.checked = on(c.dataset.k);
+    for (const c of dlg.querySelectorAll("input[data-c]")) c.checked = +c.value === get(c.dataset.c);
+    for (const [k, , , , , show] of CHOICES) dlg.querySelector(`fieldset[data-c="${k}"]`).hidden = !!show && !show();
+    dlg.querySelector("#a11y-novoice").hidden = !(on("say") && !voice());
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+  };
+  // 声の一覧はあとから届くことがある。届いたら「声がありません」を出し直す
+  try { speechSynthesis.addEventListener("voiceschanged", () => { if (dlg) dlg.querySelector("#a11y-novoice").hidden = !(on("say") && !voice()); }); } catch { /* 無い端末 */ }
+  apply();
+  // 端末の「視差効果を減らす」を開いたあとに変えても効かせる（自分で決めていないときだけ。v7、hatsuden-kurabe #1 の CodeRabbit）
+  try {
+    const mq = matchMedia("(prefers-reduced-motion: reduce)");
+    // 設定の画面を開いたままでも、チェックを今の状態に合わせる（合わないと1回目の押しで外せない）
+    const follow = () => { if (!("calm" in S)) { apply(); const c = dlg && dlg.querySelector('input[data-k="calm"]'); if (c) c.checked = on("calm"); document.dispatchEvent(new CustomEvent("a11ychange", { detail: { key: "calm", on: on("calm") } })); } };
+    if (mq.addEventListener) mq.addEventListener("change", follow); else if (mq.addListener) mq.addListener(follow);
+  } catch { /* matchMedia の無い端末 */ }
+  // 端末のダークモードを開いたあとに変えても効かせる（「自動」のときだけ）
+  try {
+    const mq = matchMedia("(prefers-color-scheme: dark)");
+    const follow = () => { if (get("theme") === 0) { applyTheme(); document.dispatchEvent(new CustomEvent("a11ychange", { detail: { key: "theme", on: dark(), value: 0 } })); } };
+    if (mq.addEventListener) mq.addEventListener("change", follow); else if (mq.addListener) mq.addListener(follow);
+  } catch { /* matchMedia の無い端末 */ }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => { build(); applyTheme(); }); else build();
+  // 別のタブ・別のゲームで設定を変えたら、こちらにも効かせる
+  addEventListener("storage", (e) => { if (e.key === KEY) { S = { ...load(), ...unsaved }; apply(); } });
+  window.A11y = { on, get, set, fs, fsFrom, open, say, stop, dark };
+})();
+</script>
+<!-- a11y:end -->
+<!-- store:begin（template/store/store.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す） -->
+<script id="game-store">
+// 保存の読み直し（2つの写しを合わせる）の共通部品。ひな形: satou-aaaaa/shared-workflows の template/store/store.js。
+// ゲームでは直さない。index.html の store:begin〜store:end の印のあいだに node scripts/sync-template.mjs <ゲームのフォルダ> で写す（ファイルを足さないので sw.js の SHELL は変えない）。
+// 共通部品の版: 2（上げたら写しの版も上がる。scripts/drift-check.mjs がずれを週次まとめに出す）
+//   1: とことんを終えた保存が失敗したあと、読み直しで古い回が戻る不具合が73本に広がっていた（incidents/2026-11-17-endless-revive-after-save-failure.md）。
+//      load() の合わせ方を1か所に集め、直すときはここだけ直す。
+//   2: 終えた回の id を s.gone に持つゲームで、新しい写しに残った終えた回が消えなかった（2026-11-18 に発見）。
+//      片方が null の回が、どちらかの写しの gone（既定は gone[r.id]）にあれば、どちらの写しにあっても null にする。
+// 使い方（ゲームの load()）:
+//   function load() { return GameStore.load(KEY, mem, { v: 1, fresh, tidy, bank, doneOf, bookOf, objs: ["days", "runs"] }); } の形で使う
+// 決まり（どのゲームでも同じ。変えるときはここと scripts/check-store.mjs を直す）:
+//   - 2つの写し（localStorage と、保存に失敗したときの mem）を時刻 t で新しい n・古い o に分ける。
+//   - 数は多いほう・true は残す・入れ物は両方を合わせて数は多いほう（field で変えられる）。
+//   - 途中経過 runs はモードごと。片方が null（その回を終えた）なら、もう片方の回は
+//     済んでいる・記録帳にある・とことん（ended）なら戻さない。終えた回の印 gone にあれば、新しい写しにあっても消す。
+//   - 別の回どうしなら日付の新しいほう（同じ日は n）。古いほうは bank で記録へ入れる。
+//   - 同じ回なら進み具合 prog の大きいほう（同じなら n）。join で両方の印を合わせられる。
+(function (root) {
+  "use strict";
+  const isObj = (x) => !!x && typeof x === "object" && !Array.isArray(x);
+  const VER = 2;
+
+  // 1つの写しを読む（読めない・形がちがう・版がちがうときは null）
+  function parse(text, v) {
+    if (text === null || text === undefined) return null;
+    let x = null;
+    try { x = JSON.parse(text); } catch (e) { return null; }
+    return isObj(x) && x.v === v ? x : null;
+  }
+
+  // 既定の進み具合：答えた数を重く、いまの問題のまちがい・ヒントを軽く見る
+  const progOf = (r) => (r && r.res ? r.res.length : 0) * 1000 + (r && r.cur ? (r.cur.wrong || []).length * 10 + (r.cur.hints || 0) : 0);
+
+  // 回以外の記録を合わせる
+  function fields(s, n, o, opt) {
+    for (const k in o) {
+      if (k === "runs" || k === "t") continue;
+      const x = o[k], y = n[k];
+      if (opt.field) { const r = opt.field(k, x, y, s); if (r !== undefined) { s[k] = r; continue; } }
+      if (Array.isArray(x) && Array.isArray(y)) s[k] = y;
+      else if (isObj(x) && isObj(y)) {
+        s[k] = Object.assign({}, x, y);
+        for (const q in x) if (typeof x[q] === "number" && typeof y[q] === "number") s[k][q] = Math.max(x[q], y[q]);
+      } else if (typeof x === "number" && typeof y === "number") s[k] = Math.max(x, y);
+      else if (x === true) s[k] = true;
+    }
+  }
+
+  // 片方が null（終えた）・もう片方が途中の回のとき、その回を戻してよいか
+  function revive(s, r, m, n, opt) {
+    if (!r || opt.bank(s, r) || opt.doneOf(r)) return false;
+    // とことんは日付の記録帳を持たない。終えた側（null）が新しければ、古い回を戻さない
+    if (opt.ended(r, m) && n.runs[m] === null) return false;
+    const bd = opt.bookOf(s, r.mode);
+    return opt.strictBook ? !!bd && !bd[r.date] : !bd || !bd[r.date];
+  }
+
+  // 途中経過（モードごと）を合わせる
+  function runs(s, a, b, n, opt) {
+    const ra = isObj(a.runs) ? a.runs : {}, rb = isObj(b.runs) ? b.runs : {};
+    s.runs = Object.assign({}, n.runs);
+    for (const m of new Set([...Object.keys(ra), ...Object.keys(rb)])) {
+      const x = ra[m], y = rb[m];
+      if (x === undefined || y === undefined) { if (x || y) s.runs[m] = x || y; continue; }
+      if (!x || !y) { const r = x || y; if (r && [s, a, b].some((q) => opt.gone(q, r))) s.runs[m] = null; else if (revive(s, r, m, n, opt)) s.runs[m] = r; continue; }
+      if (!opt.same(x, y, m)) {
+        if (opt.differ) { opt.differ(s, x, y, m, n); continue; }
+        const dx = x.date || "", dy = y.date || "";
+        if (dx === dy && !opt.bankTie) continue; // 同じ日の別の回は新しい写しのまま
+        const [w, l] = dx > dy ? [x, y] : dx < dy ? [y, x] : n.runs[m] === x ? [x, y] : [y, x];
+        opt.bank(s, l);
+        s.runs[m] = w;
+        continue;
+      }
+      const px = opt.prog(x), py = opt.prog(y), w = px > py ? x : py > px ? y : n.runs[m], l = w === x ? y : x;
+      s.runs[m] = w && l && opt.join ? opt.join(w, l, m) : w;
+    }
+  }
+
+  // 2つの写しを合わせる（どちらか null なら、ある方に足りない置き場を補うだけ）
+  function merge(a, b, opt) {
+    opt = Object.assign({
+      tidy: (s) => s, objs: [], bank: () => false, doneOf: () => false, bookOf: () => null, strictBook: false,
+      ended: (r) => r.mode === "e", gone: (s, r) => isObj(s.gone) && !!s.gone[r.id], same: (x, y) => x.id === y.id, prog: progOf, bankTie: false,
+    }, opt);
+    if (typeof opt.fresh !== "function") throw new Error("GameStore: fresh が要る");
+    a = isObj(a) && a.v === opt.v ? a : null;
+    b = isObj(b) && b.v === opt.v ? b : null;
+    if (!a || !b) {
+      const s = Object.assign(opt.fresh(), a || b || {});
+      for (const q of opt.objs) if (!isObj(s[q])) s[q] = {};
+      return opt.tidy(s);
+    }
+    a = Object.assign(opt.fresh(), a);
+    b = Object.assign(opt.fresh(), b);
+    const [n, o] = (a.t || 0) >= (b.t || 0) ? [a, b] : [b, a];
+    const s = Object.assign(opt.fresh(), n);
+    fields(s, n, o, opt);
+    runs(s, a, b, n, opt);
+    if (opt.after) opt.after(s, n, o);
+    return opt.tidy(s);
+  }
+
+  // localStorage の写しと mem（保存に失敗したときの写し）を読んで合わせる
+  function load(key, mem, opt) {
+    let b = null;
+    try { b = parse(root.localStorage.getItem(key), opt.v); } catch (e) {}
+    return merge(parse(mem, opt.v), b, opt);
+  }
+
+  const api = { VER, parse, merge, load, progOf };
+  if (typeof module === "object" && module.exports) module.exports = api;
+  else root.GameStore = api;
+})(typeof window !== "undefined" ? window : globalThis);
+</script>
+<!-- store:end -->
+<!-- core:begin（template/core/core.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す） -->
+<script id="game-core">
+// ゲームの共通部品 game-core。ひな形: satou-aaaaa/shared-workflows の template/core/core.js。
+// ゲームでは直さない。index.html の core:begin〜core:end の印のあいだに node scripts/sync-template.mjs <ゲームのフォルダ> で写す
+// （ファイルを足さないので sw.js の SHELL は変えない）。ゲームからは window.Core で使う。
+// 共通部品の版: 8
+//   1: 2026-11-21 ゲームごとに手で写していた小さな関数を1か所に集めた。40本で同じ役目の関数が何通りにも分かれ
+//      （お知らせの帯 11通り・振動 10通り・文字を安全にする esc 4通り・数の読み込み num 2通り）、
+//      「動きを減らす」でも振動する・お知らせが読み上げられない・num の直し（#410）が22本に届かない・esc が " を変えない、が起きていた
+//      （incidents/2026-11-21-hand-copied-helpers-drift.md）。
+//      あわせて、はじめて遊ぶ人への案内（吹き出し Core.coach）を足した。長い「遊び方」の窓の代わりに、練習の1問を遊びながら
+//      その場で一言ずつ教える（NN/g「Mobile Instructional Overlays」・Andersen ほか CHI 2012「The Impact of Tutorials on Games of Varying Complexity」）。
+//   3: 2026-11-22 吹き出しを出しているあいだ 0.4 秒ごとに場所を測り直す（古い場所に残って押す所を隠すことがあった）。ボタンの字を「案内を閉じる」に。
+//      段の wait（その所が出るまで待つ）を足した。全ゲームの「はじめての練習」を sync-template の migrateFirstPlay が足すため
+//   2: 2026-11-22 感想フォームのゲーム名を、渡さなければ題（<title>）から入れる。sync-template が全ゲームを game-core に切り替える（migrateCore）ため
+//   4: 2026-11-23 画面の切り替え（Core.screens）を足した。1ページに全部を縦に積んで見づらくなるのを、単体の HTML のまま
+//      URL の #（例 #kiroku）で画面を分けて止める（routines/ui-rules.md U10〜U12。NN/g「Progressive Disclosure」・Android「Layouts and navigation patterns」）。
+//      <section data-screen="home">〜 を置いたページだけで動く（置いていないゲームでは何もしない）
+//      JS で描き替えるゲームは、画面の関数の最初で Core.screens.mark("dex")、起動時に Core.screens.route({...}, home) で「戻る」がホームへ戻る
+//   5: 2026-11-27 全ゲームで同じ場所（ページのいちばん上の右）に「？ 遊び方」を置く（Core.help）。止まるような不具合が起きたら
+//      ページの上に帯を出し、本人が「知らせる」を押したときだけ感想フォームが開く（Core.errBar）。エラーの文は保存も自動送信もしない
+//      （satou さん 2026-11-27「個人データ・個人情報をとらない」。外のサーバーへ自動で送ると IP がいつも届くため、自動の通知と集計は作らない）。
+//      MDN「Window: error event」「unhandledrejection event」・NN/g「Error-Message Guidelines」（何が起きたか・どうすればよいかを書く）
+//   7: 2026-11-27 Ko-fi 応援の一文（Core.kofi）と応援先（Core.KOFI）を足した。201本が同じ一文を手で写し、文言が4通り以上に分かれていた
+//      （incidents/2026-11-27-kofi-line-hand-copied.md）。出す条件（初めて・まちがい0・練習でない日だけ）はゲームの記録しだいなので、ゲームに残す
+//   8: 2026-11-27 SNS への共有（Core.share）を足した。結果のシェア（X・LINE・端末の共有・コピー）は約200本に同じ5行を手で写していたのを1か所に集め、
+//      フッターの「共有」（data-share）からゲームそのものも共有できるようにした（satou さん「全ゲームに SNS 共有」「共通化も」）。
+//      X は公式の Web Intent（docs.x.com「Web Intent」: https://x.com/intent/tweet?text=）、LINE は LINE URL スキーム
+//      （developers.line.biz「LINE URLスキームでLINEの機能を使う」: https://line.me/R/share?text=）、端末の共有は Web Share API
+//      （MDN「Navigator: share()」: 押したその場でだけ呼ぶ・やめたら AbortError）。共有する文は公開の URL（? と # を外す）とゲームの名前・結果だけ
+//      （遊ぶ人の名前・引き継ぎの #hk=・記録の中身は入れない）。どれも押した人が自分で選んで進むリンクで、外へ勝手に送らない
+// 決まり: 外へ通信しない。ゲームの関数の名前（toast・buzz など）は上書きしない（Core.toast などで呼ぶ）。
+(function () {
+  "use strict";
+  if (window.Core && window.Core.v) return;
+  const J = 9 * 3600e3, DAY = 864e5;
+  const doc = document;
+
+  // ---- 設定 ----
+  // 「動きを減らす」（見やすさの設定 a11y-calm・端末の設定）を選んでいるか
+  function calm() {
+    try {
+      if (window.A11y && typeof A11y.on === "function" && A11y.on("calm")) return true;
+      if (doc.documentElement.classList.contains("a11y-calm")) return true;
+      return !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+    } catch (e) { return false; }
+  }
+
+  // ---- 文字と数 ----
+  // HTML の文にも属性（"…"・'…'）にも入れてよい形にする
+  const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+  const esc = (t) => String(t == null ? "" : t).replace(/[&<>"']/g, (c) => ESC[c]);
+  // 記録から読んだ数：0 以上の整数だけ。配列・true・オブジェクトは 0（+[5] が 5 になるのを防ぐ。#410）
+  const num = (v) => ((typeof v === "number" || typeof v === "string") && v !== "" && Number.isFinite(+v) && +v >= 0 ? Math.floor(+v) : 0);
+
+  // ---- 日付（日本時間。"YYYY-MM-DD" の文字で持つ）----
+  const jstNow = () => new Date(Date.now() + J);
+  const today = () => jstNow().toISOString().slice(0, 10);
+  const addDays = (k, n) => new Date(Date.parse(k) + n * DAY).toISOString().slice(0, 10);
+  const prevDay = (k) => addDays(k, -1);
+  const nextDay = (k) => addDays(k, 1);
+  const md = (k) => `${+k.slice(5, 7)}/${+k.slice(8, 10)}`;
+  const dayNo = (k, epoch) => Math.round((Date.parse(k) - Date.parse(epoch)) / DAY) + 1;
+  const ymOf = (k) => k.slice(0, 7);
+  const ymAdd = (ym, n) => new Date(Date.UTC(+ym.slice(0, 4), +ym.slice(5, 7) - 1 + n, 1)).toISOString().slice(0, 7);
+  // 次の日（日本時間の0時）まで
+  function untilNext() { const ms = DAY - (jstNow().getTime() % DAY), m = Math.ceil(ms / 6e4); return `${Math.floor(m / 60)}時間${m % 60}分`; }
+  // 続けて遊んだ日数（今日まだ遊んでいなければ昨日から数える。責めない数え方）
+  function streak(days) { if (!days || typeof days !== "object") return 0; let k = today(), n = 0; if (!days[k]) k = prevDay(k); while (Object.prototype.hasOwnProperty.call(days, k) && days[k]) { n++; k = prevDay(k); } return n; }
+
+  // ---- 読み上げ・お知らせ・振動 ----
+  let live = null;
+  function liveEl() {
+    if (live && live.isConnected) return live;
+    live = doc.createElement("div");
+    live.id = "core-live"; live.setAttribute("role", "status"); live.setAttribute("aria-live", "polite");
+    live.style.cssText = "position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0";
+    (doc.body || doc.documentElement).appendChild(live);
+    return live;
+  }
+  // 読み上げソフトに伝える（画面には出さない）。同じ文でももう一度読むよう、いったん空にしてから入れる
+  function say(t) { const l = liveEl(); l.textContent = ""; setTimeout(() => { l.textContent = String(t); }, 30); }
+  // 画面の下に短く出すお知らせ。読み上げにも届ける（WCAG 4.1.3）。長い文ほど長く出す（読み終える前に消さない）
+  let toastT = 0;
+  function toast(t, ms) {
+    doc.querySelectorAll(".toast.core-toast").forEach((x) => x.remove());
+    const d = doc.createElement("div");
+    d.className = "toast core-toast"; d.setAttribute("aria-hidden", "true"); d.textContent = String(t);
+    (doc.body || doc.documentElement).appendChild(d);
+    say(t);
+    clearTimeout(toastT);
+    toastT = setTimeout(() => d.remove(), ms || Math.min(6000, Math.max(2000, String(t).length * 120)));
+  }
+  // 振動（「動きを減らす」のときは震わせない）
+  function buzz(n) { if (calm()) return; try { if (navigator.vibrate) navigator.vibrate(n == null ? 12 : n); } catch (e) { /* 震えない端末 */ } }
+
+  // ---- 保存できないときの帯 ----
+  // 保存に失敗しているあいだ、画面のいちばん上に消えない帯を出す（ボタンに重ならないよう sticky で場所を取る）。保存できたら消す
+  const SAVE_W = "この端末に記録を保存できませんでした。ページを開き直すと、いまの記録が消えます";
+  function saveWarn(on) {
+    let b = doc.getElementById("savewarn");
+    if (!on) { if (b) b.remove(); return; }
+    if (b) return;
+    b = doc.createElement("div");
+    b.id = "savewarn"; b.setAttribute("role", "alert"); b.textContent = SAVE_W;
+    b.style.cssText = "position:sticky;top:0;z-index:9999;padding:8px 12px;background:#fff3cd;color:#000;font-size:15px;line-height:1.5;text-align:center;pointer-events:none;border-bottom:2px solid #8a6d00";
+    (doc.body || doc.documentElement).prepend(b);
+  }
+
+  // ---- Ko-fi の応援（任意。押すまで外へは通信しない）----
+  // 結果の画面に出す一文。lead は「楽しめたら」「役に立ったら」など、what は「新しいゲームづくり」など（ゲームの中身に合わせて渡す）
+  const KOFI = "https://ko-fi.com/satouaaaaa";
+  function kofi(lead, what) {
+    return `<p class="note kofi">${esc(lead || "楽しめたら")}、<a href="${KOFI}" target="_blank" rel="noopener">Ko-fi でコーヒー1杯の応援</a>をもらえると、${esc(what || "新しいゲームづくり")}の励みになります（任意・遊ぶのはずっと無料）。</p>`;
+  }
+
+  // ---- はじめての案内（吹き出し）----
+  // Core.coach.start(steps, { onEnd(done), home }) で、1つずつ吹き出しを出す。home はホームを描く関数（Core.coach.leave() が使う）。steps の1つは
+  //   { sel: "#choices", text: "…", until: "#after .ok", button: "つぎへ" } の形（オブジェクト）
+  //   sel   …… 吹き出しを付ける所。まだ画面に無いあいだは待つ（ゲームが画面を作り直しても付け直す）
+  //   until …… その所が画面に出たら次へ進む（答えた・正解した など）。無ければ sel を押したら次へ
+  //   button …… 押すと次へ進むボタンの字（読むだけの吹き出し）
+  //   wait  …… その所が画面に出るまで、この吹き出しは出さずに待つ（答えたあとにだけ「次へ」を指す など）
+  //   pos   …… "below"（既定）か "above"。その側に場所が無ければ、ページを少し動かして場所を空ける（読む所を隠さないため）
+  // 吹き出しは押す所を隠さない（上か下の空いたほうに出す）。「案内を閉じる」と Esc でいつでもやめられる。
+  const coach = (() => {
+    let steps = null, i = 0, opt = {}, box = null, tgt = null, mo = null, raf = 0, shown = -1, tick = 0;
+    function css() {
+      if (doc.getElementById("core-coach-css")) return;
+      const s = doc.createElement("style");
+      s.id = "core-coach-css";
+      s.textContent = "#core-coach{position:fixed;z-index:9998;box-sizing:border-box;width:min(340px,calc(100vw - 32px));padding:10px 12px;border-radius:14px;background:#1d2320;color:#fff;font:600 16px/1.55 system-ui,sans-serif;box-shadow:0 8px 24px #0006}"
+        + "#core-coach p{margin:0 0 6px}#core-coach .core-coach-row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}"
+        + "#core-coach button{min-height:44px;min-width:44px;padding:0 14px;border-radius:10px;border:2px solid #fff;background:#fff;color:#1d2320;font:700 15px/1 system-ui,sans-serif;cursor:pointer}"
+        + "#core-coach button.core-coach-skip{background:transparent;color:#fff}"
+        + "#core-coach .core-coach-n{font-size:13px;opacity:.85;margin-right:auto;align-self:center}"
+        + ".core-coach-on{outline:3px dashed #e0a000!important;outline-offset:3px!important}";
+      (doc.head || doc.documentElement).appendChild(s);
+    }
+    const visible = (el) => !!(el && el.isConnected && el.getClientRects().length);
+    const find = (sel) => { if (!sel) return null; const all = doc.querySelectorAll(sel); for (const el of all) if (visible(el)) return el; return null; };
+    function mark(el) { if (tgt === el) return; if (tgt) tgt.classList.remove("core-coach-on"); tgt = el; if (tgt) tgt.classList.add("core-coach-on"); }
+    function build() {
+      box = doc.createElement("div");
+      box.id = "core-coach"; box.setAttribute("role", "dialog"); box.setAttribute("aria-modal", "false"); box.setAttribute("aria-label", "はじめての案内");
+      box.innerHTML = '<p id="core-coach-t"></p><div class="core-coach-row"><span class="core-coach-n" aria-hidden="true"></span><button type="button" class="core-coach-skip">案内を閉じる</button><button type="button" class="core-coach-go" hidden></button></div>';
+      box.querySelector(".core-coach-skip").onclick = () => stop(false);
+      box.querySelector(".core-coach-go").onclick = () => advance();
+      (doc.body || doc.documentElement).appendChild(box);
+    }
+    function place() {
+      raf = 0;
+      if (!steps) return;
+      // 先へ進む所がもう出ていたら、その段は飛ばす（正解したら2段目の無い問題など）
+      while (steps && i < steps.length && steps[i].until && find(steps[i].until)) i++;
+      if (!steps) return;
+      if (i >= steps.length) return stop(true);
+      const st = steps[i], el = st.wait && !find(st.wait) ? null : find(st.sel);
+      if (!el) { box.hidden = true; mark(null); return; }
+      box.hidden = false; mark(el);
+      const fresh = shown !== i;
+      if (fresh) {
+        shown = i;
+        box.querySelector("#core-coach-t").textContent = st.text;
+        box.querySelector(".core-coach-n").textContent = steps.length > 1 ? `${i + 1}/${steps.length}` : "";
+        const go = box.querySelector(".core-coach-go");
+        go.hidden = !st.button; go.textContent = st.button || "";
+        say(st.text);
+        // ゲームがあとからページを動かす（正解のあとに「次へ」を見せる など）ことがあるので、少しのあいだ測り直す
+        for (const ms of [120, 350, 800]) setTimeout(sched, ms);
+        const r0 = el.getBoundingClientRect();
+        if (r0.top < 0 || r0.bottom > innerHeight) el.scrollIntoView({ block: "center" }); // すぐ動かす（なめらかに動かすと、場所を測る前に動き続ける）
+      }
+      // 画面の下の端は、見やすさの設定のボタン（左下）に重ならないよう BOTTOM だけ空ける
+      const w = box.offsetWidth, h = box.offsetHeight, vw = doc.documentElement.clientWidth || innerWidth, vh = innerHeight, gap = 12, BOTTOM = 60, want = st.pos === "above" ? "above" : "below";
+      let r = el.getBoundingClientRect();
+      if (fresh) {
+        // はじめて出すときだけ、決めた側に場所が無ければページを動かして空ける（押す所は画面に残す）
+        const need = want === "below" ? r.bottom + gap + h + BOTTOM - vh : gap + h + 8 - r.top;
+        if (need > 0) {
+          const dy = want === "below" ? Math.min(need, Math.max(0, r.top - 8)) : -need;
+          if (dy) { scrollBy(0, dy); r = el.getBoundingClientRect(); }
+        }
+      }
+      const below = vh - BOTTOM - r.bottom - gap, above = r.top - gap - 8;
+      const fitB = below >= h, fitA = above >= h;
+      let top = want === "below" ? (fitB ? r.bottom + gap : fitA ? r.top - gap - h : null) : (fitA ? r.top - gap - h : fitB ? r.bottom + gap : null);
+      if (top === null) top = below >= above ? vh - h - BOTTOM : 8;
+      top = Math.max(8, Math.min(top, vh - h - 8));
+      const left = Math.max(16, Math.min(r.left + r.width / 2 - w / 2, vw - w - 16));
+      box.style.top = Math.round(top) + "px"; box.style.left = Math.round(left) + "px";
+    }
+    const sched = () => { if (!raf) raf = requestAnimationFrame(place); };
+    function advance() { if (!steps) return; i++; shown = -1; sched(); }
+    function onClick(e) {
+      if (!steps || (box && box.contains(e.target))) return;
+      const st = steps[i];
+      if (!st || st.until || st.button) return;
+      if (st.sel && e.target.closest && e.target.closest(st.sel)) setTimeout(advance, 0); // ゲームが押した所を描き直してから次へ
+    }
+    function onKey(e) { if (steps && e.key === "Escape" && !doc.querySelector("dialog[open]")) stop(false); }
+    function start(list, o) {
+      stop(null);
+      steps = (list || []).filter((x) => x && x.text); i = 0; shown = -1; opt = o || {};
+      if (!steps.length) { steps = null; return; }
+      css(); build();
+      mo = new MutationObserver(sched); mo.observe(doc.body || doc.documentElement, { childList: true, subtree: true });
+      addEventListener("resize", sched); addEventListener("scroll", sched, true);
+      // 見た目だけの変化（開く動き・字の読み込み・あとから出る絵）は上の知らせが来ないことがあるので、出ているあいだは少しずつ測り直す。
+      // 吹き出しが古い場所に残って押す所を隠し、押せなくなっていた（2026-11-22 練習の1問の QA が GitHub の上でだけ止まった）
+      tick = setInterval(sched, 400);
+      doc.addEventListener("click", onClick, true); doc.addEventListener("keydown", onKey, true);
+      sched();
+    }
+    // done: true（最後まで進んだ）・false（とじた）・null（ほかの案内に替えた。onEnd は呼ばない）
+    function stop(done) {
+      if (!steps) return;
+      const o = opt;
+      steps = null; opt = {};
+      if (mo) mo.disconnect(); mo = null;
+      removeEventListener("resize", sched); removeEventListener("scroll", sched, true);
+      clearInterval(tick); tick = 0;
+      doc.removeEventListener("click", onClick, true); doc.removeEventListener("keydown", onKey, true);
+      if (raf) cancelAnimationFrame(raf); raf = 0;
+      mark(null);
+      if (box) box.remove(); box = null;
+      if (done !== null && typeof o.onEnd === "function") { try { o.onEnd(done); } catch (e) { setTimeout(() => { throw e; }); } }
+    }
+    // 案内をやめてホームへもどる（QA の共通部品が、はじめての練習を飛ばしてホームから測るのに使う）
+    function leave() { const h = opt.home; stop(false); if (typeof h === "function") h(); }
+    return { start, stop, leave, active: () => !!steps, step: () => (steps ? i : -1) };
+  })();
+
+  // ---- 画面の切り替え（1つの HTML を # で画面に分ける。routines/ui-rules.md U10〜U12）----
+  // 書き方: <section data-screen="home" data-title="ホーム">…</section><section data-screen="kiroku" data-title="記録" hidden>…</section>
+  //         入口は <a href="#kiroku">記録</a>。戻るボタン・ブラウザの「戻る」で前の画面へ戻る。最初の data-screen がホーム。
+  // 画面が変わると、その画面の最初の見出しへフォーカスを移し（読み上げのため）、上までもどし、"core:screen" を知らせる（detail.id）。
+  // ゲームから: Core.screens.go("kiroku")・Core.screens.now()・Core.screens.list()
+  // screens.js（単体の部品）を先に読んだページでは、それを使う（2回つながない）
+  const screens = window.Screens || (function () {
+    // screens:begin（template/screens/screens.js と同じ中身。check-core が比べる。直すときは両方を同じに）
+    const all = () => (doc.querySelectorAll ? [...doc.querySelectorAll("[data-screen]")] : []);
+    const ids = () => all().map((e) => e.getAttribute("data-screen"));
+    let cur = "";
+    let baseTitle = "";
+    function want() {
+      let h = "";
+      try { h = decodeURIComponent((location.hash || "").slice(1)); } catch (e) { h = ""; }
+      const list = ids();
+      return list.includes(h) ? h : list[0] || "";
+    }
+    function show(id, first) {
+      const list = all();
+      if (!list.length) return;
+      const el = list.find((e) => e.getAttribute("data-screen") === id) || list[0];
+      id = el.getAttribute("data-screen");
+      for (const e of list) e.hidden = e !== el;
+      const t = el.getAttribute("data-title");
+      if (!baseTitle) baseTitle = doc.title;
+      doc.title = t && id !== list[0].getAttribute("data-screen") ? `${t}｜${baseTitle}` : baseTitle;
+      const changed = cur !== id;
+      cur = id;
+      if (!changed || first) { if (changed) fire(id); return; }
+      try { scrollTo(0, 0); } catch (e) { /* 古いブラウザ */ }
+      const h = el.querySelector("h1,h2,[data-screen-focus]");
+      if (h) { if (!h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1"); try { h.focus({ preventScroll: true }); } catch (e) { /* 無視 */ } }
+      fire(id);
+    }
+    function fire(id) { try { doc.dispatchEvent(new CustomEvent("core:screen", { detail: { id } })); } catch (e) { /* 古いブラウザ */ } }
+    function go(id) {
+      if (!ids().includes(id)) return;
+      if (want() === id) return show(id);
+      location.hash = id === ids()[0] ? "" : id; // ホームは # を付けない（共有したURLがホームになる）
+    }
+    function init() {
+      if (!all().length) return;
+      // ゲームの CSS が section に display を書いていても、隠した画面は出さない
+      const st = doc.createElement("style");
+      st.textContent = "[data-screen][hidden]{display:none!important}";
+      doc.head.appendChild(st);
+      addEventListener("hashchange", () => show(want()));
+      show(want(), true);
+    }
+    if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", init); else init();
+    // ---- JS で描き替える画面（ゲームの帳・カレンダー・実績など）を # と「戻る」につなぐ ----
+    // ゲームは画面を app.innerHTML で描き替えるので、そのままでは「戻る」でゲームから出てしまう。
+    // 使い方: 画面を描く関数の最初で Core.screens.mark("dex")（ホームは mark("")）。起動時に一度
+    //         Core.screens.route({ dex: book, cal: () => cal(), ach: achView }, home)。
+    // 履歴はいつも [ホーム] か [ホーム, #画面] の2つまで（画面から画面へは置き換え、ホームへは戻す）。開き直すとホームから。
+    const views = new Map(); // Map にする（# から来た名前で Object の関数を呼ばない。CodeQL js/unvalidated-dynamic-method-call）
+    let homeFn = null, pushed = false, skipPop = 0, quiet = false;
+    const hashName = () => { try { return decodeURIComponent((location.hash || "").slice(1)); } catch (e) { return ""; } };
+    const bare = () => location.pathname + location.search;
+    // # が画面の名前でないとき（引き継ぎの #hk=… など、ほかの部品の印）は触らない
+    const foreign = () => { const h = hashName(); return !!h && !/^[A-Za-z][\w-]*$/.test(h); };
+    function mark(name) {
+      if (quiet || all().length || !homeFn) return; // data-screen のページ・route の前・戻るで描いている最中は何もしない
+      name = name || "";
+      if (foreign()) return;
+      const now = hashName();
+      if (now === name) return;
+      try {
+        if (!name) {
+          if (pushed) { pushed = false; skipPop++; history.back(); } else history.replaceState(null, "", bare());
+        } else if (!now) { history.pushState(null, "", "#" + encodeURIComponent(name)); pushed = true; }
+        else history.replaceState(null, "", "#" + encodeURIComponent(name));
+      } catch (e) { /* 使えない */ }
+      fire(name || "home");
+    }
+    function onPop() {
+      if (skipPop) { skipPop--; return; }
+      if (foreign()) return;
+      const h = hashName();
+      const own = !!h && views.has(h);
+      if (!own) pushed = false;
+      // CodeQL js/unvalidated-dynamic-method-call：# から選んだものは has で確かめ、関数かどうかも見てから呼ぶ
+      const fn = own ? views.get(h) : homeFn;
+      quiet = true;
+      try { if (typeof fn === "function") fn(); } finally { quiet = false; }
+    }
+    function route(map, home) {
+      if (all().length) return;
+      for (const k of Object.keys(map || {})) if (typeof map[k] === "function") views.set(k, map[k]);
+      // 何度呼んでもよい（ゲームの home() の最初で呼ぶ）。# を消すのは最初の1回だけ（開き直したらホームから。途中の回は続きから出る）
+      if (!homeFn) { addEventListener("popstate", onPop); if (hashName() && !foreign()) try { history.replaceState(null, "", bare()); } catch (e) { /* 使えない */ } }
+      homeFn = home;
+    }
+    return { go, now: () => cur, list: ids, show: (id) => show(id), mark, route };
+    // screens:end
+  })();
+  window.Screens = screens;
+
+  // ---- SNS への共有（X・LINE・端末の共有・コピー）----
+  // 結果の画面: <div class="shares"><a id="toX" …>Xで投稿</a><a id="toLine" …>LINEで送る</a><button id="copy">コピー</button></div> と
+  //            <button id="share">結果をシェア</button> を描いたあとで Core.share.wire(文)。文には SITE（公開の URL）を含める（ハッシュタグは Core が足す）
+  // ゲームそのもの: フッターなどに <a href="#" data-share>共有</a>。押すと共有の窓（端末の共有・X・LINE・リンクをコピー）が開く
+  // ゲームから: Core.share.links(文) → { x, line }・Core.share.copy(文)・Core.share.send(文)・Core.share.open(文)・Core.share.url()
+  const TITLE0 = doc.title || "";
+  const share = (() => {
+    const X = "https://x.com/intent/tweet?text=", LINE = "https://line.me/R/share?text=";
+    // 公開の URL だけ（? と # は外す。引き継ぎの #hk=・画面の名前・記録を外へ出さない）
+    const url = () => {
+      const m = doc.querySelector ? doc.querySelector('meta[property="og:url"]') : null;
+      if (m && /^https:\/\//.test(m.content || "")) return m.content; // 公開の URL（OGP に書いたもの）
+      try { return location.origin + location.pathname.replace(/index\.html$/, ""); } catch (e) { return ""; }
+    };
+    // ゲームの名前：og:title、無ければ開いたときの題（画面の切り替えで「記録｜…」になる前のもの）
+    const name = () => { const m = doc.querySelector ? doc.querySelector('meta[property="og:title"]') : null; return String((m && m.content) || TITLE0 || doc.title || "").trim(); };
+    const gameText = () => `「${name()}」無料・登録なしで遊べます\n${url()}`;
+    // ハッシュタグ：ゲームの名前＋全ゲーム共通の「学べる無料ゲーム」の2つ。
+    // X のヘルプ「How to use hashtags」は1つの投稿に2つまでをすすめる。タグに使えない字（空白・？・・ など）は外す（× は「バツ」）。
+    // satou さん 2026-11-27「ハッシュタグもつけて、検索しやすいように」
+    // ゲーム一覧ページの題「学べる無料ゲーム一覧」から。ゲームにはサークル名を出さない（satou さん 2026-11-24。check-core が見る）
+    const TAG_ALL = "学べる無料ゲーム";
+    const tagOf = (s) => String(s || "").split(/[：:｜|]/)[0].replace(/×/g, "バツ").replace(/[^\p{L}\p{N}\p{M}_ー]/gu, "").slice(0, 30);
+    function tags() {
+      const g = tagOf(name());
+      return [g && !/^\d+$/.test(g) && g !== TAG_ALL ? g : "", TAG_ALL].filter(Boolean).map((x) => "#" + x).join(" ");
+    }
+    // 文の最後にタグを1行足す（もう付いていれば足さない）
+    const tagged = (t) => { t = String(t); return t.includes("#" + TAG_ALL) ? t : `${t.replace(/\s+$/, "")}\n${tags()}`; };
+    const links = (t) => { t = tagged(t); return { x: X + encodeURIComponent(t), line: LINE + encodeURIComponent(t) }; };
+    function copy(t) {
+      t = tagged(t);
+      const done = () => toast("コピーしました"), fail = () => toast("コピーできませんでした");
+      try { if (navigator.clipboard && navigator.clipboard.writeText) return void navigator.clipboard.writeText(String(t)).then(done, fail); } catch (e) { /* 使えない */ }
+      fail();
+    }
+    // 端末の共有メニュー（スマホ）。無い・使えないときはコピー。やめた（AbortError）ときは何もしない
+    function send(t) {
+      t = tagged(t);
+      if (!navigator.share) return copy(t);
+      try { navigator.share({ text: String(t) }).catch((e) => { if (!e || e.name !== "AbortError") copy(t); }); } catch (e) { copy(t); }
+    }
+    // 結果の画面のボタン（#toX・#toLine・#copy・#share）をつなぐ。無いボタンは飛ばす
+    function wire(t, root) {
+      const r = root || doc, q = (id) => (r.querySelector ? r.querySelector("#" + id) : null), l = links(t);
+      const x = q("toX"), ln = q("toLine"), c = q("copy"), s = q("share");
+      if (x) { x.href = l.x; x.target = "_blank"; x.rel = "noopener"; }
+      if (ln) { ln.href = l.line; ln.target = "_blank"; ln.rel = "noopener"; }
+      if (c) c.onclick = () => copy(t);
+      if (s) s.onclick = () => send(t);
+    }
+    function css() {
+      if (doc.getElementById("core-share-css")) return;
+      const s = doc.createElement("style");
+      s.id = "core-share-css";
+      s.textContent = "#core-share{box-sizing:border-box;width:min(360px,calc(100vw - 32px));padding:16px;border:0;border-radius:16px;background:#1d2320;color:#fff;font:600 16px/1.55 system-ui,sans-serif;box-shadow:0 8px 24px #0006}"
+        + "#core-share::backdrop{background:#0008}#core-share h2{margin:0 0 4px;font-size:18px}#core-share p{margin:0 0 12px;font-size:14px;font-weight:400;white-space:pre-wrap;word-break:break-all;opacity:.9}"
+        + "#core-share .core-share-row{display:grid;gap:8px}"
+        + "#core-share a,#core-share button{box-sizing:border-box;display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 14px;border-radius:10px;border:2px solid #fff;background:#fff;color:#1d2320;font:700 15px/1.2 system-ui,sans-serif;text-decoration:none;cursor:pointer}"
+        + "#core-share .core-share-close{background:transparent;color:#fff}";
+      (doc.head || doc.documentElement).appendChild(s);
+    }
+    // 共有の窓。t を渡さなければ、ゲームそのもの（名前と URL）を共有する
+    function open(t) {
+      t = tagged(t == null ? gameText() : String(t));
+      css();
+      let d = doc.getElementById("core-share");
+      if (d) d.remove();
+      d = doc.createElement("dialog");
+      d.id = "core-share"; d.setAttribute("aria-labelledby", "core-share-h");
+      const l = links(t);
+      d.innerHTML = `<h2 id="core-share-h">共有する</h2><p>${esc(t)}</p><div class="core-share-row">`
+        + (navigator.share ? '<button type="button" class="core-share-send">スマホの共有メニュー</button>' : "")
+        + `<a class="core-share-x" href="${esc(l.x)}" target="_blank" rel="noopener">Xで投稿</a>`
+        + `<a class="core-share-line" href="${esc(l.line)}" target="_blank" rel="noopener">LINEで送る</a>`
+        + '<button type="button" class="core-share-copy">文とリンクをコピー</button>'
+        + '<button type="button" class="core-share-close">閉じる</button></div>';
+      (doc.body || doc.documentElement).appendChild(d);
+      const b = (c) => d.querySelector("." + c);
+      if (b("core-share-send")) b("core-share-send").onclick = () => send(t);
+      b("core-share-copy").onclick = () => copy(t);
+      b("core-share-close").onclick = () => d.close();
+      d.addEventListener("close", () => d.remove());
+      try { d.showModal(); } catch (e) { d.setAttribute("open", ""); }
+    }
+    // data-share を付けた所を押したら共有の窓を開く（data-share に文があればその文、無ければゲームそのもの）
+    if (doc.addEventListener) doc.addEventListener("click", (e) => {
+      const a = e.target && e.target.closest ? e.target.closest("[data-share]") : null;
+      if (!a) return;
+      e.preventDefault();
+      open(a.getAttribute("data-share") || null);
+    });
+    // 「共有」は2字なので、フッターの字が大きいと幅が 44px に足りない（2026-11-27 古いゲームの QA で見つけた）。押す所は 44px 以上（WCAG 2.5.8・ui-rules U1）
+    if (doc.head && doc.createElement) {
+      const st = doc.createElement("style");
+      st.id = "core-share-min";
+      st.textContent = "[data-share]{min-width:44px;justify-content:center;text-align:center}";
+      doc.head.appendChild(st);
+    }
+    return { url, name, tags, tagged, links, copy, send, wire, open };
+  })();
+
+  // ---- 感想・不具合のフォーム（全ゲームで1つの Googleフォーム。事前入力のリンクでゲーム名と付属情報を入れる）----
+  // 送る人が入力するのは「内容」の1か所だけ（必須はそれだけ）。名前・メール・遊んだ記録の中身は入れない。
+  // 付属情報はフォームに見える形で入り、送る前に本人が消せる。フォームの entry 番号は Googleフォームの「事前入力した URL を取得」で確かめたもの
+  // （Google ドキュメント エディタ ヘルプ「回答をあらかじめ入力したフォームを送信する」）
+  const FORM = "https://docs.google.com/forms/d/e/1FAIpQLSftS0o3joZDdMLIBL_czoEonBo2tu9_ilndrUc89b2Waktmvw/viewform";
+  // 番号は数の足し算で書く（ゲームの QA が短い番号を写し元の言葉として探すことがある。incidents/2026-11-22-core-text-tripped-game-qa.md）
+  const ENTRY = { kind: `entry.${241861100 + 88}`, game: "entry.443796210", info: "entry.1094269478" };
+  const KINDS = { fun: "感想", bug: "不具合（動かない・表示がおかしい）", data: "問題・答え・出典のまちがい", wish: "要望" };
+  // 最後に出たエラー（付属情報に短く入れる。ファイル名と行だけ。URL の残りは入れない）
+  let lastErr = "";
+  const short = (t) => String(t || "").replace(/https?:\/\/[^\s)]*\/([^/\s)?#]+)/g, "$1").replace(/\s+/g, " ").slice(0, 200);
+  try {
+    addEventListener("error", (e) => { lastErr = short(`${e.message || "エラー"}${e.filename ? ` (${e.filename}:${e.lineno || 0})` : ""}`); });
+    addEventListener("unhandledrejection", (e) => { lastErr = short(`Promise: ${e.reason && e.reason.message ? e.reason.message : e.reason}`); });
+  } catch (e) { /* 古いブラウザ */ }
+  // ゲームの版：sw.js の保存箱の名前（例 game-v12）。ゲームごとに版の数を書かなくてよいように、ここで読む
+  let cacheVer = "";
+  try { if (window.caches && caches.keys) caches.keys().then((k) => { cacheVer = k.filter((x) => /-v\d+$/.test(x)).sort().pop() || ""; }, () => {}); } catch (e) { /* 使えない */ }
+  // ブラウザと OS の名前だけ（細かい版や機種名は入れない）
+  function envName() {
+    const u = (navigator.userAgent || "");
+    const os = /iPhone|iPad|iPod/.test(u) ? "iOS" : /Android/.test(u) ? "Android" : /Windows/.test(u) ? "Windows" : /Mac OS X/.test(u) ? "Mac" : /CrOS/.test(u) ? "ChromeOS" : /Linux/.test(u) ? "Linux" : "その他";
+    const br = /Edg\//.test(u) ? "Edge" : /SamsungBrowser/.test(u) ? "Samsung" : /CriOS|Chrome\//.test(u) ? "Chrome" : /FxiOS|Firefox\//.test(u) ? "Firefox" : /Safari\//.test(u) ? "Safari" : "その他";
+    return `${br} / ${os}`;
+  }
+  // 付属情報の文（1行ずつ）。o には game・ver・screen・q を入れる
+  function feedbackInfo(o) {
+    o = o || {};
+    const a11y = [...doc.documentElement.classList].filter((c) => /^a11y-/.test(c)).map((c) => c.slice(5)).join(",");
+    return [
+      `ゲーム: ${o.game || (doc.title || "").slice(0, 40)}`,
+      `版: ${o.ver || cacheVer || "?"} / 共通部品 core ${Core.v}`,
+      o.screen ? `画面: ${o.screen}` : "",
+      o.q ? `問題: ${o.q}` : "",
+      `画面の大きさ: ${innerWidth}x${innerHeight}`,
+      `ブラウザ: ${envName()}`,
+      `日付: ${today()}`,
+      a11y ? `見やすさ: ${a11y}` : "",
+      lastErr ? `最後のエラー: ${lastErr}` : "",
+    ].filter(Boolean).join("\n");
+  }
+  // 感想フォームのリンク。kind は fun（感想）・bug（不具合）・data（問題のまちがい）・wish（要望）
+  function feedbackUrl(o) {
+    o = o || {};
+    const p = new URLSearchParams();
+    p.set("usp", "pp_url");
+    p.set(ENTRY.kind, KINDS[o.kind] || KINDS.fun);
+    p.set(ENTRY.game, String(o.game || doc.title || "").slice(0, 80)); // 渡さなければ題（<title>）をゲーム名にする
+    p.set(ENTRY.info, feedbackInfo(o));
+    return `${FORM}?${p.toString()}`;
+  }
+  // href を押したその時の情報で作り直す（data-feedback="fun|bug|data|wish" を付けた a）。開く前に作るので、画面の大きさ・最後のエラーが新しい
+  let fbBound = false;
+  function bindFeedback(o) {
+    fbBound = true;
+    doc.addEventListener("click", (e) => {
+      const a = e.target && e.target.closest ? e.target.closest("a[data-feedback]") : null;
+      if (!a) return;
+      const x = Object.assign({}, typeof o === "function" ? o() : o, { kind: a.getAttribute("data-feedback") || "fun" });
+      a.href = feedbackUrl(x); a.target = "_blank"; a.rel = "noopener";
+    }, true);
+  }
+
+  // ---- 遊び方の「？」（全ゲームで同じ場所：ページのいちばん上の右。NN/g「Help and Documentation」：いつでも同じ所から開ける）----
+  // ページの上に 52px の場所を空けて置く（浮かせないので、押せる所を隠さない。routines/ui-rules.md U1）。
+  // 押すと、ゲームの openHow()（無ければフッターの #f-how、それも無ければ dialog#howto）を開く。遊び方の無いページには出さない。
+  function helpOpen() {
+    try {
+      if (typeof window.openHow === "function") { window.openHow(); return true; }
+      const d = doc.getElementById("howto");
+      if (d && d.tagName === "DIALOG") { if (!d.open) { if (d.showModal) d.showModal(); else d.setAttribute("open", ""); } return true; }
+      const f = doc.getElementById("f-how");
+      if (f) { f.click(); return true; }
+    } catch (e) { setTimeout(() => { throw e; }); }
+    return false;
+  }
+  const helpHas = () => typeof window.openHow === "function" || !!doc.getElementById("howto") || !!doc.getElementById("f-how");
+  function help() {
+    if (doc.getElementById("core-help") || !doc.body || !helpHas()) return;
+    if (!doc.getElementById("core-help-css")) {
+      const s = doc.createElement("style");
+      s.id = "core-help-css";
+      s.textContent = "html.core-helpon{padding-top:52px}"
+        + "#core-help{position:absolute;top:4px;right:max(8px,env(safe-area-inset-right,0px));z-index:50;display:inline-flex;align-items:center;gap:4px;min-height:44px;min-width:44px;padding:0 12px;border-radius:22px;border:2px solid #1d2320;background:#fff;color:#1d2320;font:700 15px/1 system-ui,sans-serif;cursor:pointer}"
+        + "#core-help b{font-size:18px}"
+        + "html.a11y-dark #core-help{background:#22282a;color:#eceae4;border-color:#eceae4}"
+        + "#core-err{margin:0;padding:8px 12px;background:#fff3cd;color:#000;border-bottom:2px solid #8a6d00;font:500 15px/1.5 system-ui,sans-serif}"
+        + "#core-err p{margin:0 0 6px}#core-err .core-err-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}"
+        + "#core-err a,#core-err button{display:inline-flex;align-items:center;min-height:44px;min-width:44px;padding:0 14px;border-radius:10px;border:2px solid #000;background:#fff;color:#000;font:700 15px/1 system-ui,sans-serif;text-decoration:none;cursor:pointer}";
+      (doc.head || doc.documentElement).appendChild(s);
+    }
+    const b = doc.createElement("button");
+    b.type = "button"; b.id = "core-help"; b.setAttribute("aria-label", "遊び方");
+    b.innerHTML = "<b aria-hidden=\"true\">？</b><span aria-hidden=\"true\">遊び方</span>";
+    b.addEventListener("click", helpOpen);
+    doc.body.appendChild(b);
+    doc.documentElement.classList.add("core-helpon");
+  }
+
+  // ---- 止まるような不具合の帯（本人が押したときだけ知らせる）----
+  // このページの script のエラーだけを拾う（拡張機能・別のサイトの script の「Script error.」は数えない）。1回開くごとに1度だけ出す。
+  // 帯は流れの中に置く（浮かせない）。「知らせる」で感想フォーム（不具合）を開く。付属情報は送る前に本人が見て消せる。何も自動では送らない
+  let errShown = false;
+  function mine(e) {
+    if (!e) return false;
+    if (e.type === "unhandledrejection") return true;
+    if (!e.message || /^Script error\.?$/i.test(e.message)) return false;
+    if (/ResizeObserver loop/i.test(e.message)) return false; // 画面の描き直しの知らせで、動きは止まらない
+    const f = e.filename || "";
+    try { return !f || new URL(f, location.href).origin === location.origin; } catch (x) { return false; }
+  }
+  function errBar() {
+    if (errShown || !doc.body) return;
+    errShown = true;
+    const d = doc.createElement("div");
+    d.id = "core-err"; d.setAttribute("role", "alert");
+    d.innerHTML = "<p>うまく動かない所がありました。ページを開き直すと直ることがあります。</p>"
+      + "<div class=\"core-err-row\"><a data-feedback=\"bug\" target=\"_blank\" rel=\"noopener\">不具合を知らせる</a><button type=\"button\">閉じる</button></div>";
+    const a = d.querySelector("a");
+    a.href = feedbackUrl({ kind: "bug" });
+    a.addEventListener("click", () => { a.href = feedbackUrl({ kind: "bug" }); });
+    d.querySelector("button").addEventListener("click", () => d.remove());
+    doc.body.prepend(d);
+  }
+  try {
+    addEventListener("error", (e) => { if (e instanceof ErrorEvent && mine(e)) setTimeout(errBar, 0); });
+    addEventListener("unhandledrejection", (e) => { if (mine(e)) setTimeout(errBar, 0); });
+  } catch (e) { /* 古いブラウザ */ }
+  // ゲームが遊び方の窓を後から作ることがあるので、読み終えてから置く
+  if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", () => setTimeout(help, 0)); else setTimeout(help, 0);
+
+  // bindFeedback を呼ばないゲーム（形のちがうゲームに sync-template が「感想・質問を送る」を足した所）でも、data-feedback を押せばフォームへ。
+  // a でないもの（button）は新しいタブに出す
+  if (doc.addEventListener) doc.addEventListener("click", (e) => {
+    const a = e.target && e.target.closest ? e.target.closest("[data-feedback]") : null;
+    if (!a || (fbBound && a.tagName === "A")) return; // a は bindFeedback が作る（ゲームの付属情報が入る）
+    const u = feedbackUrl({ kind: a.getAttribute("data-feedback") || "fun" });
+    if (a.tagName === "A") { a.href = u; a.target = "_blank"; a.rel = "noopener"; return; }
+    e.preventDefault();
+    try { window.open(u, "_blank", "noopener"); } catch (err) { /* 開けない */ }
+  }, true);
+
+  window.Core = { v: 8, calm, esc, num, jstNow, today, addDays, prevDay, nextDay, md, dayNo, ymOf, ymAdd, untilNext, streak, say, toast, buzz, saveWarn, coach, feedbackUrl, feedbackInfo, bindFeedback, screens, help: helpOpen, errBar, kofi, KOFI, share };
+})();
+</script>
+<!-- core:end -->
+<!-- kiroku:begin（template/kiroku/kiroku.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す） -->
+<script id="game-kiroku">
+// ゲームの共通部品 kiroku（成績のまとめ・更新のお知らせ・長く遊んだら知らせる）。ひな形: satou-aaaaa/shared-workflows の template/kiroku/kiroku.js。
+// ゲームでは直さない。index.html の kiroku:begin〜kiroku:end の印のあいだに node scripts/sync-template.mjs <ゲームのフォルダ> で写す。
+// ゲームからは window.Kiroku で使う。外へは何も送らない（端末の localStorage だけ。2026-11-26 satou さん「個人データはとらない」）。
+// 版: 1（2026-11-26）
+//   成績：ホームを描くたびに Kiroku.note(() => ({ s, tally, ach })) で、このゲームの成績のまとめ（遊んだ日・正解・続けた日・自己ベスト・実績）を
+//         kiroku-v1 に書く。同じサイト（satou-aaaaa.github.io）の全ゲームで1つを共有するので、フッターの「成績」から全部のゲームの成績が同じ形で見られる。
+//   お知らせ：ゲームが新しくなったとき、画面の下に一度だけ「ここが変わりました」を出す（画面のいちばん上に、ほかの物に重ねずに出す。閉じるまで残る。読み上げにも届く。WCAG 4.1.3 Status Messages）。
+//         全ゲーム共通の知らせは下の COMMON_NEWS、ゲームだけの知らせは index.html の script 要素（type は application/json、id は game-news）に [{"d":"2026-11-26","t":"…"}] を書く。
+//         はじめて遊ぶ人には出さない（見たことにする）。どこまで見たかは news-v1。
+//   長く遊んだら知らせる：見やすさの設定「長く遊んだら知らせる」（A11y.get("rest")。既定 60 分・切れる）の時間だけ遊んだら、ホームに戻った区切りで一度だけ知らせる。
+//         画面に触った・キーを押したあとの2分間だけを遊んだ時間として数え、画面が隠れているあいだは数えない（LAST TELL の「長く遊んだら、ひと息」と同じ数え方）。
+//         時間は保存しない。60 分は厚生労働省「情報機器作業における労働衛生管理のためのガイドライン」（2019）の「一連続作業時間が1時間を超えないように」に合わせた。
+(function () {
+  "use strict";
+  if (window.Kiroku && window.Kiroku.v) return;
+  const doc = document;
+  const KEY = "kiroku-v1", NEWS = "news-v1"; // gitleaks:allow 記録の名前（鍵ではない）
+  // 全ゲーム共通の知らせ（新しいものを上に。日付は日本時間の YYYY-MM-DD）
+  const COMMON_NEWS = [
+    { d: "2026-11-26", t: "「見やすさ」から、文字の大きさ（小・中・大）と、長く遊んだら知らせる時間を選べるようになりました。どのゲームにも同じ設定が使われます。フッターの「成績」で、遊んだゲームの成績をまとめて見られます。" },
+  ];
+  const read = (k) => { try { const v = JSON.parse(localStorage.getItem(k) || "{}"); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch (e) { return {}; } };
+  const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
+  const n0 = (v) => (window.Core ? Core.num(v) : Math.max(0, Math.floor(+v) || 0));
+  // HTML に入れる文字はいつもここを通す（Core が無いページでも < " などを替える。2026-11-26 CodeQL「DOM text reinterpreted as HTML」）
+  const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+  const esc = (t) => String(t == null ? "" : t).replace(/[&<>"']/g, (c) => ESC[c]);
+  const today = () => (window.Core ? Core.today() : new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10));
+  // このゲームの名前（URL の最初の段。手元で開いたときは local）と題
+  const id = () => (location.pathname.split("/").filter(Boolean)[0] || "local").replace(/[^\w-]/g, "");
+  const title = () => { const h = doc.querySelector("h1"); return ((h && h.textContent) || doc.title || id()).replace(/\s+/g, " ").trim().slice(0, 40); };
+
+  // ---- 成績 ----
+  let noted = false;
+  function note(fn) {
+    let o = {};
+    try { o = (typeof fn === "function" ? fn() : fn) || {}; } catch (e) { o = {}; }
+    const s = o.s && typeof o.s === "object" ? o.s : {}, t = o.tally && typeof o.tally === "object" ? o.tally : {};
+    const days = s.days && typeof s.days === "object" ? s.days : {};
+    const r = {
+      name: title(),
+      played: n0(t.played != null ? t.played : t.days != null ? t.days : Object.keys(days).length),
+      solved: t.solved != null ? n0(t.solved) : null,
+      streak: window.Core ? Core.streak(days) : 0,
+      best: s.ebest != null ? n0(s.ebest) : t.ebest != null ? n0(t.ebest) : null,
+      ach: Array.isArray(o.ach) && o.ach.length === 2 ? [n0(o.ach[0]), n0(o.ach[1])] : null,
+      last: today(),
+    };
+    const fresh = r.played === 0 && !r.solved && !r.best;
+    if (!fresh) { const all = read(KEY); all[id()] = r; write(KEY, all); }
+    if (!noted) { noted = true; news(fresh); }
+    atHome();
+  }
+  function rows() {
+    const all = read(KEY), me = id();
+    return Object.entries(all).filter(([k, r]) => /^[\w-]+$/.test(k) && r && typeof r === "object")
+      .sort(([a, x], [b, y]) => (a === me ? -1 : b === me ? 1 : String(y.last || "").localeCompare(String(x.last || ""))));
+  }
+  const cell = (v) => (v == null ? "—" : esc(v));
+  let dlg = null, lastFocus = null;
+  function open() {
+    if (!dlg) {
+      dlg = doc.createElement("dialog");
+      dlg.className = "kiroku-dlg"; dlg.setAttribute("aria-labelledby", "kiroku-h");
+      doc.body.appendChild(dlg);
+      dlg.addEventListener("click", (e) => { if (e.target.closest("[data-kiroku-close]")) close(); });
+      dlg.addEventListener("close", () => { if (lastFocus && lastFocus.focus) lastFocus.focus(); });
+    }
+    const rs = rows(), me = id();
+    dlg.innerHTML = `<h2 id="kiroku-h">成績</h2><p>この端末で遊んだゲームの成績です。外へは送りません。</p>` +
+      (rs.length ? `<div class="kiroku-wrap"><table><caption class="kiroku-cap">遊んだゲーム ${rs.length}本</caption><thead><tr><th scope="col">ゲーム</th><th scope="col">遊んだ日</th><th scope="col">正解</th><th scope="col">続けた日</th><th scope="col">自己ベスト</th><th scope="col">実績</th><th scope="col">最後</th></tr></thead><tbody>` +
+        rs.map(([k, r]) => `<tr${k === me ? ' class="kiroku-me"' : ""}><th scope="row">${k === me || k === "local" ? cell(r.name) : `<a href="../${esc(k)}/">${cell(r.name)}</a>`}</th><td data-l="遊んだ日">${cell(r.played)}</td><td data-l="正解">${cell(r.solved)}</td><td data-l="続けた日">${cell(r.streak)}</td><td data-l="自己ベスト">${cell(r.best)}</td><td data-l="実績">${r.ach ? `${r.ach[0]}/${r.ach[1]}` : "—"}</td><td data-l="最後">${r.last ? esc(String(r.last).slice(5).replace("-", "/")) : "—"}</td></tr>`).join("") +
+        `</tbody></table></div>` : `<p>まだ記録がありません。1回遊ぶと、ここに出ます。</p>`) +
+      `<div class="kiroku-row"><button type="button" class="kiroku-ok" data-kiroku-close>閉じる</button></div>`;
+    lastFocus = doc.activeElement;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+    if (window.Core && Core.say) Core.say(`成績。遊んだゲーム ${rs.length}本`);
+  }
+  function close() { if (!dlg) return; if (dlg.close) dlg.close(); else { dlg.removeAttribute("open"); if (lastFocus && lastFocus.focus) lastFocus.focus(); } }
+  // フッターに「成績」を足す（ゲームはフッターを JS で何度も描き直すので、描き直すたびに足す。ゲームの footer() の文字は変えない）
+  function addEntry() {
+    for (const f of doc.querySelectorAll("footer")) {
+      if (f.querySelector("[data-kiroku-open]")) continue;
+      const a = doc.createElement("a");
+      a.href = "#"; a.setAttribute("data-kiroku-open", ""); a.textContent = "成績";
+      const after = f.querySelector("[data-a11y-open]");
+      if (after) after.after(a); else f.appendChild(a);
+    }
+  }
+
+  // ---- 知らせの帯（お知らせ・長く遊んだら）。1つずつ、閉じるまで画面の下に出す ----
+  const queue = [];
+  let bar = null;
+  function show(text, done) {
+    queue.push([text, done]);
+    if (!bar || !bar.isConnected) next();
+  }
+  function next() {
+    const it = queue.shift();
+    if (bar) { bar.remove(); bar = null; }
+    if (!it) return;
+    bar = doc.createElement("div");
+    bar.className = "kiroku-bar"; bar.setAttribute("role", "status");
+    const p = doc.createElement("p"), btn = doc.createElement("button");
+    p.textContent = it[0]; btn.type = "button"; btn.textContent = "わかった"; // 知らせの文は文字として入れる（HTML として読まない）
+    bar.append(p, btn);
+    btn.addEventListener("click", () => { try { it[1] && it[1](); } catch (e) { /* 書けない */ } next(); });
+    doc.body.prepend(bar); // 画面のいちばん上に、ほかの物に重ねずに出す（押す所を隠さない。WCAG 2.4.11）
+  }
+
+  // ---- お知らせ ----
+  function gameNews() {
+    try { const e = doc.getElementById("game-news"); const v = e ? JSON.parse(e.textContent) : []; return Array.isArray(v) ? v : []; } catch (e) { return []; }
+  }
+  const ok = (x) => x && typeof x === "object" && /^\d{4}-\d{2}-\d{2}$/.test(x.d) && typeof x.t === "string" && x.t;
+  function news(fresh) {
+    const seen = read(NEWS), me = id();
+    const cn = COMMON_NEWS.filter(ok), gn = gameNews().filter(ok);
+    const newest = (l) => l.reduce((m, x) => (x.d > m ? x.d : m), "");
+    const mark = () => { const s = read(NEWS); if (cn.length) s["*"] = newest(cn) > (s["*"] || "") ? newest(cn) : s["*"]; if (gn.length) s[me] = newest(gn) > (s[me] || "") ? newest(gn) : s[me]; write(NEWS, s); };
+    if (fresh) return mark(); // はじめて遊ぶ人には出さない
+    const list = [...cn.filter((x) => x.d > (seen["*"] || "")), ...gn.filter((x) => x.d > (seen[me] || ""))].sort((a, b) => b.d.localeCompare(a.d)).slice(0, 3);
+    if (!list.length) return;
+    show(`新しくなりました：${list.map((x) => x.t).join(" ")}`, mark);
+  }
+
+  // ---- 長く遊んだら知らせる ----
+  let playMs = 0, lastIn = -1e9, restDone = false, homeSeen = 0;
+  const limit = () => { try { return window.A11y && A11y.get ? +A11y.get("rest") || 0 : 60; } catch (e) { return 60; } };
+  ["pointerdown", "keydown", "wheel", "touchstart"].forEach((t) => addEventListener(t, () => { lastIn = performance.now(); }, { passive: true, capture: true }));
+  function restMsg() { const m = limit(); return m >= 60 && m % 60 === 0 ? `${m / 60}時間` : `${m}分`; }
+  function restCheck(force) {
+    const m = limit();
+    if (restDone || !m || playMs < m * 6e4) return;
+    // 区切り（ホームに戻ったとき）で出す。ホームを描かないゲームでは、時間になったら出す。区切りが来なくても10分すぎたら出す
+    if (!force && homeSeen && playMs < (m + 10) * 6e4) return;
+    restDone = true;
+    show(`${restMsg()}遊びました。目を休めて、ひと休みしませんか（「見やすさ」で時間を変えたり、切ったりできます）。`);
+  }
+  function atHome() { homeSeen++; restCheck(true); }
+  setInterval(() => { if (!doc.hidden && performance.now() - lastIn < 120000) playMs += 10000; restCheck(false); }, 10000);
+
+  // ---- 見た目 ----
+  const css = doc.createElement("style");
+  css.id = "kiroku-css";
+  css.textContent = `.kiroku-dlg{max-width:min(640px,calc(100vw - 32px));width:100%;box-sizing:border-box;border:2px solid #1d2320;border-radius:14px;padding:18px 16px 14px;background:#fffdf8;color:#1d2320;font:500 16px/1.6 "BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif}
+.kiroku-dlg::backdrop{background:#0008}.kiroku-dlg:not([open]){display:none}
+.kiroku-dlg h2{font-size:19px;margin:0 0 4px;line-height:1.4}.kiroku-dlg p{margin:4px 0 10px;font-size:14px;color:#3d4440}
+.kiroku-wrap{overflow-x:auto;max-height:60vh}.kiroku-dlg table{border-collapse:collapse;width:100%;font-size:14px}
+.kiroku-cap{text-align:left;font-size:13px;color:#3d4440;padding-bottom:4px}
+.kiroku-dlg th,.kiroku-dlg td{border-top:1px solid #1d232033;padding:8px 6px;text-align:right;white-space:nowrap}
+.kiroku-dlg th[scope=row],.kiroku-dlg thead th:first-child{text-align:left;white-space:normal;min-width:7em}
+.kiroku-dlg a{color:#1a4fb0;min-height:44px;display:inline-flex;align-items:center}
+footer [data-kiroku-open]{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center}
+.kiroku-me{background:#f1ead8}
+@media (max-width:540px){.kiroku-dlg thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.kiroku-dlg tr{display:block;border-top:1px solid #1d232033;padding:6px 4px}.kiroku-dlg th[scope=row]{display:block;border:0;padding:4px 2px}.kiroku-dlg td{display:inline-block;border:0;padding:2px 8px 2px 2px;text-align:left}.kiroku-dlg td::before{content:attr(data-l) " ";color:#3d4440;font-size:12px}}
+.kiroku-row{display:flex;justify-content:flex-end;margin-top:12px}
+.kiroku-dlg button,.kiroku-bar button{min-height:44px;min-width:44px;border-radius:10px;border:2px solid #1d2320;background:#1d2320;color:#fff;font:700 15px/1.2 "BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;padding:0 14px;cursor:pointer}
+.kiroku-bar{position:relative;z-index:5;margin:8px auto;width:min(560px,calc(100% - 32px));box-sizing:border-box;display:flex;gap:10px;align-items:center;padding:10px 12px;border:2px solid #1d2320;border-radius:12px;background:#fffdf8;color:#1d2320;font:500 15px/1.6 "BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif}
+.kiroku-bar p{margin:0;flex:1}`;
+  (doc.head || doc.documentElement).appendChild(css);
+
+  function start() {
+    addEntry();
+    new MutationObserver(() => addEntry()).observe(doc.body, { childList: true, subtree: true });
+    doc.addEventListener("click", (e) => { const t = e.target.closest && e.target.closest("[data-kiroku-open]"); if (t) { e.preventDefault(); open(); } });
+  }
+  if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start); else start();
+  window.Kiroku = { v: 1, note, open, close, rows, news: () => news(false), show, playMinutes: () => Math.floor(playMs / 6e4) };
+})();
+</script>
+<!-- kiroku:end -->
+<script src="transfer.js" data-game="yume-kikai" data-keys="ymk-v1,ymk-fs,ymk-depth"></script>
+<script src="depth.js" data-game="yume-kikai" data-key="ymk-depth"></script>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<dialog id="howto" aria-labelledby="howto-t">
+  <h2 id="howto-t">遊び方</h2>
+  <ol>
+    <li>夢の機械が出ます。入ると、望む体験がつづきます。中では、機械だと気づきません。</li>
+    <li>「入る？」「もう中にいたら、出る？」など5つに答えます。正解はありません。思ったとおりに押します。</li>
+    <li>答えたら、研究で多かった答えとくらべます。いまいる所に残った答えの数も出ます。</li>
+    <li>次に、考える問題を5問。ノージックの理由・どの条件がちがうか・研究の数字などです。</li>
+  </ol>
+  <p>研究の数字の問題は、正解したら2段目（変えた条件は？）も選びます。自信があるときは、答える前に「🎯 自信あり？」を押します（押さなくても遊べます）。</p>
+  <p>まちがえても、何度でも選び直せます。まちがえた問題は、次の日から「復習」にもどってきます。今日の回はだれでも同じで、1日1回。時間制限はありません。</p>
+  <p>研究の数字は、論文に書いてあるものを短く言いかえて出しています。数は大学生などに聞いた1回の結果で、人みんなの答えではありません。くわしくは論文で確かめてください。</p>
+  <p><a id="fb2" target="_blank" rel="noopener" data-feedback="fun">感想を送る</a></p>
+  <button class="main" id="howto-ok" style="width:100%">わかった</button>
+</dialog>
+<script src="data.js"></script>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id), app = $("app");
+const SITE = "https://satou-aaaaa.github.io/yume-kikai/";
+const FEEDBACK = "https://github.com/satou-aaaaa/yume-kikai/issues/new?template=feedback.yml";
+if (window.Core) Core.bindFeedback({}); // 「感想を送る」は全ゲームで1つの Googleフォームへ（ゲーム名・版などを事前入力。GitHub のアカウントが無くても送れる）
+const KEY = "ymk-v1", FSKEY = "ymk-fs", EPOCH = "2026-11-27";
+const G = window.YMK, LV = G.LV;
+Depth.setValid((t) => { if (!Object.prototype.hasOwnProperty.call(G.BY, String(t).split("|")[0])) return false; return !!G.make(t); }); // 作り直せない鍵（引き継ぎ・消えた種類）は復習に数えない
+
+// ---- 文字の大きさ（この端末だけ。記録とは別に置く。はじめは「大きい」）----
+function fsGet() { return A11y.fs(); } // 文字の大きさは見やすさの設定（全ゲーム共通。sync-template の migrateFs）
+function fsSet(v) { A11y.set("fs", v); } // 共通の設定を変える（html の a11y-fs1〜3 も替わる）
+A11y.fsFrom(FSKEY, 2); // 前にこのゲームで選んだ大きさを引き継ぐ
+document.addEventListener("a11ychange", (e) => { if (e.detail && e.detail.key === "fs") document.querySelectorAll(".fsrow button").forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.fs === e.detail.value))); }); // 見やすさの窓で変えても、ホームの「文字」の印をそろえる
+
+// ---- 日付（日本時間。だれでも同じ回）----
+const jstNow = () => new Date(Date.now() + 9 * 3600e3);
+const todayKey = () => jstNow().toISOString().slice(0, 10);
+const dayNo = (k) => Core.dayNo(k, EPOCH);
+const prevDay = Core.prevDay;
+const md = Core.md;
+const listOf = (mode, date) => (mode === "h" ? G.hardTags(date) : G.dailyTags(date));
+
+// 今日のきほん（Nozick 1974・De Brigard 2010・Weijers 2014 に書いてあること）を日ごとに1つ。研究の数字は data.js の ST から出す
+const ST = G.ST, pc = G.pc;
+const TIPS = [
+  ["経験機械", "ノージックが1974年に出した問い。入ると望む体験がつづき、中では機械だと気づかない。"],
+  ["入らない3つの理由", "ノージック：自分でしたい・ある人でありたい・人が作った現実にとじこめられたくない。"],
+  ["逆向きの問い", "De Brigard 2010：もう機械の中にいたら、出る？ と聞きかえた。"],
+  ["何も知らせないと", `De Brigard 2010：外のことを知らせないと、出る${pc(100 - ST.dbn.mach)}・残る${pc(ST.dbn.mach)}（${ST.dbn.who}）。`],
+  ["外が刑務所なら", `De Brigard 2010：外の本当のあなたは刑務所と知らせると、残るが${pc(ST.dbneg.mach)}（${ST.dbneg.who}）。`],
+  ["ノージックのまま聞くと", `Weijers 2014：${ST.noz.who}のうち、入るは${ST.noz.k}人（約${pc(ST.noz.mach)}）。`],
+  ["知らない人のことなら", `Weijers 2014：知らない人のこととして聞くと、入るのがよいは${ST.wst.n}人中${ST.wst.k}人（約${pc(ST.wst.mach)}）。`],
+  ["いまの所びいき", "人は、いまの状態を変えないほうを選びやすい。現状維持のかたより（status quo bias）という。"],
+];
+const tipOf = (k) => TIPS[((dayNo(k) - 1) % TIPS.length + TIPS.length) % TIPS.length];
+
+// ---- とことん：やさしい6 → ふつう14 → むずかしい混ぜ を、毎回ちがう種で（乱数は練習ととことんだけ）----
+// 1回の中では同じ問題（keyOf）を出さず、続けて同じ種類も出さない。使い切ったら moreList で足して終わらない
+const ERAMP = [[[0], 6], [[1], 14], [[1, 2], 40]];
+const rid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const idsOf = (lvs) => lvs.flatMap((l) => G.kindsOf(l));
+function randomTags(ids, n, salt, seen, prev) {
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    let tag = null;
+    for (let t = 0; t < 60 && !tag; t++) {
+      const id = ids[Math.floor(Math.random() * ids.length)]; if (ids.length > 1 && id === prev) continue;
+      const cand = `${id}|${salt}:${i}:${t}`, P = G.make(cand); if (!P) continue;
+      const k = G.keyOf(P); if (seen.has(k)) continue;
+      seen.add(k); tag = cand; prev = id;
+    }
+    if (tag) out.push(tag);
+  }
+  return out;
+}
+function endlessList() { const s = rid(), seen = new Set(), out = []; let prev = null; for (const [lvs, n] of ERAMP) { const t = randomTags(idsOf(lvs), n, s + ":" + lvs.join(""), seen, prev); out.push(...t); prev = t.length ? t[t.length - 1].split("|")[0] : prev; } return out; }
+let moreHook = null; // QA で「足せる問題が無い」を試すときだけ差し替える
+function moreList(list) { const seen = new Set(list.map((t) => G.keyOf(G.make(t)))), prev = list.length ? list[list.length - 1].split("|")[0] : null; return randomTags(idsOf([0, 1, 2]), 40, rid(), seen, prev); }
+const starsOf = (m) => (m === 0 ? 3 : m === 1 ? 2 : 1); // m = まちがい＋ヒントの数
+const starStr = (s) => `<span class="stars" role="img" aria-label="星${s}つ">${"★".repeat(s)}<span class="off">${"☆".repeat(3 - s)}</span></span>`;
+
+// ---- 夢の機械（正解の無い問い）----
+// run.mc = { t:お題, a:[5つの答え], done:0/1, seen:0/1 }。答えは STEPS の opts の番号（0・1・2）
+const themeOf = (mc) => G.THEME_BY[mc.t] || G.THEMES[0];
+const newMc = (t) => ({ t, a: [], done: 0, seen: 0 });
+const mcRec = (mc) => ({ t: mc.t, a: mc.a.slice(0, G.STEPS.length), p: G.stayScore(mc.a) });
+// 機械の絵（外にいる・中にいる・知らない人で変える。文字でも書く）
+function mcPic(st, th) {
+  const inside = st.where === "中", other = st.where === "人";
+  const stars = [[24, 20], [70, 44], [118, 16], [210, 30], [262, 52], [300, 18], [160, 54]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.6" fill="#fff7d6"/>`).join("");
+  const person = (x, y, c) => `<circle cx="${x}" cy="${y - 22}" r="8" fill="${c}"/><rect x="${x - 8}" y="${y - 12}" width="16" height="24" rx="6" fill="${c}"/>`;
+  return `<svg viewBox="0 0 320 150" role="img" aria-label="${inside ? "機械の中にいる人" : other ? "機械と本当の暮らしのあいだにいる人" : "機械の外にいる人"}" data-a11y-keepcolor>${stars}
+    <rect x="0" y="126" width="320" height="24" fill="#3a376f"/>
+    <rect x="${other ? 30 : 120}" y="26" width="96" height="104" rx="44" fill="#4f4aa8" stroke="#c9c4ff" stroke-width="3"/>
+    <rect x="${other ? 44 : 134}" y="40" width="68" height="70" rx="32" fill="#8f89e8" fill-opacity=".55"/>
+    <text x="${other ? 78 : 168}" y="22" font-size="13" text-anchor="middle" fill="#fff" font-weight="700">夢の機械 ${th.mk}</text>
+    ${inside ? person(168, 100, "#ffe2a8") : other ? person(160, 116, "#ffe2a8") : person(62, 116, "#ffe2a8")}
+    ${other ? `<rect x="214" y="70" width="70" height="56" fill="#2f6d3a"/><path d="M206 72 L249 40 L292 72 Z" fill="#9a4b2c"/><text x="249" y="142" font-size="11" text-anchor="middle" fill="#fff">本当の暮らし</text>` : ""}
+  </svg>`;
+}
+
+// ---- 記録（この端末の localStorage だけ）----
+// days/hdays/adays：日付 → { m:[1問ごとのまちがい＋ヒント], k:[種類] }。adays はあとから遊んだ日（連続の日・今日の記録・Ko-fi には数えない）
+// mc：日付 → 夢の機械の答え { t:お題, a:[5つの答え], p:いまの所に残った答えの数 }
+// dex：種類 → 正解した数（考え帳）。runs：モードごとの途中経過（練習で今日・上級の途中を消さない）。ebest：とことんで一度で正解した数の自己ベスト
+const fresh = () => ({ v: 1, days: {}, hdays: {}, adays: {}, dex: {}, runs: {}, mc: {}, tut: false, kofi: {}, ach: {}, ebest: 0 });
+let MODE = "d";
+let mem = null; // 保存できない環境では、開いているあいだだけここに置く
+const doneOf = (r) => !!r && typeof r === "object" && r.mode !== "e" && Array.isArray(r.res) && Array.isArray(r.list) && r.res.length >= r.list.length && (!r.mc || r.mc.done === 1), // 形のくずれた回は終わっていない扱い（CodeRabbit 2026-11-17）
+  recOf = (r) => ({ m: r.res.map((x) => x.m), k: r.list.map((t) => t.split("|")[0]) });
+const runKey = (mode, date) => (mode === "a" ? "a:" + date : mode);
+const bookOf = (s, m) => (m === "d" ? s.days : m === "h" ? s.hdays : m === "a" ? s.adays : null);
+// 終わった回を日ごとの記録に入れる（結果を見る前に閉じても、別のタブが次の日を保存しても、終えた日を失わない）
+function bank(s, r) { const b = doneOf(r) ? bookOf(s, r.mode) : null; if (!b || b[r.date] || (r.mode === "a" && s.days[r.date])) return false; b[r.date] = recOf(r); if (r.mc && r.mc.done && !s.mc[r.date]) s.mc[r.date] = mcRec(r.mc); return true; }
+function load() {
+  // 2つの写し（localStorage と保存に失敗したときの mem）の合わせ方は共通部品 GameStore（上の store:begin〜end）。
+  // 直すときは shared-workflows の template/store/store.js を直して配る（ここに合わせ方を書き戻さない）
+  return GameStore.load(KEY, mem, {
+    v: 1, fresh, tidy, bank, doneOf, bookOf,
+    objs: ["days", "hdays", "adays", "dex", "runs", "mc", "kofi", "ach"],
+    // 同じ回の進み具合：夢の機械に答えた数と、くらべる画面を見たかも数える（考える問題に進んだら、答えた問題の数が大きく効く。CodeRabbit yume-kikai#1）
+    prog: (r) => GameStore.progOf(r) + (r && r.mc && Array.isArray(r.mc.a) ? (r.mc.a.length + (r.mc.seen === 1 ? 1 : 0)) * 100 : 0),
+    // 同じ問題の途中なら、両方のまちがい（1段目・2段目）・多いほうのヒントを残す（保存に失敗した側のまちがいを消さない）
+    join: (w, o) => {
+      if (!(w.cur && o.cur && typeof w.cur === "object" && typeof o.cur === "object" && w.cur.i === o.cur.i && w.cur.tag === o.cur.tag && w.res.length === o.res.length)) return w;
+      const u = (x, y) => [...new Set([...(Array.isArray(x) ? x : []), ...(Array.isArray(y) ? y : [])])];
+      return { ...w, cur: { ...w.cur, wrong: u(w.cur.wrong, o.cur.wrong), w2: u(w.cur.w2, o.cur.w2), hints: Math.max(+w.cur.hints || 0, +o.cur.hints || 0), step: Math.max(w.cur.step === 2 ? 2 : 1, o.cur.step === 2 ? 2 : 1), h2: w.cur.h2 || o.cur.h2 ? 1 : 0, jd: w.cur.jd || o.cur.jd || null } };
+    },
+    // 終えた回（gone）は、保存できなかった側から戻さない
+    after: (s2) => { if (s2.gone && typeof s2.gone === "object") for (const m in s2.runs) { const r = s2.runs[m]; if (r && typeof r === "object" && s2.gone[r.id]) s2.runs[m] = null; } },
+  });
+}
+// 引き継ぎコードなどから入った値を正しい形に直す（数の所に文字が入っていても画面に出さない）
+const num = Core.num; // 共通部品 game-core（配列・true を数にしない #410）
+// 終えた回の id を覚える（保存に失敗しても、合わせるときに終えた回を戻さない）。古いものから捨てて30まで
+function endRun(s, id) { if (typeof id !== "string") return; const g = s.gone && typeof s.gone === "object" && !Array.isArray(s.gone) ? s.gone : {}; g[id] = 1; const ks = Object.keys(g); for (const k of ks.slice(0, Math.max(0, ks.length - 30))) delete g[k]; s.gone = g; }
+const okHa = (a) => Array.isArray(a) && a.length <= G.STEPS.length && a.every((x) => x === 0 || x === 1 || x === 2);
+function tidy(s) {
+  s.ebest = num(s.ebest); s.t = num(s.t); // 保存の時刻も数に直す（{valueOf:null} などで save が止まらない。CodeRabbit 2026-11-17）
+  if (!s.gone || typeof s.gone !== "object" || Array.isArray(s.gone)) s.gone = {}; else { const g = {}; for (const k of Object.keys(s.gone).slice(-30)) if (s.gone[k] === 1) g[k] = 1; s.gone = g; }
+  for (const q of ["days", "hdays", "adays", "dex", "runs", "mc", "kofi", "ach"]) if (!s[q] || typeof s[q] !== "object" || Array.isArray(s[q])) s[q] = {};
+  for (const k in s.dex) s.dex[k] = num(s.dex[k]);
+  const okDate = (v) => { if (typeof v !== "string" || !/^\d{4}-\d\d-\d\d$/.test(v)) return false; const t = Date.parse(v + "T00:00:00Z"); return Number.isFinite(t) && new Date(t).toISOString().slice(0, 10) === v; };
+  const okTag = (t) => typeof t === "string" && Object.prototype.hasOwnProperty.call(G.BY, t.split("|")[0]);
+  const okRec = (x) => !!x && typeof x === "object" && Array.isArray(x.m) && x.m.every((v) => Number.isInteger(v) && v >= 0) && (x.k === undefined || (Array.isArray(x.k) && x.k.every((v) => typeof v === "string")));
+  for (const b of [s.days, s.hdays, s.adays]) for (const d in b) if (!okDate(d) || !okRec(b[d])) delete b[d];
+  for (const d in s.mc) { const h = s.mc[d]; if (!okDate(d) || !h || typeof h !== "object" || !Object.prototype.hasOwnProperty.call(G.THEME_BY, h.t) || !okHa(h.a) || h.a.length !== G.STEPS.length) { delete s.mc[d]; continue; } s.mc[d] = mcRec({ t: h.t, a: h.a }); }
+  for (const m in s.runs) {
+    const r = s.runs[m]; if (r === null) continue;
+    if (typeof r !== "object" || !["d", "h", "p", "e", "a", "r"].includes(r.mode) || (m.startsWith("a:") ? r.mode !== "a" : r.mode !== m) || !okDate(r.date) || !Array.isArray(r.list) || !r.list.every(okTag) || !Array.isArray(r.res) || !r.res.every((x) => x && typeof x === "object" && Number.isInteger(x.m) && x.m >= 0)) { delete s.runs[m]; continue; }
+    if (r.mc != null) { const h = r.mc; if (typeof h !== "object" || !Object.prototype.hasOwnProperty.call(G.THEME_BY, h.t) || !okHa(h.a)) { if (r.mode === "d" || r.mode === "a") r.mc = newMc(G.themeOf(r.date)); else { delete s.runs[m]; continue; } } else r.mc = { t: h.t, a: h.a.slice(), done: h.done === 1 && h.a.length === G.STEPS.length ? 1 : 0, seen: h.seen === 1 ? 1 : 0 }; }
+    if (r.cur != null && (typeof r.cur !== "object" || !Array.isArray(r.cur.wrong))) r.cur = null; else if (r.cur) { r.cur.hints = num(r.cur.hints); r.cur.step = r.cur.step === 2 ? 2 : 1; r.cur.w2 = Array.isArray(r.cur.w2) ? r.cur.w2.filter((x) => Object.prototype.hasOwnProperty.call(G.GROUPS, x)) : []; r.cur.jd = r.cur.jd && typeof r.cur.jd === "object" && r.cur.jd.sure === true ? { sure: true, ok: r.cur.jd.ok === true, text: "" } : null; r.cur.h2 = r.cur.h2 === 1 && r.cur.step === 2 ? 1 : 0; }
+    r.ds = r.ds && typeof r.ds === "object" ? { n: num(r.ds.n), ok: Math.min(num(r.ds.ok), num(r.ds.n)) } : { n: 0, ok: 0 }; // この回の「自信あり」の数と当たり
+  }
+  return s;
+}
+// 保存の前に読み直す（別のタブで進めた記録を消さない）
+function saveWarn(on) { let b = document.getElementById("savewarn"); if (!on) { if (b) b.remove(); return; } if (b) return; b = document.createElement("div"); b.id = "savewarn"; b.setAttribute("role", "status"); b.textContent = "この端末に記録を保存できませんでした。ページを開き直すと、いまの記録が消えます"; b.style.cssText = "position:fixed;left:0;right:0;top:0;z-index:9999;padding:8px 12px;background:#fff3cd;color:#000;font-size:15px;line-height:1.5;text-align:center;pointer-events:none;border-bottom:2px solid #8a6d00"; (document.body || document.documentElement).appendChild(b); }
+// 保存できないあいだは帯を出したままにし、保存できたら消す（routines/game-dev.md「共通の形」の記録）
+function save(fn) { const s = load(); fn(s); s.t = Math.max(Date.now(), (s.t || 0) + 1); const j = JSON.stringify(s); try { localStorage.setItem(KEY, j); mem = null; saveWarn(false); } catch (e) { mem = j; saveWarn(true); } return s; }
+function streak(days) { return Core.streak(days); } // 続けて遊んだ日数（共通部品 game-core。壊れた記録・constructor などの名前を日に数えない）
+// part:playedDays:begin（shared-workflows の template/parts/index/playedDays.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す）
+const playedDays = (s) => new Set([...Object.keys(s.days), ...Object.keys(s.adays)]).size;
+// part:playedDays:end
+const solvedAll = (s) => Object.values(s.dex).reduce((a, b) => a + (+b || 0), 0);
+const cleanOf = (r) => r.res.filter((x) => x.m === 0).length;
+// 取りこぼした日：今日より前の7日のうち、今日の回もあとからも遊んでいない日（新しい順。第1回より前は無い）
+const LATE = 7;
+// part:lateDays:begin（shared-workflows の template/parts/index/lateDays.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す）
+function lateDays(s, k = todayKey()) { const out = []; let d = k; for (let i = 0; i < LATE; i++) { d = prevDay(d); if (d < EPOCH) break; if (!s.days[d] && !s.adays[d]) out.push(d); } return out; }
+// part:lateDays:end
+
+// ---- 実績：いまの記録から毎回数える（新しく残すのは結果で知らせ終えた印 ach だけ）。[id, 名前, 条件, 種類, 数え方, 目標] ----
+function tally(s) {
+  const dk = Object.values(s.days).filter((r) => r && Array.isArray(r.m));
+  return { days: Object.keys(s.days).length, played: playedDays(s), clean: dk.filter((r) => r.m.length && r.m.every((m) => m === 0)).length, hard: Object.keys(s.hdays).length,
+    late: Object.keys(s.adays).length, kinds: Object.keys(s.dex).filter((k) => Object.prototype.hasOwnProperty.call(G.BY, k) && s.dex[k] > 0).length, solved: solvedAll(s), ebest: s.ebest || 0,
+    lines: Object.keys(s.mc).length, themes: new Set(Object.values(s.mc).map((h) => h && h.t)).size };
+}
+const ACH = [
+  ["clean1", "まっすぐ考える", "今日の5問を、まちがいもヒントもなしで解く", 0, "clean", 1],
+  ["clean5", "考える名人", "まちがいなしの日を5日", 0, "clean", 5],
+  ["hard1", "上級の3問", "上級の3問を解く", 0, "hard", 1],
+  ["hard10", "上級の常連", "上級を10日解く", 0, "hard", 10],
+  ["e10", "とことん10問", "とことんで、一度で正解した問題が10問", 0, "ebest", 10],
+  ["e30", "とことん30問", "とことんで、一度で正解した問題が30問", 0, "ebest", 30],
+  ["k5", "5種類", "考え帳に5種類", 1, "kinds", 5],
+  ["kall", "考え帳ぜんぶ", `考え帳の${G.KINDS.length}種類を全部見つける`, 1, "kinds", G.KINDS.length],
+  ["s100", "100問", "正解した問題が合わせて100問", 1, "solved", 100],
+  ["th3", "3つの体験", "3つのお題（旅・山・本など）の機械に答える", 1, "themes", 3],
+  ["first", "はじめの1日", "今日の回を終える", 2, "days", 1],
+  ["line7", "機械に7回", "今日の夢の機械に7日答える", 2, "lines", 7],
+  ["p30", "30日", "遊んだ日が合わせて30日", 2, "played", 30],
+  ["late1", "あとから1日", "取りこぼした日をあとから遊ぶ", 2, "late", 1],
+];
+const AGRP = ["腕前", "集める", "続ける"];
+const AUNIT = { clean: "日", hard: "日", days: "日", played: "日", late: "日", kinds: "種類", solved: "問", ebest: "問", lines: "日", themes: "つ" };
+// part:achGot:begin（shared-workflows の template/parts/index/achGot.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す）
+const achGot = (s) => { const t = tally(s); return ACH.filter((a) => t[a[4]] >= a[5]).map((a) => a[0]); };
+// part:achGot:end
+// あと少しの実績：まだの実績のうち、いちばん目標に近いもの1つ（ゴールに近いほど人はがんばる。Kivetz ほか 2006）
+// part:nextAch:begin（shared-workflows の template/parts/index/nextAch.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す）
+function nextAch(s) {
+  const t = tally(s); let best = null;
+  for (const a of ACH) { const n = t[a[4]]; if (n <= 0 || n >= a[5]) continue; const r = n / a[5], left = a[5] - n; if (!best || r > best.r || (r === best.r && left < best.left)) best = { id: a[0], name: a[1], left, unit: AUNIT[a[4]] || "", r }; }
+  return best;
+}
+// part:nextAch:end
+
+// ---- 画面 ----
+function toast(t) { Core.toast(t); } // 知らせの帯（共通部品 game-core。読み上げにも届け、重ねて出さない）
+const buzz = Core.buzz; // 共通部品 game-core（「動きを減らす」では震わせない）
+const esc = Core.esc; // 共通部品 game-core（" と ' も変える。属性の中でも切れない）
+const toTop = () => window.scrollTo(0, 0);
+const link = ([n, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a>`;
+const srcHtml = (P) => `<p class="src">出典：${P.src.map(link).join("・")}</p>`;
+const footer = () => `<footer><a href="#" id="f-how">遊び方</a><a href="#" id="f-about">このゲームについて</a><a href="#" data-a11y-open>見やすさ</a><a href="#" data-hk>引き継ぎ</a><a href="#" data-share>共有</a><a href="${FEEDBACK}" data-feedback="fun" target="_blank" rel="noopener">感想を送る</a><a href="${Core.KOFI}" target="_blank" rel="noopener">Ko-fi で応援</a></footer>`;
+function bindFooter() { const h = $("f-how"); if (h) h.onclick = (e) => { e.preventDefault(); openHow(); }; const a = $("f-about"); if (a) a.onclick = (e) => { e.preventDefault(); about(); }; }
+function openHow() { $("fb2").href = FEEDBACK; const d = $("howto"); if (d.showModal) d.showModal(); else d.setAttribute("open", ""); }
+$("howto").addEventListener("cancel", () => { if (!load().tut) save((s) => { s.tut = true; }); }); // Esc を押したその場で「見た」を残す（close の知らせは遅れて届き、すぐ読み直すと間に合わない）
+$("howto").addEventListener("close", () => { if (!load().tut) save((s) => { s.tut = true; }); }); // Esc で閉じても「見た」を残す
+$("howto-ok").onclick = () => { save((s) => { s.tut = true; }); const d = $("howto"); d.close ? d.close() : d.removeAttribute("open"); }; // 押したらすぐ残す
+
+// 夢の機械の答えを1行で（ホーム・結果・帳）
+function mcText(h) {
+  const th = G.THEME_BY[h.t] || G.THEMES[0], k = G.kataOf(h.a);
+  return `${th.w}の機械：いまの所に残った答え ${h.p}/4${k >= 0 ? `・${G.KATA[k]}` : ""}`;
+}
+function home() {
+  Core.screens.route({}, home); Core.screens.mark(""); // 「戻る」でホームへ（sync-template の migrateBack）
+  const s = load(), k = todayKey(), done = s.days[k], hdone = s.hdays[k];
+  // 最後の1問を解いて結果を見る前に閉じた回は、開き直したら結果へ進める（記録をつける）
+  for (const m of Object.keys(s.runs)) { const r = s.runs[m]; if (m !== "p" && m !== "e" && r && doneOf(r)) { MODE = m; return finish(); } }
+  const late = lateDays(s, k), ag = achGot(s).length, fs = fsGet(), tip = tipOf(k), nk = Object.keys(s.dex).filter((x) => Object.prototype.hasOwnProperty.call(G.BY, x) && s.dex[x] > 0).length; // constructor などを種類に数えない
+  const rd = s.runs.d && s.runs.d.date === k ? s.runs.d : null, rh = s.runs.h && s.runs.h.date === k ? s.runs.h : null, re = s.runs.e || null;
+  const st = streak(s.days), rv = Depth.count(), th = G.THEME_BY[G.themeOf(k)];
+  app.innerHTML = `
+    <h1 class="title">夢の機械、<span>入る？</span></h1>
+    <p class="lead" data-a11y-say>もう中にいたら、出る？<br>答えを変える条件を、研究とくらべる。</p>
+    <div class="fsrow" role="group" aria-label="文字の大きさ">文字<button data-fs="1" aria-pressed="${fs === 1}" aria-label="文字 ふつう">あ</button><button data-fs="2" aria-pressed="${fs === 2}" aria-label="文字 大きい" style="font-size:1.15em">あ</button><button data-fs="3" aria-pressed="${fs === 3}" aria-label="文字 とても大きい" style="font-size:1.3em">あ</button></div>
+    <div class="tip" id="tip"><b>今日のきほん：${tip[0]}</b><br>${tip[1]}</div>
+    ${done ? `<div class="share">今日の結果　${done.m.map(sq).join("")}${s.mc[k] ? "\n" + esc(mcText(s.mc[k])) : ""}</div>` : ""}
+    <button class="main" id="go-d">${done ? "今日の結果を見る" : rd ? `続きから（${rd.mc && !rd.mc.done ? "夢の機械" : rd.res.length + 1 + "問目"}）` : `今日の${th.w}の機械と5問 <small>第${dayNo(k)}回</small>`}</button>
+    <button class="main alt" id="go-h">${hdone ? "上級の結果を見る" : rh ? "上級の続きから" : "上級：むずかしい3問（ヒントなし）"}</button>
+    <button class="main alt" id="go-e">${re ? `とことんの続きから（${re.res.length + 1}問目）` : "とことん：何問続けて考える？"}${s.ebest ? ` <small>自己ベスト ${s.ebest}問</small>` : ""}</button>
+    ${(s.runs.r && !doneOf(s.runs.r) ? s.runs.r : null) ? `<button class="main alt" id="go-r">復習の続きから（${s.runs.r.res.length + 1}問目）</button>` : rv ? `<button class="main alt" id="go-r">復習 ${rv}問 <small>まちがえた問題がもどってきた</small></button>` : ""}
+    <div class="row"><button class="sub" id="go-p">練習（何度でも）</button><button class="sub" id="go-dex">考え帳 ${nk}/${G.KINDS.length}</button></div>
+    <div class="row"><button class="sub" id="go-cal" aria-label="カレンダー${late.length ? `（あとから遊べる日 ${late.length}）` : ""}">カレンダー${late.length ? ` <span class="badge">▶${late.length}</span>` : ""}</button><button class="sub" id="go-ach">実績 ${ag}/${ACH.length}</button></div>
+    <div class="stats"><div><b>${playedDays(s)}</b><small>遊んだ日</small></div><div><b>${Object.keys(s.mc).length}</b><small>答えた機械</small></div><div><b>${st >= 1 ? st : "—"}</b><small>${st >= 1 ? "続けて" : "続けた日"}</small></div></div>
+    ${footer()}`;
+  document.querySelectorAll(".fsrow button").forEach((b) => (b.onclick = () => { fsSet(+b.dataset.fs); home(); }));
+  $("go-d").onclick = () => (k !== todayKey() ? home() : done ? result("d", k) : startRun("d")); // 画面を開いたまま0時を過ぎたら、今日の状態に描き直す
+  $("go-h").onclick = () => (k !== todayKey() ? home() : hdone ? result("h", k) : startRun("h"));
+  $("go-e").onclick = () => startRun("e");
+  $("go-p").onclick = practiceMenu;
+  if ($("go-r")) $("go-r").onclick = () => startRun("r");
+  $("go-dex").onclick = book;
+  $("go-cal").onclick = () => cal();
+  $("go-ach").onclick = achView;
+  if (window.Kiroku) Kiroku.note(() => ({ s, tally: typeof tally === "function" ? tally(s) : null, ach: typeof achGot === "function" && typeof ACH !== "undefined" ? [achGot(s).length, ACH.length] : null })); // 成績のまとめ（共通部品 kiroku）
+  bindFooter();
+  if (!s.tut) firstPlay();
+}
+function practiceMenu() {
+  Core.screens.mark("practiceMenu"); // 「戻る」でホームへ（sync-template の migrateBack）
+  app.innerHTML = `<header><button class="icon" id="back" aria-label="もどる">←</button><h1>練習<small>今日の記録には入りません（考え帳には載ります）</small></h1></header>
+    <button class="main" id="go-mc">夢の機械に答える</button>
+    <p class="note">考える問題：難しさを選ぶと5問出ます。何度でも遊べます。</p>
+    <div class="lv">${LV.map((l, t) => `<button class="sub" data-t="${t}" style="min-height:64px">${l}</button>`).join("")}</div>
+    <p class="note">考え帳の種類を押すと、同じ種類だけで練習できます。</p>${footer()}`;
+  $("back").onclick = home;
+  $("go-mc").onclick = () => startRun("p", "mc");
+  document.querySelectorAll(".lv button").forEach((b) => (b.onclick = () => startRun("p", +b.dataset.t)));
+  bindFooter(); toTop();
+}
+// はじめての人：長い「遊び方」の窓を出さず、記録に入らない練習の夢の機械に答えながら、吹き出しで一言ずつ教える（game-core の Core.coach）。
+// このゲームのいちばんの遊びは夢の機械なので、考える問題の1問でなく夢の機械から始める（見本は shindo-yomi の自分で書いた FIRST_STEPS）。
+// 「見た」は始めたその場で残す（途中でやめても、次からはふつうに始まる。くわしい遊び方はいつでもいちばん下の「遊び方」から）
+const FIRST_STEPS = [
+  { sel: "#hans", button: "やってみる", text: "はじめての方へ：まずは記録に入らない練習です。夢の機械に、思ったとおりに答えます。正解はありません。" },
+  { sel: "#hans", until: "#lines", text: "入る？ 出る？ 迷う？ 聞き方を少しずつ変えて、5回聞きます。" },
+  { sel: "#lines .me", button: "わかった", text: "あなたの答えと、研究で多かった答えをくらべます。くわしい遊び方は、いちばん下の「遊び方」にあります。" },
+];
+function firstPlay() {
+  save((s) => { s.tut = true; });
+  if (!window.Core || !Core.coach) return openHow();
+  startRun("p", "mc");
+  // 案内を閉じた（Esc も）ら、練習の機械を残さずにホームのいちばん上へ（ふだんの練習の「続きから」を出さない）
+  Core.coach.start(FIRST_STEPS, { home, onEnd: (done) => { if (done === false) { save((s) => { const r = s.runs && s.runs.p; if (r && !(r.res || []).length) delete s.runs.p; }); home(); scrollTo(0, 0); } } });
+}
+function startRun(mode, opt, notT) {
+  const k = todayKey(); let ng = false;
+  save((s) => {
+    // あとから：取りこぼした日（過去7日・まだ遊んでいない）だけ。その日の今日の回と同じ問題。途中経過は日付ごとに runs["a:日付"]
+    if (mode === "a") {
+      const ra = s.runs[runKey("a", opt)];
+      if (!lateDays(s, k).includes(opt)) { ng = true; return; } // 期限は続きからより先に確かめる
+      if (ra && ra.date === opt) return; // 終えたまま記録していない回も、play → finish で記録する
+      s.runs[runKey("a", opt)] = { mode, date: opt, list: G.dailyTags(opt), res: [], cur: null, id: "a" + opt, a0: achGot(s), mc: newMc(G.themeOf(opt)) };
+      return;
+    }
+    // 復習：日の来た問題（depth.js）。種類をまぜて多くて10問。今日の記録・連続・Ko-fi には数えない
+    // 途中の復習は、日が替わっても続きから（新しい回で上書きしない。2026-11-11 CodeRabbit）
+    if (mode === "r") { const r0 = s.runs.r; if (r0 && !doneOf(r0)) return; const list = Depth.due(); if (!list.length) { ng = "r"; return; } s.runs.r = { mode, date: k, list, res: [], cur: null, id: rid(), a0: achGot(s) }; return; }
+    if (mode === "e") { if (s.runs.e) return; s.runs.e = { mode, date: k, list: endlessList(), res: [], cur: null, id: rid(), a0: achGot(s) }; return; }
+    if (mode !== "p" && s.runs[mode] && s.runs[mode].date === k) return; // 続きから
+    if ((mode === "d" && s.days[k]) || (mode === "h" && s.hdays[k])) return; // 別のタブで今日の分を終えていたら、もう一度は始めない
+    if (doneOf(s.runs[mode])) bank(s, s.runs[mode]); // 別のタブで終えたまま記録していない回は、上書きする前に記録する
+    let list, mc;
+    if (mode === "d" || mode === "h") list = listOf(mode, k);
+    else if (opt === "mc") { const ts = G.THEMES.filter((t) => t.id !== notT); list = []; mc = newMc(ts[G.seedOf(rid()) % ts.length].id); } // 練習の夢の機械：お題は毎回ちがう（もう一度は、いまのお題を除く）
+    else if (typeof opt === "string") list = randomTags([opt], 5, rid(), new Set(), null);
+    else list = randomTags(idsOf([opt]), 5, rid(), new Set(), null);
+    if (mode === "d") mc = newMc(G.themeOf(k));
+    s.runs[mode] = { mode, date: k, list, res: [], cur: null, id: rid(), a0: achGot(s), ...(mc ? { mc } : {}) };
+  });
+  if (ng === "r") { toast("今日の復習はありません"); return home(); }
+  if (ng) return cal();
+  MODE = runKey(mode, opt);
+  play();
+}
+
+// ---- 夢の機械の画面 ----
+function mcPlay(run) {
+  Core.screens.mark("play"); // 「戻る」でホームへ（sync-template の migrateBack）
+  cur = null;
+  const mc = run.mc, th = themeOf(mc), i = mc.a.length, stp = G.STEPS[i];
+  if (!stp) return mcView(run);
+  const label = run.mode === "p" ? "練習" : run.mode === "a" ? "あとから" : "今日";
+  app.innerHTML = `
+    <header><button class="icon" id="back" aria-label="もどる">←</button><span style="font-size:.85rem;color:var(--ink2)">${label}の${th.w}の機械　${i + 1}/${G.STEPS.length}</span></header>
+    <div class="mc" id="mc">
+      <div class="bar"><span>${th.mk} ${stp.where === "外" ? "外にいる" : stp.where === "中" ? "もう中にいる" : "知らない人"}</span><span>正解はありません</span></div>
+      <div class="pic">${mcPic(stp, th)}</div>
+      <p class="sit" data-a11y-say>${esc(stp.sit(th))}</p>
+      <p class="ask" data-a11y-say>${esc(stp.ask)}</p>
+      <div class="hans" id="hans" role="group" aria-label="答え">${stp.opts.map((o, j) => `<button data-a="${j}" data-a11y-say><span class="mk" aria-hidden="true">${stp.mk[j]}</span>${esc(o)}</button>`).join("")}</div>
+    </div>
+    <p class="note">思ったとおりに押してください。時間制限はありません。</p>`;
+  $("back").onclick = home;
+  document.querySelectorAll(".hans button").forEach((b) => (b.onclick = () => mcAns(+b.dataset.a, run.id, i)));
+  toTop();
+  const card = $("mc"); card.tabIndex = -1; card.focus({ preventScroll: true });
+}
+// 答えを残す。別のタブで先に進んでいたら、二重に入れない
+function mcAns(a, id, at) {
+  let ok = false;
+  save((s) => {
+    const r = s.runs[MODE]; if (!r || r.id !== id || !r.mc || r.mc.done) return;
+    const mc = r.mc; if (mc.a.length !== at || at >= G.STEPS.length) return;
+    mc.a.push(a); ok = true; buzz(8);
+    if (mc.a.length >= G.STEPS.length) { mc.done = 1; if (r.mode === "d" || r.mode === "a") { if (!s.mc[r.date] && !(r.mode === "a" && s.days[r.date])) s.mc[r.date] = mcRec(mc); } }
+  });
+  if (!ok) toast("別の画面で先に進んでいます");
+  play();
+}
+// 自分の答えと、研究で多かった答えをくらべる
+function linesHtml(h, prev) {
+  const th = G.THEME_BY[h.t] || G.THEMES[0], kt = G.kataOf(h.a);
+  const dots = [0, 1, 2, 3].map((i) => `<span class="${i < h.p ? "on" : ""}">${i < h.p ? "●" : "○"}</span>`).join("");
+  const me = `<b>いまの所に残った答え：${h.p}/4</b><span class="score" role="img" aria-label="4つのうち${h.p}つ">${dots}</span>${kt >= 0 ? `外と中の答え方は「${G.KATA[kt]}」。` : "迷うと答えた所がありました。"}${h.p >= 3 ? "どこにいても、いまの所を選びやすい答えでした。" : h.p <= 1 ? "いまの所にこだわらない答えでした。" : ""}`;
+  const rows = G.STEPS.map((stp, i) => {
+    const s = G.ST[stp.st], a = h.a[i];
+    return `<div class="cmp"><b>${i + 1}. ${esc(stp.where === "外" ? "外にいて、入る？" : stp.where === "人" ? "知らない人には？" : stp.id === "out" ? "もう中。出る？" : stp.id === "bad" ? "外は刑務所。出る？" : "外はお金持ちの芸術家。出る？")}</b>あなた：<span class="you">${esc(a == null ? "—" : stp.opts[a])}</span><span class="meter" role="img" aria-label="機械を選んだ人 ${G.pc(s.mach)}"><i style="width:${s.mach}%"></i><u></u></span>研究：${esc(G.stText(s))}</div>`;
+  }).join("");
+  return `<div class="lines" id="lines">
+    <div class="me" data-a11y-say>${me}${prev ? `<br>前の日：${esc(prev)}` : ""}</div>
+    <p class="note">研究の答え（帯は機械を選んだ人の割合）</p>
+    ${rows}
+    <div><b>同じ機械でも、答えが変わる</b>外にいると、入る人は約${G.pc(G.ST.noz.mach)}。もう中にいると知らせると、残る人は${G.pc(G.ST.dbn.mach)}。外が刑務所なら${G.pc(G.ST.dbneg.mach)}。De Brigard 2010 は、いまの暮らしを動かしたくない気持ち（現状維持のかたより）で説明しました。${link(G.SRC.db)}${link(G.SRC.wj)}</div>
+  </div>`;
+}
+function prevLine(s, h, date) { const ds = Object.keys(s.mc).filter((d) => d < date).sort(); const d = ds[ds.length - 1]; return d ? `${md(d)} ${mcText(s.mc[d])}` : ""; }
+function mcView(run) {
+  Core.screens.mark("mc"); // 「戻る」でホームへ（sync-template の migrateBack）
+  cur = null;
+  const s = load(), h = mcRec(run.mc), th = themeOf(run.mc), more = run.list.length > 0;
+  app.innerHTML = `
+    <header><button class="icon" id="back" aria-label="ホームへ">←</button><h1>${th.w}の機械<small>${run.mode === "p" ? "練習" : `第${dayNo(run.date)}回`}</small></h1></header>
+    ${linesHtml(h, prevLine(s, h, run.date))}
+    ${more ? `<button class="main" id="hp-go">次は考える問題を5問</button>` : `<button class="main" id="hp-again">もう一度（ちがうお題）</button><button class="main alt" id="hp-home">ホームへ</button>`}
+    ${footer()}`;
+  $("back").onclick = home;
+  if ($("hp-go")) $("hp-go").onclick = () => { save((s2) => { const r = s2.runs[MODE]; if (r && r.id === run.id && r.mc) r.mc.seen = 1; }); play(); };
+  if ($("hp-again")) $("hp-again").onclick = () => startRun("p", "mc", run.mc.t); // もう一度は、いまのお題を除いて選ぶ
+  if ($("hp-home")) $("hp-home").onclick = home;
+  if (!more) save((s2) => { const r = s2.runs[MODE]; if (r && r.id === run.id) { s2.runs[MODE] = null; endRun(s2, run.id); } }); // 練習の機械は、見終えたら終わり
+  bindFooter(); toTop();
+}
+
+// 今の1問：{ i, date, id, tag, P(問題), wrong:[選んだまちがい], hints, done }
+let cur = null;
+const same = (r) => r && cur && r.date === cur.date && r.id === cur.id && r.res.length === cur.i && r.list[cur.i] === cur.tag; // 保存した進み具合が、この画面と同じ問題か
+// 途中の保存：別のタブで使ったヒント・まちがいも減らさない（多いほう・合わせたほうを残す）
+// まちがえた・ヒントを使ったその時に復習へ入れる（とことんで降りる・閉じるなど、解き終えずにやめても残る。2026-11-11 CodeRabbit）
+function early() { if (cur && !cur.done && ((cur.wrong && cur.wrong.length) || cur.hints || (cur.w2 && cur.w2.length))) Depth.mark(cur.tag, 1, cur.P.name); }
+// keep は保存した回が同じ問題のときだけ early する（古いタブが復習の段を戻さない）。別のタブで2段目へ進んでいたら、この画面も2段目にする（2026-11-11 CodeRabbit）
+function keep() { let ok = false; const st0 = cur.step; save((s) => { const r = s.runs[MODE]; if (!same(r)) return; ok = true; const was = r.cur && r.cur.i === cur.i && r.cur.tag === cur.tag ? r.cur : { wrong: [], hints: 0 }; cur.hints = Math.max(cur.hints, was.hints || 0); for (const w of was.wrong || []) if (!cur.wrong.includes(w)) cur.wrong.push(w); cur.step = Math.max(cur.step, was.step || 1); for (const w of was.w2 || []) if (!cur.w2.includes(w)) cur.w2.push(w); if (!cur.jd && was.jd) cur.jd = was.jd; if (was.h2) cur.h2 = 1; r.cur = { i: cur.i, tag: cur.tag, wrong: cur.wrong.slice(), hints: cur.hints, step: cur.step, w2: cur.w2.slice(), jd: cur.jd, h2: cur.h2 ? 1 : 0 }; }); if (ok) early(); if (ok && cur.step === 2 && st0 !== 2) { const c0 = cur; setTimeout(() => { if (cur === c0 && !cur.done && cur.step === 2) askWhy(); }, 0); } }
+const ICON = { riyuu: "💭", kikai: "⚙", kata: "🔁", jouken: "⚖", tasuu: "📊", yosou: "📈" };
+const missOf = () => cur.wrong.length + cur.hints + cur.w2.length; // 2段目のまちがいも数える
+function play() {
+  Core.screens.mark("play"); // 「戻る」でホームへ（sync-template の migrateBack）
+  const s = load(), run = s.runs[MODE];
+  if (!run) return home();
+  if (run.mc && !run.mc.done) return mcPlay(run); // 今日の回は、まず夢の機械
+  if (run.mc && (!run.mc.seen || !run.list.length) && run.res.length === 0 && !run.cur) return mcView(run); // 機械に答え終えたら、研究の答えとくらべる
+  if (run.mode === "e" && run.res.length >= run.list.length - 5) { let added = 0; save((s2) => { const r = s2.runs.e; if (r && r.id === run.id) { const more = (moreHook || moreList)(r.list); added = more.length; r.list.push(...more); } }); if (added) return play(); if (run.res.length >= run.list.length) return endFinish(run); } // 足せる問題が無ければ、残りを出して終える（くり返し呼ばない）
+  const i = run.res.length;
+  if (i >= run.list.length) return finish();
+  if (run.mode === "a" && s.days[run.date]) { save((s2) => { s2.runs[MODE] = null; }); toast("この日は別の画面で遊び終えています"); return home(); }
+  const tag = run.list[i], P = G.make(tag), hard = run.mode === "h";
+  if (!P) { save((s2) => { const r = s2.runs[MODE]; if (r && r.id === run.id && r.res.length === i) r.res.push({ m: 0 }); }); return play(); } // 作れない問題は飛ばす（壊れた鍵）
+  const saved = run.cur && run.cur.i === i && run.cur.tag === tag ? run.cur : { wrong: [], hints: 0 };
+  cur = { i, date: run.date, id: run.id, tag, P, wrong: (saved.wrong || []).filter((w) => P.opts.includes(w) && w !== P.ans), hints: saved.hints || 0, step: P.grp && saved.step === 2 ? 2 : 1, w2: (saved.w2 || []).filter((x) => x !== P.grp && P.g2.includes(x)), jd: saved.jd || null, h2: P.grp && saved.step === 2 && saved.h2 ? 1 : 0, done: false };
+  const label = run.mode === "d" ? LV[P.lv] : run.mode === "a" ? `あとから・${LV[P.lv]}` : hard ? "上級" : run.mode === "r" ? `復習・${LV[P.lv]}` : run.mode === "e" ? `とことん・${LV[P.lv]}` : `練習・${LV[P.lv]}`;
+  const showTip = (run.mode === "d" || run.mode === "a") && i === 0, tip = tipOf(run.date);
+  app.innerHTML = `
+    <header><button class="icon" id="back" aria-label="もどる">←</button>
+      ${run.mode === "e" ? `<span style="font-size:.85rem;color:var(--ink2)">${label} ${i + 1}問目　一度で正解した ${cleanOf(run)}問${s.ebest ? `（ベスト ${s.ebest}）` : ""}</span>`
+        : `<div class="dots" aria-label="${i + 1}問目／${run.list.length}問">${run.list.map((_, j) => `<i class="${j < i ? "done" : j === i ? "on" : ""}"></i>`).join("")}</div><span style="font-size:.8rem;color:var(--ink2)">${label} ${i + 1}/${run.list.length}</span>`}
+    </header>
+    ${showTip ? `<div class="tip"><b>今日のきほん：${tip[0]}</b><br>${tip[1]}</div>` : ""}
+    <div class="ad act" id="card">
+      <div class="bar"><span>${ICON[P.type] || "💭"} ${esc(P.media)}</span><span>考える問題</span></div>
+      ${P.svg ? `<div class="sky">${P.svg}</div>` : ""}
+      <p class="sit sit2" data-a11y-say>${esc(P.q)}</p>
+      <p class="q" id="ask" data-a11y-say>${esc(P.ask)}</p>
+      ${cur.wrong.length || cur.step === 2 ? "" : `<div class="sure-row">${Depth.sureHtml()}</div>`}
+      <div class="choices" id="choices" role="group" aria-label="答え">${P.opts.map((t, j) => `<button class="ch" data-j="${j}" data-a11y-say>${esc(t)}</button>`).join("")}</div>
+    </div>
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+    <div id="why"></div>
+    <div id="hintbox"></div>
+    ${hard ? "" : `<button class="sub" id="hint">ヒント</button>`}
+    ${run.mode === "e" ? `<p class="note">まちがえても続きます。好きなところで終われます。</p><button class="sub" id="quit">ここで降りる（${i}問で終える）</button>` : ""}
+    <div id="after"></div>`;
+  $("back").onclick = home;
+  document.querySelectorAll(".ch").forEach((b) => (b.onclick = () => choose(+b.dataset.j)));
+  Depth.bindSure(tag, cur.id + "|" + cur.i);
+  if ($("hint")) $("hint").onclick = hint;
+  if ($("quit")) $("quit").onclick = () => { const r = load().runs[MODE]; if (!r || r.id !== run.id) { toast("別の画面で先に進んでいます"); return play(); } finish(); }; // 正解した直後でも降りられる（解いた問題は記録ずみ）。別のタブで始めた新しい回は終えない（funka-level #1 の CodeRabbit）
+  if (cur.step === 2) askWhy(); else paint();
+  toTop();
+  // 画面を作り直すとフォーカスが body に戻るので、問題へ移す（キーボード・読み上げで続けられる。saibanin-shikumi #1 の CodeRabbit）
+  const card = $("card"); card.tabIndex = -1; card.focus({ preventScroll: true });
+}
+// ヒント2：まちがいの選び肢を消して、2つまでにしぼる（消すのは、正解でない選び肢のうち最後の1つ以外。まちがいの数で変えない。
+// 変えると、しぼったあとに残ったまちがいを選んだとき、消した選び肢が戻る。saibanin-shikumi #1 の CodeRabbit）
+const cutOf = () => (cur.hints >= 2 && cur.step !== 2 ? cur.P.opts.filter((o) => o !== cur.P.ans).slice(0, -1) : []); // 2回目のヒントは、まちがいを消して2つにしぼり、資料の言葉も見せる
+function paint() {
+  const cut = cutOf();
+  document.querySelectorAll(".ch").forEach((b) => { const t = cur.P.opts[+b.dataset.j], ng = cur.wrong.includes(t) || cut.includes(t); b.classList.toggle("ng", ng); b.disabled = ng || cur.done || cur.step === 2; b.setAttribute("aria-label", t + (ng ? "（ちがう）" : "")); });
+  const h = $("hint"); if (h) h.disabled = cur.done || cur.hints >= 2;
+  $("hintbox").innerHTML = cur.hints && !cur.done ? `<div class="hint" role="status">💡 ${esc(cur.P.look)}${cur.hints >= 2 ? `<br>💡 ${esc(cur.P.key)}` : ""}</div>` : "";
+}
+function hint() { if (cur.done || cur.hints >= 2) return; if (cur.step === 2) { if (cur.h2 || !left2Of().length) return; cur.h2 = 1; cur.hints++; keep(); return paintWhy(); } cur.hints++; keep(); paint(); }
+// 2段目：正解したら、時の問題は「決め手は？」、気温の問題は「少しずらすと？」を選ぶ（game-dev.md「1問を深くする」）
+// 2段目のヒント：ちがう答えを1つ消す（消すのは決まった1つ。まちがいの数で変えない）
+const left2Of = () => cur.P.g2.filter((x) => x !== cur.P.grp && !cur.w2.includes(x));
+const cut2Of = () => (cur.h2 ? left2Of().slice(0, 1) : []);
+function askWhy() {
+  const P = cur.P;
+  document.querySelectorAll(".ch").forEach((b) => { b.disabled = true; if (P.opts[+b.dataset.j] === P.ans) { b.classList.remove("ng"); b.classList.add("ok"); } });
+  $("msg").className = "msg"; $("msg").textContent = `✓ 正解！ では、${P.ask2}${cur.jd && cur.jd.text ? "　" + cur.jd.text : ""}`;
+  if ($("ask")) $("ask").textContent = P.ask2;
+  document.querySelectorAll("#card [data-a11y-say]").forEach((e) => e.removeAttribute("data-a11y-say")); // 読み上げは2段目の問いと選び肢だけ（funka-level #1 の CodeRabbit）
+  $("why").innerHTML = `<p class="note" data-a11y-say>${esc(P.ask2)}</p><div class="why" role="group" aria-label="2段目の答え">${P.g2.map((x) => `<button data-g="${x}" data-a11y-say><b>${G.GROUPS[x].name}</b><small>${G.GROUPS[x].sub}</small></button>`).join("")}</div>`;
+  document.querySelectorAll(".why button").forEach((b) => (b.onclick = () => chooseWhy(b.dataset.g)));
+  paintWhy();
+}
+function paintWhy() {
+  const cut = cut2Of();
+  document.querySelectorAll(".why button").forEach((b) => { const x = b.dataset.g, ng = cur.w2.includes(x) || cut.includes(x); b.classList.toggle("ng", ng); b.disabled = ng || cur.done; b.setAttribute("aria-label", G.GROUPS[x].name + (ng ? "（ちがう）" : "")); });
+  const h = $("hint"); if (h) h.disabled = cur.done || cur.hints >= 2 || !!cur.h2 || !left2Of().length;
+  $("hintbox").innerHTML = cur.h2 && !cur.done ? `<div class="hint" role="status">💡 ちがう答えを1つ消しました。</div>` : "";
+}
+function chooseWhy(x) {
+  if (cur.done || cur.step !== 2) return;
+  if (!same(load().runs[MODE])) { toast("別の画面で先に進んでいます"); return play(); }
+  if (x !== cur.P.grp) { if (cur.w2.includes(x)) return; buzz(40); cur.w2.push(x); keep(); paintWhy(); $("msg").className = "msg bad"; $("msg").textContent = "✕ ちがいます。2つの聞き方で変えたのは1つだけ。文のちがう所を見ます。もう一度どうぞ。"; return; }
+  const b = document.querySelector(`.why button[data-g="${x}"]`); if (b) b.classList.add("ok");
+  solved();
+}
+// この回の「自信あり」の数と当たり（結果の画面に出す。開き直しても残るよう回の記録に入れる）
+// 1問につき1回だけ数える（同じ問題を2つのタブで開いても2回足さない。CodeRabbit の指摘）
+function sureCount(ok) { const q = cur.i + ":" + cur.tag; save((s) => { const r = s.runs[MODE]; if (!same(r) || r.dsq === q) return; r.dsq = q; r.ds = r.ds || { n: 0, ok: 0 }; r.ds.n++; if (ok) r.ds.ok++; }); }
+function choose(j) {
+  if (cur.done || cur.step === 2) return;
+  const t = cur.P.opts[j], r0 = load().runs[MODE];
+  if (!same(r0)) { toast("別の画面で先に進んでいます"); return play(); }
+  if (r0.cur && r0.cur.i === cur.i && r0.cur.tag === cur.tag && r0.cur.step === 2) { cur.step = 2; return play(); } // 別のタブで2段目へ進んでいたら、古い1段目の答えは数えずに2段目へ（CodeRabbit yume-kikai#1）
+  if (t !== cur.P.ans) {
+    if (cur.wrong.includes(t)) return;
+    buzz(40);
+    const jd = Depth.judge(false); if (jd && jd.sure) { cur.jd = jd; sureCount(false); }
+    cur.wrong.push(t); keep(); paint();
+    $("msg").className = "msg bad"; $("msg").textContent = "✕ ちがいます。もう一度どうぞ。" + (jd && jd.text ? "　" + jd.text : "");
+    return;
+  }
+  // 正解（続けて2段目を選ぶ）
+  const jd = Depth.judge(true); if (jd && jd.sure) { cur.jd = jd; sureCount(true); }
+  if (cur.P.grp) { cur.step = 2; keep(); buzz(10); return askWhy(); }
+  solved();
+}
+function solved() {
+  cur.done = true; buzz([10, 40, 10]);
+  const P = cur.P;
+  const s = save((s) => { const r = s.runs[MODE]; if (!same(r)) return; const was = r.cur && r.cur.i === cur.i && r.cur.tag === cur.tag ? r.cur : null; if (was) { cur.hints = Math.max(cur.hints, was.hints || 0); for (const w of was.wrong || []) if (!cur.wrong.includes(w)) cur.wrong.push(w); for (const w of was.w2 || []) if (G.GROUPS[w] && !cur.w2.includes(w)) cur.w2.push(w); } r.res.push({ m: missOf() }); r.cur = null; s.dex[P.kind] = (s.dex[P.kind] || 0) + 1; }); // 別のタブで使ったヒント・まちがいも合わせてから数える
+  const m = missOf(), st = starsOf(m);
+  Depth.mark(cur.tag, m, P.name); // まちがい・ヒントがあれば復習へ、復習中なら次の間へ
+  const r = s.runs[MODE], fin = r && r.mode !== "e" && r.res.length >= r.list.length;
+  document.querySelectorAll(".ch").forEach((b) => { b.disabled = true; if (P.opts[+b.dataset.j] === P.ans) { b.classList.remove("ng"); b.classList.add("ok"); b.setAttribute("aria-label", P.ans + "（正解）"); } });
+  document.querySelectorAll(".why button").forEach((b) => (b.disabled = true));
+  if ($("hint")) $("hint").disabled = true;
+  $("hintbox").innerHTML = ""; $("msg").className = "msg"; $("msg").textContent = "";
+  $("after").innerHTML = `<div class="verdict" role="status">
+    <div class="hd">✓ 正解！ ${starStr(st)}</div>
+    ${P.grp ? `<p class="note" style="text-align:left">${esc(P.ask2)} → <b>${esc(G.GROUPS[P.grp].name)}</b><br>${esc(P.gwhy)}</p>` : ""}
+    ${cur.jd && cur.jd.sure ? `<p class="sure-res">${cur.jd.ok ? "🎯 自信ありで当てた" : "🎯 自信ありでまちがえた。ここを覚えよう"}</p>` : ""}
+    <p class="why" data-a11y-say><b>${esc(P.name)}：</b>${esc(P.why)}</p>
+    ${srcHtml(P)}
+    <button class="main ok" id="next">${fin ? "結果を見る" : "次の問題へ"}</button></div>`;
+  $("next").onclick = play;
+  setTimeout(() => { if ($("next") && cur && cur.done && cur.tag === P.tag) $("next").scrollIntoView({ behavior: A11y && A11y.on("calm") ? "auto" : "smooth", block: "nearest" }); }, 60);
+}
+
+let JUST = null; // 回を終えた直後の結果なら、その回の「自信あり」の数と当たり
+function finish() {
+  const s = load(), run = s.runs[MODE];
+  if (!run) return home();
+  if (run.mode === "e") return endFinish(run);
+  if (run.mc && !run.list.length) return mcView(run); // 練習の夢の機械だけの回
+  JUST = run.ds || null;
+  let first = false, newAch = [];
+  const rec = recOf(run);
+  save((s2) => {
+    first = bank(s2, run);
+    const c = s2.runs[MODE]; if (c && c.date === run.date && c.id === run.id) { s2.runs[MODE] = null; endRun(s2, run.id); } // 別のタブで新しい回が始まっていたら、それは消さない
+    if (Array.isArray(run.a0)) newAch = achGot(s2).filter((id) => !run.a0.includes(id) && !s2.ach[id]);
+    for (const id of newAch) s2.ach[id] = 1;
+  });
+  if (run.mode === "p" || run.mode === "r") return result(run.mode, run.date, false, { list: run.list, ...rec }, newAch);
+  result(run.mode, run.date, first, null, newAch);
+}
+// とことんの終わり：一度で正解した数を自己ベストと比べる（他の人との順位は出さない）
+function endFinish(run) {
+  Core.screens.mark("endFinish"); // 「戻る」でホームへ（sync-template の migrateBack）
+  const n = cleanOf(run), all = run.res.length, miss = all - n; let prev = 0, newAch = [];
+  save((s2) => { prev = s2.ebest || 0; s2.ebest = Math.max(prev, n); const c = s2.runs.e; if (c && c.id === run.id) { s2.runs.e = null; endRun(s2, run.id); } if (Array.isArray(run.a0)) newAch = achGot(s2).filter((id) => !run.a0.includes(id) && !s2.ach[id]); for (const id of newAch) s2.ach[id] = 1; });
+  const s = load(), best = n > prev && n > 0;
+  app.innerHTML = `
+    <header><button class="icon" id="back" aria-label="ホームへ">←</button><h1>夢の機械、入る？<small>とことん</small></h1></header>
+    <p class="big" id="eres">${all}問 正解しました</p>
+    <p class="note">一度で正解した ${n}問・まちがいやヒントのあった ${miss}問</p>
+    ${run.ds && run.ds.n ? `<p class="note" id="surestat">🎯 自信ありの当たり ${run.ds.ok}/${run.ds.n}</p>` : ""}
+    <p class="note" id="ebest">${best ? "🎉 自己ベスト更新！" : `自己ベスト ${s.ebest}問${s.ebest > n ? `（あと${s.ebest - n + 1}問で更新）` : ""}`}</p>
+    ${newAch.length ? `<p class="achnew" id="achnew">${newAch.map((id) => `🏅 実績：${ACH.find((a) => a[0] === id)[1]}`).join("<br>")}</p>` : ""}
+    <button class="main" id="go-e">もう一度とことん</button>
+    <div class="row"><button class="sub" id="go-p">練習する</button><button class="sub" id="go-dex">考え帳を見る</button></div>
+    <p class="note"><a href="${FEEDBACK}" data-feedback="fun" target="_blank" rel="noopener">感想を送る</a></p>`;
+  $("back").onclick = home; $("go-e").onclick = () => startRun("e"); $("go-p").onclick = practiceMenu; $("go-dex").onclick = book;
+  toTop();
+}
+// 共有の文：問題と答えは出さない。まちがい＋ヒントの数で色と形を変える（色だけで分けない）。夢の機械の答えは正解の無い答えなので、残った数だけ出す
+const sq = (m) => (m === 0 ? "🟢" : m === 1 ? "🔶" : "🔺");
+function shareText(mode, k, rec, h) { return `夢の機械、入る？${mode === "h" ? " 上級" : ""} 第${dayNo(k)}回 ${md(k)}${h ? "\n" + mcText(h) : ""}\n${rec.m.map(sq).join("")}${rec.m.every((m) => m === 0) ? " まちがいなし" : ""}`; }
+function untilNext() { return Core.untilNext(); } // 次の回までの時間（共通部品 game-core）
+function result(mode, k, first, prec, newAch = []) {
+  Core.screens.mark("result"); // 「戻る」でホームへ（sync-template の migrateBack）
+  const pr = mode === "p" || mode === "r", ds = JUST || { n: 0, ok: 0 }; JUST = null; // 練習・復習は今日の記録に入れない。自信の当たりは終えた直後だけ出す
+  const s = load(), rec = pr ? prec : bookOf(s, mode)[k];
+  if (!rec) return home();
+  const h = (mode === "d" || mode === "a") && s.mc[k] ? s.mc[k] : null;
+  const real = pr ? null : listOf(mode, k), list = pr ? prec.list : (Array.isArray(rec.k) && rec.k.length === rec.m.length ? rec.k.map((id, j) => real[j] && real[j].split("|")[0] === id ? real[j] : Object.prototype.hasOwnProperty.call(G.BY, id) ? id + "|" : null) : real), total = rec.m.reduce((a, b) => a + b, 0), late = mode === "a", text = shareText(mode, k, rec, h);
+  const showKofi = first && !pr && !late && total === 0 && !s.kofi[k + mode]; // あとから・練習・まちがいのある日には出さない
+  if (showKofi) save((s2) => { s2.kofi[k + mode] = 1; });
+  app.innerHTML = `
+    <header><button class="icon" id="back" aria-label="ホームへ">←</button><h1>夢の機械、入る？<small>${mode === "d" ? `今日の回 第${dayNo(k)}回` : late ? `第${dayNo(k)}回 あとから` : mode === "h" ? "上級" : mode === "r" ? "復習" : "練習"}</small></h1></header>
+    <p class="big">${total === 0 ? "全部まちがいなし！" : `${list.length}問 正解しました`}</p>
+    ${ds.n ? `<p class="note" id="surestat">🎯 自信ありの当たり ${ds.ok}/${ds.n}</p>` : ""}
+    ${newAch.length ? `<p class="achnew" id="achnew">${newAch.map((id) => `🏅 実績：${ACH.find((a) => a[0] === id)[1]}`).join("<br>")}</p>` : ""}
+    ${(() => { const nx = nextAch(s); return nx ? `<p class="achnext" id="achnext">🎯 あと${nx.left}${nx.unit}で「${nx.name}」</p>` : ""; })()}
+    ${h ? `<p class="note">夢の機械：あなたの答えと研究の答え</p>${linesHtml(h, prevLine(s, h, k))}` : ""}
+    <p class="note">今日考えたこと</p>
+    <div class="rlist">${list.map((tag, j) => { const P = tag && (tag.endsWith("|") ? G.BY[tag.slice(0, -1)] : G.make(tag)); if (!P || !P.why) return ""; return `<div><span>${starStr(starsOf(rec.m[j]))}</span><span class="w"><b>${esc(P.name)}</b>${esc(P.why)}</span></div>`; }).join("")}</div>
+    ${late ? `<p class="note">あとから遊んだ日は、カレンダーに ↺ で残ります（続けた日には数えません）。</p><button class="main alt" id="go-cal">カレンダーへ</button>` : ""}
+    ${!pr && !late ? `<div class="share">${esc(text)}</div>
+    <button class="main" id="share">結果をシェア</button>
+    <div class="shares"><a id="toX" target="_blank" rel="noopener">Xで投稿</a><a id="toLine" target="_blank" rel="noopener">LINEで送る</a><button id="copy">コピー</button></div>
+    <p class="note">🟢まちがいなし　🔶1回　🔺2回以上<br>次の回まで あと <b>${untilNext()}</b></p>` : ""}
+    ${!pr ? `<button class="main alt" id="go-e">続けて遊ぶ：とことん${s.ebest ? `（ベスト ${s.ebest}問）` : ""}</button>` : ""}
+    ${mode === "d" && k === todayKey() && !s.hdays[k] ? `<button class="main alt" id="go-h">上級：むずかしい3問に挑む</button>` : ""}
+    <div class="row"><button class="sub" id="go-p">練習する</button><button class="sub" id="go-dex">考え帳を見る</button></div>
+    ${showKofi ? Core.kofi("楽しめたら", "新しいゲームづくり") : ""}
+    <p class="note"><a href="${FEEDBACK}" data-feedback="fun" target="_blank" rel="noopener">感想を送る</a></p>`;
+  $("back").onclick = home; $("go-p").onclick = practiceMenu; $("go-dex").onclick = book;
+  if ($("go-e")) $("go-e").onclick = () => startRun("e");
+  if ($("go-h")) $("go-h").onclick = () => (k === todayKey() ? startRun("h") : home());
+  if ($("go-cal")) $("go-cal").onclick = () => cal(k.slice(0, 7));
+  if (!pr && !late) {
+    const withUrl = text + "\n" + SITE;
+    Core.share.wire(withUrl); // X・LINE・コピー・端末の共有（共通部品 game-core。sync-template の migrateShare）
+  }
+  toTop();
+}
+
+// 考え帳：夢の機械の答えの記録と、正解した種類と数。種類を押すと、その種類だけで練習
+function book() {
+  Core.screens.mark("book"); // 「戻る」でホームへ（sync-template の migrateBack）
+  const s = load(), n = G.KINDS.filter((k) => s.dex[k.id] > 0).length, ds = Object.keys(s.mc).sort().reverse().slice(0, 10);
+  app.innerHTML = `
+    <header><button class="icon" id="back" aria-label="ホームへ">←</button><h1>考え帳<small>${n}/${G.KINDS.length}種類</small></h1></header>
+    <p class="agrp">夢の機械の答え（新しい順）</p>
+    ${ds.length ? `<div class="rlist" id="mylines">${ds.map((d) => `<div><span>${md(d)}</span><span class="w">${esc(mcText(s.mc[d]))}</span></div>`).join("")}</div><p class="note">日やお題で答えが動いていませんか？ 聞き方で答えが変わるのは、ふつうのことです。</p>` : `<p class="note">今日の回で夢の機械に答えると、ここに残ります。</p>`}
+    <p class="note">考える問題：正解した種類が集まります。押すと、その種類だけで5問練習できます。</p>
+    ${LV.map((l, lv) => `<p class="agrp">${l}</p><div class="book">${G.KINDS.filter((k) => k.lv === lv).map((k) => s.dex[k.id] > 0 ? `<button data-k="${k.id}"><span class="mk" aria-hidden="true">💭</span><span>${esc(k.name)}</span><span class="ct">${s.dex[k.id]}問</span></button>` : `<span class="no" role="img" aria-label="まだ見つけていない種類"><span class="mk" aria-hidden="true">？</span><span>まだ</span><span class="ct"></span></span>`).join("")}</div>`).join("")}
+    ${footer()}`;
+  $("back").onclick = home;
+  document.querySelectorAll(".book button").forEach((b) => (b.onclick = () => startRun("p", b.dataset.k)));
+  bindFooter(); toTop();
+}
+// part:achView:begin（shared-workflows の template/parts/index/achView.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す）
+function achView() {
+  Core.screens.mark("achView"); // 「戻る」でホームへ（sync-template の migrateBack）
+  const s = load(), t = tally(s), got = achGot(s);
+  app.innerHTML = `
+    <header><button class="icon" id="back" aria-label="ホームへ">←</button><h1>実績<small>${got.length}/${ACH.length}</small></h1></header>
+    ${AGRP.map((g, gi) => `<p class="agrp">${g}</p><div class="alist">${ACH.filter((a) => a[3] === gi).map((a) => { const ok = got.includes(a[0]), n = Math.min(t[a[4]], a[5]); return `<div class="ach${ok ? " got" : ""}" data-id="${a[0]}"><span class="ic" aria-hidden="true">🏅</span><b>${ok ? "✓ " : ""}${a[1]}</b><span class="pg">${ok ? "達成" : `${n}/${a[5]}`}</span><small>${a[2]}</small>${ok ? "" : `<span class="bar"><i style="width:${Math.round((n / a[5]) * 100)}%"></i></span>`}</div>`; }).join("")}</div>`).join("")}
+    ${footer()}`;
+  $("back").onclick = home; bindFooter(); toTop();
+}
+// part:achView:end
+// 遊んだ日のカレンダー：今日の回の日は★（まちがいの少なさ）、あとから遊んだ日は ↺、取りこぼした過去7日は押すとあとから遊べる
+const ymOf = Core.ymOf;
+const ymAdd = Core.ymAdd;
+const lvOf = (rec) => { const t = rec && Array.isArray(rec.m) ? rec.m.reduce((a, b) => a + b, 0) : 9; return t === 0 ? 3 : t <= 2 ? 2 : 1; };
+// part:cal:begin（shared-workflows の template/parts/index/cal.js の写し。ここでは直さない。node scripts/sync-template.mjs で写す）
+function cal(ym) {
+  Core.screens.mark("cal"); // 「戻る」でホームへ（sync-template の migrateBack）
+  const s = load(), k = todayKey(), late = lateDays(s, k), st = streak(s.days);
+  if (!ym || ym > ymOf(k)) ym = ymOf(k);
+  if (ym < ymOf(EPOCH)) ym = ymOf(EPOCH);
+  const y = +ym.slice(0, 4), m = +ym.slice(5, 7), dow = new Date(Date.UTC(y, m - 1, 1)).getUTCDay(), n = new Date(Date.UTC(y, m, 0)).getUTCDate(), cells = [];
+  for (let i = 0; i < dow; i++) cells.push(`<span class="c off"></span>`);
+  for (let d = 1; d <= n; d++) {
+    const key = `${ym}-${String(d).padStart(2, "0")}`, rec = s.days[key], ar = s.adays[key], hd = s.hdays[key] ? `<span class="hd">上</span>` : "";
+    if (rec) { const lv = lvOf(rec); cells.push(`<span class="c p${lv}" data-k="${key}" role="img" aria-label="${m}月${d}日 星${lv}つ${hd ? "・上級も" : ""}">${d}<i>${"★".repeat(lv)}</i>${hd}</span>`); }
+    else if (ar) cells.push(`<span class="c late" data-k="${key}" role="img" aria-label="${m}月${d}日 あとから遊んだ">${d}<i>↺</i></span>`);
+    else if (late.includes(key)) { const go = s.runs[runKey("a", key)]; cells.push(`<button class="c miss" data-k="${key}" aria-label="${m}月${d}日をあとから遊ぶ${go ? "（続きから）" : ""}">${d}<i>${go ? "続き" : "▶"}</i></button>`); }
+    else cells.push(`<span class="c${key === k ? " today" : ""}" data-k="${key}">${d}</span>`);
+  }
+  const pd = playedDays(s);
+  app.innerHTML = `<header><button class="icon" id="back" aria-label="ホームへ">←</button><h1>カレンダー${pd ? `<small>合わせて ${pd}日${st >= 1 ? `・続けて ${st}日` : ""}</small>` : ""}</h1></header>
+    <div class="calnav"><button class="sub" id="prev" aria-label="前の月"${ym <= ymOf(EPOCH) ? " disabled" : ""}>‹</button><b>${y}年${m}月</b><button class="sub" id="next" aria-label="次の月"${ym >= ymOf(k) ? " disabled" : ""}>›</button></div>
+    <div class="cal">${["日", "月", "火", "水", "木", "金", "土"].map((w) => `<span class="wd">${w}</span>`).join("")}${cells.join("")}</div>
+    <div class="legend"><span><em style="background:var(--ai)"></em>★★★ まちがいなし</span><span><em style="background:#d5e1f3"></em>★★ 1〜2回</span><span>↺ あとから</span><span>上 上級</span></div>
+    ${late.length ? `<p class="note">▶ の日は、その日の5問をあとから遊べます（過去7日まで・続けた日には数えません）。</p>` : ""}
+    ${footer()}`;
+  $("back").onclick = home; $("prev").onclick = () => cal(ymAdd(ym, -1)); $("next").onclick = () => cal(ymAdd(ym, 1));
+  document.querySelectorAll(".cal .miss").forEach((b) => (b.onclick = () => (lateDays(load()).includes(b.dataset.k) ? startRun("a", b.dataset.k) : cal(ym))));
+  bindFooter(); toTop();
+}
+// part:cal:end
+// 好みに正解は無いこと・数字の出どころと、その数がだれに聞いた1回の結果かを書く
+function about() {
+  Core.screens.mark("about"); // 「戻る」でホームへ（sync-template の migrateBack）
+  app.innerHTML = `<header><button class="icon" id="back" aria-label="ホームへ">←</button><h1>このゲームについて</h1></header>
+    <div class="about" id="about">
+      <h3>経験機械を考えるゲーム</h3>
+      <p>前半の夢の機械には正解がありません。どんな暮らしを選ぶかは、人の好みだからです。自分で答えて、聞き方で答えが変わるかを見ます。</p>
+      <p>後半の問題は、ノージック（1974）の文と、De Brigard（2010）・Weijers（2014）の研究に書いてあることを、短くやさしく言いかえたものです。研究の数は大学生などに聞いた1回の結果で、人みんなの答えではありません。くわしくは論文で確かめてください。</p>
+      <h3>答えの出どころ</h3>
+      <ul>
+        ${Object.values(G.SRC).map((x) => `<li>${link(x)}</li>`).join("")}
+      </ul>
+      <h3>まとめの読みもの</h3>
+      <ul>
+        ${Object.values(G.MORE).map((x) => `<li>${link(x)}</li>`).join("")}
+      </ul>
+      <p>記録はこの端末のブラウザだけに残り、外へ送りません。</p>
+    </div>${footer()}`;
+  $("back").onclick = home; bindFooter(); toTop();
+}
+
+window.__nm = { sureCount: (ok) => sureCount(ok), setMem: (j) => { mem = j; }, randomTags, idsOf, mode: () => MODE, load, save, todayKey, dayNo, lateDays, ACH, achGot, nextAch, tally, shareText, streak, endlessList, moreList, ERAMP, TIPS, cur: () => cur, play: (m) => { if (m) MODE = m; play(); }, home, cal, book, about, EPOCH, KEY, G, start: startRun, setMore: (f) => { const o = moreHook; moreHook = f; return o; }, mcRec, mcText };
+home();
+if ("serviceWorker" in navigator && location.protocol === "https:" && /github\.io$/.test(location.hostname)) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>
