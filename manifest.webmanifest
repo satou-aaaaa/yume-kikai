@@ -1,0 +1,23 @@
+{
+  "name": "夢の機械、入る？",
+  "short_name": "夢の機械",
+  "description": "経験機械の問いに答えて、答えを変える条件を研究の数字とくらべる",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f1eefa",
+  "theme_color": "#f1eefa",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

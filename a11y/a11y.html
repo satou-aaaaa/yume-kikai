@@ -1,0 +1,394 @@
+<!-- a11y:begin 見やすさの設定 v10（shared-workflows template/a11y/a11y.html の写し。ここでは直さず、ひな形を直して全部のゲームへ写す。drift-check と qa/a11y.mjs が同じ中身か見る） -->
+<style id="a11y-css">
+/* だれでも：キーボードで選んだ所に太い枠（WCAG 2.4.7・2.4.13） */
+:is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline:3px solid #1a5fd0!important;outline-offset:2px!important;box-shadow:0 0 0 5px #fff!important}
+/* 読みやすい文字：UD フォント・行間 1.7・字間を少し広げる・斜体にしない（BDA Dyslexia Style Guide） */
+html.a11y-read body{line-height:1.7}
+html.a11y-read body,html.a11y-read body :where(*:not(svg):not(svg *):not([data-a11y-keepfont]):not([data-a11y-keepfont] *)){font-family:"BIZ UDPGothic","BIZ UDGothic","UD デジタル 教科書体 NK-R","UD Digi Kyokasho NK-R","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI",Meiryo,sans-serif!important;font-style:normal!important}
+html.a11y-read :is(p,li,dd,dt,blockquote,[data-a11y-say]){line-height:1.8!important;letter-spacing:.04em!important}
+html.a11y-read em,html.a11y-read i:not([aria-hidden]){font-style:normal!important;font-weight:700}
+/* 動きを減らす：揺れ・点滅・すべる動きを止める（WCAG 2.3.3。端末の「視差効果を減らす」でも自動で入る） */
+html.a11y-calm *,html.a11y-calm *::before,html.a11y-calm *::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+/* 色の見分けを助ける：ゲームごとの形・模様は各ゲームが html.a11y-cvd の下に書く。ここではリンクに下線 */
+html.a11y-cvd a{text-decoration:underline!important}
+/* ふりがな：ゲームが <ruby class="a11y-rb"> を置いた所だけ。選んだときだけ出す */
+html:not(.a11y-ruby) ruby.a11y-rb>rt{display:none}
+/* 設定の画面（どのゲームでも同じ見た目・同じ濃さ。白地に黒で 15:1） */
+.a11y-dlg{max-width:min(420px,calc(100vw - 32px));width:100%;box-sizing:border-box;border:2px solid #1d2320;border-radius:14px;padding:18px 16px 14px;background:#fffdf8;color:#1d2320;font:500 16px/1.6 "BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;letter-spacing:0}
+.a11y-dlg::backdrop{background:#0008}
+.a11y-dlg:not([open]){display:none}
+.a11y-dlg h2{font-size:19px;margin:0 0 4px;font-weight:700;line-height:1.4}
+.a11y-dlg p{margin:4px 0 10px;font-size:14px;color:#3d4440;line-height:1.6}
+.a11y-dlg label{display:flex;gap:12px;align-items:center;min-height:48px;padding:6px 4px;border-top:1px solid #1d232022;cursor:pointer;line-height:1.4}
+.a11y-dlg label small{display:block;font-size:13px;color:#3d4440}
+.a11y-dlg input[type=checkbox]{width:26px;height:26px;flex:none;accent-color:#1a5fd0;margin:0}
+.a11y-dlg .a11y-row{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.a11y-dlg button,.a11y-btn,.a11y-saybtn{min-height:44px;min-width:44px;border-radius:10px;border:2px solid #1d2320;background:#fff;color:#1d2320;font:700 15px/1.2 "BIZ UDPGothic","Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;padding:0 14px;cursor:pointer;letter-spacing:0}
+.a11y-dlg button.a11y-ok{background:#1d2320;color:#fff}
+.a11y-btn.a11y-float{position:fixed;left:max(8px,env(safe-area-inset-left,0px));bottom:max(8px,env(safe-area-inset-bottom,0px));z-index:2147483000}
+.a11y-btn.a11y-float[hidden]{display:none!important}
+/* 「Aa」が出ているあいだは、いちばん下の物が「Aa」の下に隠れたままにならないよう下をあける（WCAG 2.4.11） */
+html.a11y-floaton body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))!important}
+/* 読み上げボタンが、いちばん下のボタン・リンクにかぶらないよう下をあける */
+html.a11y-say body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))!important}
+.a11y-saybtn{position:fixed;right:max(8px,env(safe-area-inset-right,0px));bottom:max(8px,env(safe-area-inset-bottom,0px));z-index:2147483000;box-shadow:0 2px 8px #0003}
+.a11y-saybtn[hidden],.a11y-dlg [hidden]{display:none!important}
+.a11y-note{font-size:13px!important}
+/* 選ぶ行（文字の大きさ・音など。v9）：横に並ぶ大きなボタン。選んだものは濃く */
+.a11y-dlg fieldset{border:0;border-top:1px solid #1d232022;margin:0;padding:8px 4px 10px;min-width:0}
+.a11y-dlg legend{padding:6px 0 4px;float:left;width:100%;line-height:1.4}
+.a11y-dlg legend small{display:block;font-size:13px;color:#3d4440}
+.a11y-dlg .a11y-opts{clear:both;display:flex;gap:6px}
+.a11y-dlg .a11y-opts label{flex:1;border:2px solid #1d2320;border-radius:10px;min-height:44px;padding:0 6px;justify-content:center;gap:6px;font-weight:700}
+.a11y-dlg .a11y-opts label:has(input:checked){background:#1d2320;color:#fff}
+.a11y-dlg .a11y-opts label:focus-within{outline:3px solid #1a5fd0;outline-offset:2px}
+.a11y-dlg .a11y-opts input{width:18px;height:18px;margin:0;accent-color:#1a5fd0;flex:none}
+/* 暗い画面（v10）：設定の画面と「Aa」「🔊 読む」も暗くする（白地に黒と同じ 14:1 前後） */
+html.a11y-dark .a11y-dlg{background:#1c2124;color:#eceae4;border-color:#eceae4}
+html.a11y-dark .a11y-dlg p,html.a11y-dark .a11y-dlg label small,html.a11y-dark .a11y-dlg legend small{color:#c3c8cb}
+html.a11y-dark .a11y-dlg label,html.a11y-dark .a11y-dlg fieldset{border-top-color:#eceae433}
+html.a11y-dark .a11y-dlg button,html.a11y-dark .a11y-btn,html.a11y-dark .a11y-saybtn,html.a11y-dark .a11y-dlg .a11y-opts label{background:#262c30;color:#eceae4;border-color:#eceae4}
+html.a11y-dark .a11y-dlg button.a11y-ok,html.a11y-dark .a11y-dlg .a11y-opts label:has(input:checked){background:#eceae4;color:#1c2124}
+html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visible{outline-color:#8ab4ff!important;box-shadow:0 0 0 5px #000!important}
+</style>
+<script id="a11y-script">
+/* 見やすさの設定（色覚・ディスレクシア・弱視・動きに弱い人のため）。外へは何も送らない。
+   設定は localStorage の a11y-v1 に置く。同じサイト（satou-aaaaa.github.io）のゲームは同じ設定を使う。
+   ゲームの側でできること：
+   - 設定を開くボタンに data-a11y-open を付ける（画面に見えている入口が無いあいだだけ、左下に「Aa」のボタンを出す）
+   - 読み上げる文に data-a11y-say を付ける（問題文・知らせなど）
+   - 色の見分けを助ける形・模様は html.a11y-cvd の下に CSS で書く。JS では A11y.on('cvd')
+   - 揺れ・すべる動きを JS で動かすときは、A11y.on('calm') なら止める
+   - 設定が変わると document に a11ychange が届く
+   - 設定の印は html の class「a11y-<設定の名前>」（a11y-read など）。部品の class はこれと重ならない名前にする（2026-11-05 a11y-say がボタンとぶつかった）
+   v9（2026-11-26）：選ぶ行（CHOICES）を足した。いまは「文字の大きさ」（小・中・大。全ゲーム共通）と「音」（なし・小・ふつう。音のあるゲームだけ出る）と「長く遊んだら知らせる」（kiroku のあるゲームだけ出る）。
+   - 文字の大きさは html の class a11y-fs1〜3。ゲームが自分で html.a11y-fs1〜3 の大きさを CSS に書いていればそれを使い、
+     書いていなければ html の文字の大きさを 0.9 倍・1.2 倍にする（rem で書いた所が大きくなる。WCAG 1.4.4・Game Accessibility Guidelines「文字の大きさを変えられる」）。
+     前のゲームごとの設定（〇〇-fs）は A11y.fsFrom("〇〇-fs", 既定の値) で引き継ぐ（共通の設定をまだ選んでいなければ、その値を使う）
+   - 音は Web Audio の出口（AudioContext の destination）に音量のつまみを1つはさむので、ゲームの側は何もしなくてよい
+     （WCAG 1.4.2 Audio Control・Xbox Accessibility Guideline 105）。音量は A11y.get("vol")（0 なし・1 小・2 ふつう）
+   - 選ぶ行を足すときは CHOICES に1行足す（名前・見出し・説明・選択肢・既定の値・出す条件）
+   v10（2026-11-27）：「画面の明るさ」（自動・明るい・暗い）。自動は端末のダークモード（prefers-color-scheme）に合わせる。暗いときは html に a11y-dark。
+   - ゲームごとの色を書き直さずに暗くする（下の「暗い画面」）。:root の色の変数と決め打ちの明るい地の明るさを裏返し（OKLCH の L。色合いは残すので色覚の見分けは崩さない）、
+     字がうしろと 4.5:1（大きい字は 3:1）に足りなければ足りるまで明るくする（WCAG 1.4.3。web.dev「prefers-color-scheme」・Chrome「Dark mode」の指針）。
+   - 色を変えたくない所は data-a11y-keepcolor を付ける。ゲームが自分で html.a11y-dark の色を CSS に書いてもよい（書いた色の上でも字の濃さは合わせる）
+   - A11y.dark() で今が暗い画面か分かる。canvas に描く色はゲームの側で A11y.dark() を見て変える */
+(() => {
+  const KEY = "a11y-v1";
+  const root = document.documentElement;
+  const OPTS = [
+    ["read", "読みやすい文字", "UD フォント・行間と字間を広く"],
+    ["cvd", "色の見分けを助ける", "色に形・模様・記号を足す"],
+    ["calm", "動きを減らす", "揺れ・点滅・すべる動きを止める"],
+    ["say", "読み上げのボタンを出す", "問題や知らせを声で読む（端末の中の声だけ）"],
+    ["ruby", "ふりがなを出す", "むずかしい漢字に読みを付ける"],
+  ];
+  // 選ぶ行：[名前, 見出し, 説明, [[値, 字], …], 既定の値, 出す条件（無ければいつも）]
+  const CHOICES = [
+    ["fs", "文字の大きさ", "画面の文字を小さく・大きく", [[1, "小"], [2, "中"], [3, "大"]], 2],
+    ["theme", "画面の明るさ", "自動は端末のダークモードの設定に合わせる", [[0, "自動"], [1, "明るい"], [2, "暗い"]], 0],
+    ["vol", "音", "効果音の大きさ", [[0, "なし"], [1, "小"], [2, "ふつう"]], 2, () => hasSound()],
+    // 長く遊んだら知らせる（分。0 は知らせない）。数えて知らせるのは共通部品 kiroku（template/kiroku/kiroku.js）。60 分は厚生労働省「情報機器作業における労働衛生管理のためのガイドライン」
+    ["rest", "長く遊んだら知らせる", "続けて遊んだ時間で、ひと休みをすすめる", [[0, "知らせない"], [30, "30分"], [60, "60分"], [90, "90分"]], 60, () => !!window.Kiroku],
+  ];
+  const CH = Object.fromEntries(CHOICES.map((c) => [c[0], c]));
+  const media = (q) => { try { return matchMedia(q).matches; } catch { return false; } };
+  // 保存した値がオブジェクトでなければ（別のページが書いた・手で直した）無かったことにする（2026-11-05 CodeRabbit：true が入ると設定が開けなくなる）
+  const load = () => { try { const v = JSON.parse(localStorage.getItem(KEY) || "{}"); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch { return {}; } };
+  let S = load();
+  // 保存できなかった変更（開いているあいだだけ覚える）。書く前に読み直した値で、まだ保存できていない変更を上書きしない（v7、nenkin-shikumi #1 の CodeRabbit）
+  let unsaved = {};
+  // 決めていないものは端末の設定に合わせる（視差効果を減らす → 動きを減らす）
+  const on = (k) => (k in S ? !!S[k] : k === "calm" ? media("(prefers-reduced-motion: reduce)") : false);
+  // 選ぶ行の今の値（選択肢にない値・壊れた値は既定の値）
+  const get = (k) => { const c = CH[k]; if (!c) return on(k); const v = S[k]; return c[3].some(([x]) => x === v) ? v : k === "fs" ? oldFs() : c[4]; };
+  // 前のゲームごとの文字の大きさ（1〜3）を引き継ぐ。共通の設定をまだ選んでいなければ、その値（無ければゲームの既定の値）を使う
+  let fsKey = null, fsDef = 2;
+  const oldFs = () => { if (fsKey) { try { const v = +localStorage.getItem(fsKey); if (v >= 1 && v <= 3) return v; } catch { /* 読めない */ } } return fsDef; };
+  const fs = () => get("fs");
+  // ゲームから一度だけ：A11y.fsFrom("〇〇-fs", 既定の値)。前のキーを覚えて、今の大きさを効かせ、その値を返す
+  const fsFrom = (k, d) => { fsKey = k || null; fsDef = d === 1 || d === 3 ? d : 2; applyFs(); return fs(); };
+
+  // ---- 文字の大きさ ----
+  const FS_RATE = { 1: 0.9, 2: 1, 3: 1.2 };
+  // ゲームが自分で html.a11y-fs1〜3 の大きさを書いているか（書いていればこちらは倍にしない）
+  const ownFs = () => [...document.querySelectorAll("style:not(#a11y-css)")].some((t) => t.textContent.includes(".a11y-fs"));
+  const applyFs = () => {
+    const v = fs();
+    for (const n of [1, 2, 3]) root.classList.toggle("a11y-fs" + n, n === v);
+    if (root.dataset.a11yFs) { root.style.removeProperty("font-size"); delete root.dataset.a11yFs; }
+    if (v === 2 || ownFs()) return;
+    const base = parseFloat(getComputedStyle(root).fontSize) || 16;
+    root.style.setProperty("font-size", Math.round(base * FS_RATE[v] * 100) / 100 + "px");
+    root.dataset.a11yFs = String(v);
+  };
+
+  // ---- 音 ----
+  // Web Audio の出口に音量のつまみ（GainNode）を1つはさむ。ゲームが ctx.destination へつなぐと、つまみを通って鳴る
+  const VOL = [0, 0.35, 1];
+  const ctxs = [];
+  const level = () => VOL[get("vol")];
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const proto = AC && (window.BaseAudioContext ? BaseAudioContext.prototype : AC.prototype);
+    const d = proto && Object.getOwnPropertyDescriptor(proto, "destination");
+    if (d && d.get && d.configurable) {
+      Object.defineProperty(proto, "destination", { configurable: true, enumerable: d.enumerable, get() {
+        const real = d.get.call(this);
+        if (!(this instanceof AC)) return real; // 音を書き出すだけの OfflineAudioContext は変えない
+        let e = ctxs.find((x) => x.c === this);
+        if (!e) { const g = this.createGain(); g.gain.value = level(); g.connect(real); e = { c: this, g }; ctxs.push(e); }
+        return e.g;
+      } });
+    }
+  } catch { /* Web Audio の無い端末 */ }
+  // <audio>・<video> は「なし」のとき消音にする
+  const applyVol = () => {
+    const v = level();
+    for (const e of ctxs) { try { e.g.gain.cancelScheduledValues(0); } catch { /* 古い端末 */ } e.g.gain.value = v; } // 止まっている AudioContext でもすぐ効くよう値を直に入れる
+    for (const m of document.querySelectorAll("audio,video")) m.muted = v === 0;
+  };
+  // 音を使うページか（Web Audio・<audio>・<video> を使っている）。音の無いゲームでは「音」の行を出さない
+  const hasSound = () => ctxs.length > 0 || !!document.querySelector("audio,video") ||
+    [...document.scripts].some((t) => t.id !== "a11y-script" && /AudioContext|new Audio\(/.test(t.textContent));
+  // ---- 暗い画面（v10）----
+  // 1) :root・html に書いた色の変数のうち、明るい地の色と、暗い無彩色（字の色）の明るさを裏返す（OKLCH の L。色合いとあざやかさは残す）
+  // 2) 決め打ちの明るい地（#fff・明るいグラデーション）を、同じ色合いの暗い地にする
+  // 3) 字の色が、うしろの色（親の opacity も重ねる）と 4.5:1（大きい字は 3:1）に足りなければ、足りるまで明るくする
+  // あざやかなボタンの地（朱・藍など）と白い字はそのまま。絵・svg・canvas・設定の画面は変えない。変えたものは覚えておき、やめたら元に戻す。
+  // 画面が描き変わったら次の描画の前にもう一度合わせる（ゲームの transition で遅れて変わる地のため、変えたものがあれば 0.4 秒後にも）
+
+  const toLin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+  const toSrgb = (v) => { const x = v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055; return Math.round(Math.min(1, Math.max(0, x)) * 255); };
+  const oklch = ([r, g, b]) => {
+    r = toLin(r); g = toLin(g); b = toLin(b);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    const A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, B = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+    return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, Math.hypot(A, B), Math.atan2(B, A)];
+  };
+  const rgb = ([L, C, H]) => {
+    const A = C * Math.cos(H), B = C * Math.sin(H);
+    const l = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3, m = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3, s = (L - 0.0894841775 * A - 1.291485548 * B) ** 3;
+    return [toSrgb(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s), toSrgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s), toSrgb(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s)];
+  };
+  const lum = (c) => 0.2126 * toLin(c[0]) + 0.7152 * toLin(c[1]) + 0.0722 * toLin(c[2]);
+  const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const parse = (c) => { const m = String(c).match(/rgba?\(([^)]+)\)/); if (!m) return null; const p = m[1].split(/[,/\s]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
+  const css = (c, a) => (a == null || a >= 1 ? `rgb(${c[0]},${c[1]},${c[2]})` : `rgba(${c[0]},${c[1]},${c[2]},${a})`);
+  const flip = (c) => { const [L, C, H] = oklch(c); return rgb([Math.min(0.94, Math.max(0.17, 1.1 - L)), C * 0.85, H]); };
+  const over = (t, b) => { const a = t[3] + b[3] * (1 - t[3]); return a === 0 ? [0, 0, 0, 0] : [0, 1, 2].map((i) => (t[i] * t[3] + b[i] * b[3] * (1 - t[3])) / a).concat(a); };
+    const SKIP = "svg,canvas,img,video,picture,iframe,.a11y-dlg,[data-a11y-keepcolor]";
+  let changed = new Map(); // 要素 → 変える前の値と優先（prop ごと。{ prop: [値, 優先] } の形）の表
+  const put = (el, prop, val) => {
+    let o = changed.get(el); if (!o) { o = {}; changed.set(el, o); }
+    if (!(prop in o)) o[prop] = [el.style.getPropertyValue(prop), el.style.getPropertyPriority(prop)];
+    if (el.style.getPropertyValue(prop) !== val) { el.style.setProperty(prop, val, "important"); count++; }
+  };
+  let probe = null;
+  const colorOf = (raw) => { if (!probe) { probe = document.createElement("i"); probe.hidden = true; } probe.style.color = ""; probe.style.color = raw; if (!probe.style.color) return null; (document.body || root).appendChild(probe); const c = parse(getComputedStyle(probe).color); probe.remove(); return c; };
+  function vars() {
+    const names = new Set();
+    const walk = (rules) => { for (const r of rules) { if (r.cssRules && !r.selectorText) { try { walk(r.cssRules); } catch (e) { /* 読めない */ } continue; } if (r.selectorText && /(^|,)\s*(:root|html)\s*(,|$)/.test(r.selectorText)) for (const n of r.style) if (n.startsWith("--")) names.add(n); } };
+    for (const sh of document.styleSheets) { try { walk(sh.cssRules); } catch (e) { /* 別のサイトの CSS は読めない */ } }
+    for (const n of names) {
+      const raw = getComputedStyle(root).getPropertyValue(n).trim();
+      if (!raw || /var\(|gradient|url\(/.test(raw)) continue;
+      const c = colorOf(raw); if (!c || c[3] === 0) continue;
+      const [L, C] = oklch(c);
+      if (L > 0.7 || (L < 0.5 && C < 0.05)) put(root, n, css(flip(c), c[3]));
+    }
+  }
+  // うしろの不透明な色（無ければ null。うしろが絵なら測れないので null）
+  function backOf(el) {
+    let acc = [0, 0, 0, 0];
+    for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+      const s = getComputedStyle(n), b = parse(s.backgroundColor);
+      if (s.backgroundImage !== "none" && n !== document.body && n !== root) return null;
+      if (b && b[3] > 0) { acc = over(acc, b); if (acc[3] >= 0.98) return acc; }
+    }
+    return over(acc, [18, 21, 24, 1]);
+  }
+  function grounds() {
+    for (const el of [document.body, ...document.querySelectorAll("body *")]) {
+      if (el.closest(SKIP) || el.id === "core-help") continue;
+      const s = getComputedStyle(el), b = parse(s.backgroundColor);
+      if (b && b[3] > 0.05 && oklch(b)[0] > 0.7) put(el, "background-color", css(flip(b), b[3]));
+      const g = s.backgroundImage;
+      if (g && g !== "none" && !/url\(/.test(g) && /gradient/.test(g)) {
+        const stops = (g.match(/rgba?\([^)]+\)/g) || []).map(parse).filter(Boolean);
+        if (stops.length && stops.reduce((t, c) => t + oklch(c)[0], 0) / stops.length > 0.7) put(el, "background-image", g.replace(/rgba?\([^)]+\)/g, (m) => { const c = parse(m); return css(flip(c), c[3]); }));
+      }
+    }
+  }
+  function texts() {
+    for (const el of document.querySelectorAll("body *")) {
+      if (el.closest(SKIP)) continue;
+      if (![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
+      const s = getComputedStyle(el), fg = parse(s.color), bg = backOf(el);
+      if (!fg || !bg) continue;
+      const size = parseFloat(s.fontSize), need = (size >= 24 || (+s.fontWeight >= 700 && size >= 18.66) ? 3 : 4.5) + 0.2;
+      // 親の opacity も重ねて見る（薄くした字は、薄くしたぶん明るくする）
+      let op = 1; for (let n = el; n && n !== root; n = n.parentElement) op *= +getComputedStyle(n).opacity;
+      if (op < 0.2) continue;
+      const seen = (c) => over([c[0], c[1], c[2], fg[3] * op], bg);
+      if (ratio(seen(fg), bg) >= need) continue;
+      let [L, C, H] = oklch(fg); const up = oklch(bg)[0] < 0.6;
+      let c = fg;
+      for (let i = 0; i < 60 && ratio(seen(c), bg) < need; i++) { L = up ? Math.min(1, L + 0.02) : Math.max(0, L - 0.02); if (L >= 1 || L <= 0) C *= 0.7; c = rgb([L, C, H]); }
+      put(el, "color", css(c, fg[3]));
+    }
+  }
+  let darkOn = false, mo = null, queued = false, busy = false;
+  // 地の色を変えると、ゲームの transition（.15s など）で少し遅れて暗くなる。変えたものがあれば、動きが終わったころにもう一度合わせる
+  let count = 0, again = 0;
+  const run = () => {
+    queued = false; if (!darkOn) return; busy = true;
+    const before = count;
+    try { grounds(); texts(); } finally { mo && mo.takeRecords(); busy = false; }
+    if (count > before && again < 3) { again++; setTimeout(later, 400); } else again = 0;
+  };
+  const later = () => { if (!queued && !busy) { queued = true; requestAnimationFrame(run); } };
+  function darkStart() {
+    if (darkOn) return; darkOn = true;
+    root.classList.add("a11y-dark");
+    put(root, "color-scheme", "dark");
+    vars(); run();
+    mo = new MutationObserver(later);
+    mo.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "hidden", "open"] });
+  }
+  function darkStop() {
+    if (!darkOn) return; darkOn = false;
+    if (mo) mo.disconnect(); mo = null;
+    for (const [el, o] of changed) for (const p in o) { if (o[p][0]) el.style.setProperty(p, o[p][0], o[p][1]); else el.style.removeProperty(p); }
+    changed = new Map();
+    root.classList.remove("a11y-dark");
+  }
+  
+  // 今は暗い画面か（自動は端末の設定）
+  const dark = () => { const t = get("theme"); return t === 2 || (t === 0 && media("(prefers-color-scheme: dark)")); };
+  const applyTheme = () => { if (!document.body) return; if (dark()) darkStart(); else darkStop(); };
+  let fontLoaded = false;
+  const loadFont = () => {
+    if (fontLoaded) return; fontLoaded = true;
+    // Google Fonts を許しているページだけ取りに行く（許していなければ端末にある UD フォントを使う）
+    const csp = (document.querySelector('meta[http-equiv="Content-Security-Policy"]') || {}).content || "";
+    if (csp && !/fonts\.googleapis\.com/.test(csp)) return;
+    const l = document.createElement("link");
+    l.rel = "stylesheet"; l.href = "https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&display=swap";
+    document.head.appendChild(l);
+  };
+  const apply = () => {
+    for (const [k] of OPTS) root.classList.toggle("a11y-" + k, on(k));
+    applyFs(); applyVol(); applyTheme();
+    if (on("read")) loadFont();
+    if (sayBtn) sayBtn.hidden = !on("say");
+    if (!on("say")) stop();
+  };
+  const set = (k, v) => {
+    unsaved[k] = CH[k] ? v : !!v;
+    S = { ...S, ...load(), ...unsaved }; // 別のタブで変えた設定を消さないよう、書く前に読み直す（保存できていない変更はこちらを残す）
+    try { localStorage.setItem(KEY, JSON.stringify(S)); unsaved = {}; } catch { /* 保存できなくても今の画面には効かせる */ }
+    apply();
+    document.dispatchEvent(new CustomEvent("a11ychange", { detail: CH[k] ? { key: k, on: !!v, value: get(k) } : { key: k, on: !!v } }));
+  };
+
+  // 読み上げ：端末の中の日本語の声だけを使う（外へ文字を送る声は使わない）
+  const voice = () => { try { return speechSynthesis.getVoices().find((v) => /^ja/i.test(v.lang) && v.localService) || null; } catch { return null; } };
+  const stop = () => { try { speechSynthesis.cancel(); } catch { /* 無い端末 */ } };
+  const visible = (el) => { const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return r.width > 0 && r.height > 0 && cs.visibility !== "hidden" && !el.closest("[hidden],[aria-hidden=true],[inert]"); };
+  const textOf = (sel) => [...document.querySelectorAll(sel)].filter(visible).map((el) => (el.getAttribute("aria-label") || el.innerText || "").trim()).filter(Boolean).join("。");
+  // data-a11y-say が無い画面では、見出しと知らせの場所を読む（2026-11-05 何も読まれず設定が開くだけだった）
+  const sayText = () => textOf("[data-a11y-say]") || textOf("h1,h2,[role=status],[aria-live]");
+  const say = (text) => {
+    const v = voice();
+    if (!v || !text) return false;
+    stop();
+    const u = new SpeechSynthesisUtterance(text.slice(0, 600));
+    u.voice = v; u.lang = v.lang; u.rate = 0.95;
+    speechSynthesis.speak(u);
+    return true;
+  };
+
+  let dlg = null, sayBtn = null, lastFocus = null;
+  const build = () => {
+    dlg = document.createElement("dialog");
+    dlg.className = "a11y-dlg";
+    dlg.setAttribute("aria-labelledby", "a11y-h");
+    const hasRuby = !!document.querySelector("ruby.a11y-rb");
+    dlg.innerHTML = `<h2 id="a11y-h">見やすさ・読みやすさ</h2><p>ほかのゲームにも同じ設定が使われます。</p>` +
+      CHOICES.map(([k, n, d, opts]) => `<fieldset data-c="${k}"><legend>${n}<small>${d}</small></legend><div class="a11y-opts">` +
+        opts.map(([v, t]) => `<label><input type="radio" name="a11y-${k}" data-c="${k}" value="${v}">${t}</label>`).join("") + `</div></fieldset>`).join("") +
+      OPTS.filter(([k]) => k !== "ruby" || hasRuby).map(([k, n, d]) => `<label><input type="checkbox" data-k="${k}"><span>${n}<small>${d}</small></span></label>`).join("") +
+      `<p class="a11y-note" id="a11y-novoice" hidden>この端末には、外へ送らずに読める日本語の声がありません。</p><div class="a11y-row"><button type="button" class="a11y-ok" data-a11y-close>閉じる</button></div>`;
+    document.body.appendChild(dlg);
+    dlg.addEventListener("change", (e) => {
+      const c = e.target.dataset && e.target.dataset.c;
+      if (c) return set(c, +e.target.value);
+      const k = e.target.dataset && e.target.dataset.k;
+      if (!k) return;
+      set(k, e.target.checked);
+      if (k === "say") dlg.querySelector("#a11y-novoice").hidden = !(e.target.checked && !voice());
+    });
+    // dialog を知らないブラウザでは close が無いので、open を外して閉じ、フォーカスを戻す（v6。jitensha-rule #1・sekai-jikoku #1 の CodeRabbit）
+    dlg.querySelector("[data-a11y-close]").addEventListener("click", () => { if (dlg.close) dlg.close(); else { dlg.removeAttribute("open"); if (lastFocus && lastFocus.focus) lastFocus.focus(); } });
+    dlg.addEventListener("close", () => { if (lastFocus && lastFocus.focus) lastFocus.focus(); });
+    sayBtn = document.createElement("button");
+    sayBtn.type = "button"; sayBtn.className = "a11y-saybtn"; sayBtn.textContent = "🔊 読む"; sayBtn.setAttribute("aria-label", "画面の問題を読み上げる");
+    sayBtn.addEventListener("click", () => {
+      try { if (speechSynthesis.speaking) return stop(); } catch { /* 無い端末 */ }
+      if (!say(sayText())) open();
+    });
+    document.body.appendChild(sayBtn);
+    // 左下の「Aa」は、画面に見えている入口（data-a11y-open）がほかに無いときだけ出す。
+    // ゲームの多くはホームのフッターを JS で後から描くので、作った時だけ見ると入口があっても出て、統計の上に重なっていた
+    // （v8。2026-11-22 169本。WCAG 2.4.11 Focus Not Obscured・3.2.4 Consistent Identification。incidents/2026-11-22-a11y-float-over-home.md）
+    const float = document.createElement("button");
+    float.type = "button"; float.className = "a11y-btn a11y-float"; float.textContent = "Aa"; float.setAttribute("data-a11y-open", ""); float.setAttribute("aria-label", "見やすさの設定");
+    float.hidden = true;
+    document.body.appendChild(float);
+    const seen = (e) => e !== float && e.getClientRects().length > 0 && !e.closest("[hidden],dialog:not([open])");
+    let queued = false;
+    const place = () => {
+      queued = false;
+      const need = ![...document.querySelectorAll("[data-a11y-open]")].some(seen);
+      if (float.hidden === need) float.hidden = !need;
+      document.documentElement.classList.toggle("a11y-floaton", need);
+    };
+    const later = () => { if (!queued) { queued = true; requestAnimationFrame(place); } };
+    new MutationObserver(later).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["hidden", "class", "style", "open"] });
+    place();
+    document.addEventListener("click", (e) => { const t = e.target.closest && e.target.closest("[data-a11y-open]"); if (t) { e.preventDefault(); open(); } });
+    apply();
+  };
+  const open = () => {
+    if (!dlg) build();
+    lastFocus = document.activeElement;
+    for (const c of dlg.querySelectorAll("input[data-k]")) c.checked = on(c.dataset.k);
+    for (const c of dlg.querySelectorAll("input[data-c]")) c.checked = +c.value === get(c.dataset.c);
+    for (const [k, , , , , show] of CHOICES) dlg.querySelector(`fieldset[data-c="${k}"]`).hidden = !!show && !show();
+    dlg.querySelector("#a11y-novoice").hidden = !(on("say") && !voice());
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+  };
+  // 声の一覧はあとから届くことがある。届いたら「声がありません」を出し直す
+  try { speechSynthesis.addEventListener("voiceschanged", () => { if (dlg) dlg.querySelector("#a11y-novoice").hidden = !(on("say") && !voice()); }); } catch { /* 無い端末 */ }
+  apply();
+  // 端末の「視差効果を減らす」を開いたあとに変えても効かせる（自分で決めていないときだけ。v7、hatsuden-kurabe #1 の CodeRabbit）
+  try {
+    const mq = matchMedia("(prefers-reduced-motion: reduce)");
+    // 設定の画面を開いたままでも、チェックを今の状態に合わせる（合わないと1回目の押しで外せない）
+    const follow = () => { if (!("calm" in S)) { apply(); const c = dlg && dlg.querySelector('input[data-k="calm"]'); if (c) c.checked = on("calm"); document.dispatchEvent(new CustomEvent("a11ychange", { detail: { key: "calm", on: on("calm") } })); } };
+    if (mq.addEventListener) mq.addEventListener("change", follow); else if (mq.addListener) mq.addListener(follow);
+  } catch { /* matchMedia の無い端末 */ }
+  // 端末のダークモードを開いたあとに変えても効かせる（「自動」のときだけ）
+  try {
+    const mq = matchMedia("(prefers-color-scheme: dark)");
+    const follow = () => { if (get("theme") === 0) { applyTheme(); document.dispatchEvent(new CustomEvent("a11ychange", { detail: { key: "theme", on: dark(), value: 0 } })); } };
+    if (mq.addEventListener) mq.addEventListener("change", follow); else if (mq.addListener) mq.addListener(follow);
+  } catch { /* matchMedia の無い端末 */ }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => { build(); applyTheme(); }); else build();
+  // 別のタブ・別のゲームで設定を変えたら、こちらにも効かせる
+  addEventListener("storage", (e) => { if (e.key === KEY) { S = { ...load(), ...unsaved }; apply(); } });
+  window.A11y = { on, get, set, fs, fsFrom, open, say, stop, dark };
+})();
+</script>
+<!-- a11y:end -->
