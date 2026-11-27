@@ -121,6 +121,8 @@ const condOf = (a, b) => TBC[a + ">" + b] || TBC[b + ">" + a];
 }
 // ---- 2. ファイルの中身 ----
 const html = readFileSync(path.join(root, "index.html"), "utf8"), gen = readFileSync(path.join(root, "data.js"), "utf8"), readme = readFileSync(path.join(root, "README.md"), "utf8");
+// ひな形の写し（<!-- 名前:begin〜end -->）はゲームの言葉ではないので外し、Core.kofi・Core.KOFI は写す前の形にもどして見る（shared-workflows の sync-template が足した）
+const gameOwn = (t) => t.replace(/<!-- ([a-z0-9-]+):begin[\s\S]*?<!-- \1:end -->/g, "").split("${Core.KOFI}").join("https://ko-fi.com/satouaaaaa").replace(/Core\.kofi\(("(?:[^"\\]|\\.)*"), ("(?:[^"\\]|\\.)*")\)/g, (m, a, b) => "`<p class=\"note kofi\">" + JSON.parse(a) + "、<a href=\"https://ko-fi.com/satouaaaaa\" target=\"_blank\" rel=\"noopener\">Ko-fi でコーヒー1杯の応援</a>をもらえると、" + JSON.parse(b) + "の励みになります（任意・遊ぶのはずっと無料）。</p>`");
 const ext = [...html.matchAll(/(?:src|href)="(https?:[^"]+)"/g)].map((m) => m[1]).filter((u) => !/^https:\/\/fonts\.googleapis\.com(\/|$)|^https:\/\/ko-fi\.com\/satouaaaaa$/.test(u));
 check("外から読むのは文字（Google Fonts）だけ。スクリプト・広告・解析を入れない（出典のリンクは押したときに開くだけ）", ext.length === 0 && ![...html.matchAll(/<script[^>]+src="([^"]+)"/g)].some((m) => /^https?:/.test(m[1])), ext.join(","));
 check("CSP で通信先を自分だけにしている（connect-src は 'self' だけ。CodeRabbit menkyo-nenrei#1）", (html.match(/connect-src[^;"]*/g) || []).map((s) => s.trim()).join("|") === "connect-src 'self'");
@@ -128,13 +130,13 @@ check("Math.random は練習・とことんの種だけ（今日の5問・上級
 check("乱数は sort の比較の中で引かない（ブラウザで引く回数が変わる）", !/\.sort\(\s*\([^)]*\)\s*=>[^\n;]*\b(R|rng|rand|Math\.random)\s*\(/.test(html + gen));
 { const inl = html.split("<script>").slice(1).map((x) => x.split("</" + "script>")[0]).join("\n"); // index.html の中の script も見る（nemuri-kotsu#1 で行の途中に // を入れて画面が動かなくなった）
   check("一行の式の途中にコメント // を足さない（行の残りが消える。rosen-hitofude 2026-11-04・nemuri-kotsu#1）", !/;\s*\/\/[^\n]*;\s*\w/.test((gen + "\n" + inl).split("\n").filter((l) => !l.trim().startsWith("//")).join("\n"))); }
-check("言い方：「必ず」「絶対」と言い切らない（政令の例外もある）・画像を入れない", !/絶対に|必ず(当て|わか|見分|建て)/.test(html + gen + readme) && !/<img/.test(html));
+check("言い方：「必ず」「絶対」と言い切らない（政令の例外もある）・画像を入れない", !/絶対に|必ず(当て|わか|見分|建て)/.test(gameOwn(html) + gen + readme) && !/<img/.test(gameOwn(html)));
 { const howto = (html.match(/<dialog id="howto"[\s\S]*?<\/dialog>/) || [""])[0], ab = (html.match(/function about\(\)[\s\S]*?\n}/) || [""])[0], dis = (t) => /1回の結果/.test(t) && /人みんなの答えではありません/.test(t) && /論文で確かめてください/.test(t) && /短く(やさしく)?言いかえ/.test(t) && /正解(は|が)(あり|無い)/.test(t);
   check("言い方：遊び方・「このゲームについて」・README のどれにも、論文を言いかえた文であること・研究の数は1回の結果で人みんなの答えではないこと・論文で確かめること・夢の機械に正解が無いことがある", dis(howto) && dis(ab) && dis(readme), `遊び方 ${dis(howto)}・について ${dis(ab)}・README ${dis(readme)}`); }
-check("写し元（感想フォームも見る・どこから砂山？とその元の どこの裁判所？・裁判の期限・会社の任期と期限・何年とっておく？・特許は何年？・免許は何歳から？・駐車禁止は何m？・届け出いつまで？・危険物の類あて・用途地域あて・岩石系統分け・SDGsの目標あて・憲法のしくみ）の言葉が残っていない（共通部品 store の中は除く・game-dev.md A 手順5）", !/砂山|砂の|1粒|人だかり|予報用語|気象庁|猛暑|真夏日|冬日|sunayama|sny|SNY|ソリテス|エウブリデス|ことば帳|決めた線|裁判所|簡易|控訴|上告|訴訟|審判|少額|140万円|管轄|不服|三審|saibansho|ssd|SSD|岩石|ganseki|GNK|gnk|産総研|地質|gsj|火成|堆積|変成|SDG|ターゲット|仮訳|外務省|アジェンダ|震度|地震|ようす帳|憲法|kenpo|kps|KPS|用途地域|都市計画|建築基準|youto|yto|YTO|危険物|消防法|第何類|固体|液体|品名|kikenbutsu|kbr|KBR|届け出|市区町村|税務署|todokede|tdk|TDK|駐車|停車|chusha|ckr|CKR|場所帳|免許|menkyo|mkn|MKN|道路交通法|特許|商標|意匠|tokkyo|tkk|TKK|期間帳|期限帳|保存期間|hozon|hzk|HZK|カルテ|処方|会社の任期|会社帳|kaisha|ksk|KSK|取締役|監査役|株主|裁判の期限|saiban-kigen|sbk|SBK|勾留|逮捕|送致|支払督促|刑事訴訟法|期間は？/.test(html.replace(/<!-- store:begin[\s\S]*?<!-- store:end -->/, "") + gen + readme + readFileSync(path.join(root, ".github/ISSUE_TEMPLATE/feedback.yml"), "utf8") + readFileSync(path.join(root, "manifest.webmanifest"), "utf8")));
+check("写し元（感想フォームも見る・どこから砂山？とその元の どこの裁判所？・裁判の期限・会社の任期と期限・何年とっておく？・特許は何年？・免許は何歳から？・駐車禁止は何m？・届け出いつまで？・危険物の類あて・用途地域あて・岩石系統分け・SDGsの目標あて・憲法のしくみ）の言葉が残っていない（共通部品 store の中は除く・game-dev.md A 手順5）", !/砂山|砂の|1粒|人だかり|予報用語|気象庁|猛暑|真夏日|冬日|sunayama|sny|SNY|ソリテス|エウブリデス|ことば帳|決めた線|裁判所|簡易|控訴|上告|訴訟|審判|少額|140万円|管轄|不服|三審|saibansho|ssd|SSD|岩石|ganseki|GNK|gnk|産総研|地質|gsj|火成|堆積|変成|SDG|ターゲット|仮訳|外務省|アジェンダ|震度|地震|ようす帳|憲法|kenpo|kps|KPS|用途地域|都市計画|建築基準|youto|yto|YTO|危険物|消防法|第何類|固体|液体|品名|kikenbutsu|kbr|KBR|届け出|市区町村|税務署|todokede|tdk|TDK|駐車|停車|chusha|ckr|CKR|場所帳|免許|menkyo|mkn|MKN|道路交通法|特許|商標|意匠|tokkyo|tkk|TKK|期間帳|期限帳|保存期間|hozon|hzk|HZK|カルテ|処方|会社の任期|会社帳|kaisha|ksk|KSK|取締役|監査役|株主|裁判の期限|saiban-kigen|sbk|SBK|勾留|逮捕|送致|支払督促|刑事訴訟法|期間は？/.test(gameOwn(html).replace(/<!-- store:begin[\s\S]*?<!-- store:end -->/, "") + gen + readme + readFileSync(path.join(root, ".github/ISSUE_TEMPLATE/feedback.yml"), "utf8") + readFileSync(path.join(root, "manifest.webmanifest"), "utf8")));
 check("画面にお笑いの言葉を入れない（本物っぽく）", !/お笑い|ギャグ|ツッコミ|なんでやねん|（うそ）/.test(html + gen));
 check("引き継ぎ：transfer.js をゲームの script より前に、このゲームの記録のキー（記録・文字・復習）だけで読む・depth.js も前に読む", /<script src="transfer\.js" data-game="yume-kikai" data-keys="ymk-v1,ymk-fs,ymk-depth"><\/script>\s*<script src="depth\.js" data-game="yume-kikai" data-key="ymk-depth"><\/script>\s*<\/head>/.test(html) && html.indexOf('src="transfer.js"') < html.indexOf('src="data.js"') && /data-hk/.test(html) && existsSync(path.join(root, "transfer.js")));
-check("好きなだけ遊べる：チケット・回数の上限・🔒で開くモードを入れない（game-dev.md F1・F2）", !/🎫|チケット|すると開く|🔒/.test(html) && !/\blife\b|ELIFE/.test(html));
+check("好きなだけ遊べる：チケット・回数の上限・🔒で開くモードを入れない（game-dev.md F1・F2）", !/🎫|チケット|すると開く|🔒/.test(gameOwn(html)) && !/\blife\b|ELIFE/.test(gameOwn(html)));
 { const og = (k) => (html.match(new RegExp(`<meta (?:property|name)="${k}" content="([^"]+)"`)) || [])[1] || "";
   const png = readFileSync(path.join(root, "og.png"));
   check("SNS で貼ると絵と題が出る（OGP・1200×630・絶対URL）", og("og:title") && og("og:description") && og("og:image") === "https://satou-aaaaa.github.io/yume-kikai/og.png" && og("twitter:card") === "summary_large_image" && png.readUInt32BE(16) === 1200 && png.readUInt32BE(20) === 630); }
@@ -162,10 +164,15 @@ await new Promise((r) => server.once("listening", r));
 const url = `http://127.0.0.1:${server.address().port}/`;
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const errors = [];
-const TODAY = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+// 日付の検査は、Node とブラウザで同じ日を使う：ブラウザの時計を TODAY の正午（日本時間）に合わせる（途中で0時を過ぎても日が変わらない。CodeRabbit yume-kikai#1）。
+// 落ちた日を再現するときは QA_SHIFT_DAYS=日数 で日をずらす
+const SHIFTD = Number(process.env.QA_SHIFT_DAYS || 0);
+const TODAY = new Date(Date.now() + 9 * 3600e3 + SHIFTD * 864e5).toISOString().slice(0, 10);
+const NOON = Date.parse(TODAY + "T03:00:00Z");
 const dayBefore = (n) => new Date(Date.parse(TODAY) - n * 864e5).toISOString().slice(0, 10);
 async function newPage(w = 390, ctx) {
-  const c = ctx || await browser.newContext({ viewport: { width: w, height: 800 } });
+  let c = ctx;
+  if (!c) { c = await browser.newContext({ viewport: { width: w, height: 800 } }); await c.addInitScript((t) => { const o = Date.now, off = t - o(); Date.now = () => o() + off; }, NOON); }
   await c.route(/fonts\.(googleapis|gstatic)\.com/, (r) => r.abort());
   const p = await c.newPage();
   p.on("pageerror", (e) => errors.push(e.message));
@@ -205,7 +212,10 @@ try {
     check("ホームの題は縦長の画面でも縦に伸びない（820×1180・390×844・1280×800）", big.length === 0, big.join(" ")); await c.close(); }
     await r.evaluate(() => localStorage.clear()); await r.reload(); await r.waitForTimeout(200);
     check("はじめての練習が始まったその場で「見た」が残る", await r.evaluate(() => { return Object.keys(localStorage).some((k) => { try { return JSON.parse(localStorage.getItem(k)).tut === true; } catch { return false; } }); })); await firstClose(r);
-    await r.reload(); await r.waitForTimeout(200); check("遊び方を「わかった」で閉じてすぐ読み直しても出ない（その場で残す）", await r.locator("#howto[open]").count() === 0); await c.close(); }
+    await r.evaluate(() => localStorage.clear()); await r.reload(); await r.waitForTimeout(200); await firstClose(r); await r.evaluate(() => { const d = JSON.parse(localStorage.getItem("ymk-v1")); d.tut = false; localStorage.setItem("ymk-v1", JSON.stringify(d)); });
+    await r.click("#f-how"); const opened = await r.locator("#howto[open]").count(); await r.click("#howto-ok"); const shut = await r.locator("#howto[open]").count() === 0;
+    const kept = await r.evaluate(() => JSON.parse(localStorage.getItem("ymk-v1")).tut === true);
+    await r.reload(); await r.waitForTimeout(200); check("遊び方を開いて「わかった」を押すと閉じ、その場で「見た」が残り、すぐ読み直しても出ない", opened === 1 && shut && kept && await r.locator("#howto[open]").count() === 0 && await r.locator("#core-coach").count() === 0, `${opened} ${shut} ${kept}`); await c.close(); }
   await firstClose(p);
   check("文字の大きさ：はじめは「大きい」（19px）", await p.evaluate(() => getComputedStyle(document.documentElement).fontSize) === "19px");
   await p.click('.fsrow button[data-fs="3"]');
@@ -485,6 +495,11 @@ try {
       await q.evaluate((t) => __nm.save((s) => { s.runs.p.cur = { i: 0, tag: t, wrong: [], hints: 0, step: 2, w2: [] }; }), tq);
       await q.click("#hint"); await q.waitForTimeout(100);
       check("別のタブで2段目へ進んでいたら、この画面も2段目になる", await q.locator(".why button").count() === 3 && await q.evaluate(() => __nm.cur().step) === 2);
+      // 別のタブで1段目に正解して2段目へ進んだあと、古い画面で1段目のまちがいを押しても数えない（CodeRabbit yume-kikai#1）
+      await q.evaluate((t) => { __nm.save((s) => { s.runs.p = { mode: "p", date: __nm.todayKey(), list: [t], res: [], cur: null, id: "dz" }; }); __nm.play("p"); }, "t-db|dz1");
+      await q.evaluate((t) => __nm.save((s) => { s.runs.p.cur = { i: 0, tag: t, wrong: [], hints: 0, step: 2, w2: [] }; }), "t-db|dz1");
+      await q.click(`.ch[data-j="${await wrongIdx(q)}"]`); await q.waitForTimeout(100);
+      check("別のタブで2段目へ進んだあとの古い1段目のまちがいは数えず、2段目を出す", await q.locator(".why button").count() === 3 && (await q.evaluate(() => __nm.load().runs.p.cur.wrong.length)) === 0);
       await q.evaluate((t) => { __nm.save((s) => { s.runs.p.res.push({ m: 0 }); s.runs.p.cur = null; }); const d = JSON.parse(localStorage.getItem("ymk-depth")); d.rv[t] = { s: 2, due: "2099-01-01", t: 9 }; localStorage.setItem("ymk-depth", JSON.stringify(d)); }, tq);
       await q.click("#hint"); await q.waitForTimeout(50);
       check("別のタブで先に進んだ古い画面でヒントを押しても、復習の段は戻らない", await q.evaluate((t) => JSON.parse(localStorage.getItem("ymk-depth")).rv[t].s, tq) === 2);
@@ -542,12 +557,20 @@ try {
     if (!miss.length) await press("#hp-go");
     if (!miss.length) await press(`.ch[data-j="${await ansIdx(q)}"]`);
     if (!miss.length && await q.locator(".why button").count()) await press(`.why button[data-g="${await q.evaluate(() => __nm.cur().P.grp)}"]`);
-    check("キーボードだけ（Tab と Enter）で夢の機械に答え、考える問題も2段目まで答えられる", !miss.length && await q.locator(".verdict").count() === 1, miss.join(","));
+    check("キーボードだけ（Tab と Enter）で夢の機械に答え、考える問題に答えられる", !miss.length && await q.locator(".verdict").count() === 1, miss.join(","));
+    // 2段目のある問題（研究の数字）も、Tab と Enter だけで2段目まで答える
+    await q.evaluate(() => { __nm.save((s) => { s.runs.p = { mode: "p", date: __nm.todayKey(), list: [__nm.G.KINDS.find((k) => k.id === "y-up").id + "|kb1"], res: [], cur: null, id: "kb" }; }); __nm.play("p"); });
+    if (!miss.length) await press(`.ch[data-j="${await ansIdx(q)}"]`);
+    const two = await q.locator(".why button").count();
+    if (!miss.length && two) await press(`.why button[data-g="${await q.evaluate(() => __nm.cur().P.grp)}"]`);
+    check("キーボードだけ（Tab と Enter）で2段目「変えた条件は？」まで答えられる", !miss.length && two === 3 && await q.locator(".verdict").count() === 1, miss.join(",") + " " + two);
     await q.context().close();
   }
   // 夢の機械（正解の無い問い）：絵・問い・3つの答え・5つの聞き方・続きから・研究の答えとくらべる
   {
-    const q = await newPage(); await closeHow(q); await q.click("#go-d");
+    const q = await newPage(); await closeHow(q);
+    const dep0 = await q.evaluate(() => localStorage.getItem("ymk-depth"));
+    await q.click("#go-d");
     const mc0 = await q.evaluate(() => __nm.load().runs.d.mc);
     check("今日の回は夢の機械から始まり、お題は日付で決まる（だれでも同じ）", mc0 && mc0.t === G.themeOf(TODAY) && await q.locator(".hans").count() === 1);
     const th = G.THEME_BY[mc0.t];
@@ -566,8 +589,11 @@ try {
     const s = await mem(q), h = s.mc[TODAY];
     check("夢の機械を終えると答えが記録に残る（お題・5つの答え・いまの所に残った数3）", h && h.t === th.id && JSON.stringify(h.a) === "[1,1,1,0,2]" && h.p === 3, JSON.stringify(h));
     const lt = await q.textContent("#lines");
+    const rows = await q.$$eval("#lines .cmp", (d) => d.map((x) => [x.querySelector("b").textContent, x.querySelector(".meter").getAttribute("aria-label"), x.textContent]));
+    const want = [["外にいて", "noz"], ["もう中", "dbn"], ["刑務所", "dbneg"], ["芸術家", "dbpos"], ["知らない人", "wnsq"]];
+    check("研究の答えは問いごとの行で、その問いの研究の割合（別に書いた TB）を出す", rows.length === 5 && want.every(([w, id], i) => rows[i][0].includes(w) && rows[i][1] === `機械を選んだ人 ${TB[id]}%` && rows[i][2].includes(`${TB[id]}%`)), JSON.stringify(rows.map((r) => r[1])));
     check("研究の答えとくらべる：残った数3/4・形「いまの所に残る」・16%・46%・87%・50%・55%と出典（De Brigard・Weijers）", lt.includes("3/4") && lt.includes("いまの所に残る") && ["16%", "46%", "87%", "50%", "55%"].every((x) => lt.includes(x)) && await q.locator("#lines a[href='https://doi.org/10.1080/09515080903532290']").count() === 1 && await q.locator("#lines a[href='https://doi.org/10.1080/09515089.2012.757889']").count() === 1 && await q.locator("#lines .meter").count() === 5);
-    check("夢の機械の答えは★・自信・復習に入れない（正解が無い）", (await mem(q)).runs.d.res.length === 0 && !Object.keys(JSON.parse(await q.evaluate(() => localStorage.getItem("ymk-depth") || "{}")).rv || {}).length);
+    check("夢の機械の答えは★・自信・復習に入れない（正解が無い。自信と復習の記録 ymk-depth は答える前と同じ）", (await q.evaluate(() => localStorage.getItem("ymk-depth"))) === dep0 && (await mem(q)).runs.d.res.length === 0 && !Object.keys(JSON.parse(await q.evaluate(() => localStorage.getItem("ymk-depth") || "{}")).rv || {}).length);
     await q.click("#hp-go");
     check("「次は考える問題を5問」で1問目へ", await q.locator("#card").count() === 1 && await q.evaluate(() => __nm.cur().i) === 0);
     for (let i = 0; i < 5; i++) { await solve(q); await q.click("#next"); }
@@ -591,7 +617,7 @@ try {
 // 深さの部品（shared-workflows template/qa/depth-check.mjs）
 { const e = await checkDepth(readFileSync(path.join(root, "depth.js"), "utf8")); check("depth.js（自信をかける・復習）の動き", e.length === 0, e.join(" / ")); }
 // 2段目の系統：どの種類にもある（3つのどれか）
-{ const q = await newPage(); await closeHow(q);
+try { const q = await newPage(); await closeHow(q);
   check("保存に失敗したら、保存できるまで帯（#savewarn）で知らせ続け、保存できたら消す", await q.evaluate(async () => { const orig = Storage.prototype.setItem; Storage.prototype.setItem = function () { throw new Error("full"); }; __nm.save(() => {}); __nm.save(() => {}); const one = document.querySelectorAll("#savewarn").length === 1 && document.getElementById("savewarn").textContent.includes("保存できませんでした"); await new Promise((r) => setTimeout(r, 1500)); const stay = !!document.getElementById("savewarn"); Storage.prototype.setItem = orig; __nm.save(() => {}); return one && stay && !document.getElementById("savewarn"); }));
   await q.evaluate(() => __nm.start("e")); await q.waitForTimeout(100);
   await q.click(`.ch[data-j="${await ansIdx(q)}"]`); await why(q); await q.waitForSelector(".verdict");
@@ -606,11 +632,11 @@ try {
     const back = await q.evaluate(() => { const r = __nm.load().runs.e; return r ? r.id : null; });
     await q.evaluate(() => { Storage.prototype.setItem = window.__origSet; __nm.save(() => {}); });
     check("保存に失敗したまま「ここで降りる」を押しても、終えた回が「とことんの続き」に戻らない", back === null && (await q.evaluate(() => __nm.load().runs.e)) === null, `${eid} → ${back}`); }
-  await q.close(); }
-{ const q = await newPage(); await closeHow(q);
+  await q.close(); } catch (e) { check("追加のブラウザ検査が最後まで動く", false, String(e && e.message).split("\n")[0]); }
+try { const q = await newPage(); await closeHow(q);
   await q.evaluate(() => { localStorage.setItem("ymk-v1", JSON.stringify({ v: 1, tut: true, days: {}, hdays: {}, adays: {}, dex: { constructor: 1, toString: 2, "t-db": 1 }, runs: {}, kofi: {}, ach: {}, ebest: 0 })); }); await q.reload(); await q.waitForTimeout(150);
   check("記録に constructor などの鍵が入っても、考え帳と実績の種類に数えない（CodeRabbit funka-level#1）", (await q.textContent("#go-dex")).includes(`1/${G.KINDS.length}`) && await q.evaluate(() => __nm.tally(__nm.load()).kinds) === 1, await q.textContent("#go-dex"));
-  await q.close(); }
+  await q.close(); } catch (e) { check("追加のブラウザ検査が最後まで動く", false, String(e && e.message).split("\n")[0]); }
 { const bad = G.KINDS.filter((k) => k.lv === 2).filter((k) => { for (let i = 0; i < 200; i++) { const P = G.make(`${k.id}|g${i}`); if (P.v === "noz") continue; if (!G.GROUPS[P.grp] || P.g2.length !== 3 || !P.ask2) return true; } return false; }).map((k) => k.id);
   check("2段目：研究の数字の問題（ノージックのままの数を除く）は、3つの選び肢と問い（変えた条件は？）がある", bad.length === 0, bad.join(",")); }
 // 引き継ぎコード（shared-workflows template/qa/transfer-check.mjs）

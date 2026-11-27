@@ -736,7 +736,7 @@ html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visi
 //      JS で描き替えるゲームは、画面の関数の最初で Core.screens.mark("dex")、起動時に Core.screens.route({...}, home) で「戻る」がホームへ戻る
 //   5: 2026-11-27 全ゲームで同じ場所（ページのいちばん上の右）に「？ 遊び方」を置く（Core.help）。止まるような不具合が起きたら
 //      ページの上に帯を出し、本人が「知らせる」を押したときだけ感想フォームが開く（Core.errBar）。エラーの文は保存も自動送信もしない
-//      （satou さん 2026-11-27「個人データ・個人情報をとらない」。外のサーバーへ自動で送ると IP が必ず届くため、自動の通知と集計は作らない）。
+//      （satou さん 2026-11-27「個人データ・個人情報をとらない」。外のサーバーへ自動で送ると IP がいつも届くため、自動の通知と集計は作らない）。
 //      MDN「Window: error event」「unhandledrejection event」・NN/g「Error-Message Guidelines」（何が起きたか・どうすればよいかを書く）
 //   7: 2026-11-27 Ko-fi 応援の一文（Core.kofi）と応援先（Core.KOFI）を足した。201本が同じ一文を手で写し、文言が4通り以上に分かれていた
 //      （incidents/2026-11-27-kofi-line-hand-copied.md）。出す条件（初めて・まちがい0・練習でない日だけ）はゲームの記録しだいなので、ゲームに残す
@@ -745,7 +745,7 @@ html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visi
 //      X は公式の Web Intent（docs.x.com「Web Intent」: https://x.com/intent/tweet?text=）、LINE は LINE URL スキーム
 //      （developers.line.biz「LINE URLスキームでLINEの機能を使う」: https://line.me/R/share?text=）、端末の共有は Web Share API
 //      （MDN「Navigator: share()」: 押したその場でだけ呼ぶ・やめたら AbortError）。共有する文は公開の URL（? と # を外す）とゲームの名前・結果だけ
-//      （遊ぶ人の名前・引き継ぎの #hk=・記録の中身は入れない）。どれも押した人が自分で開くリンクで、外へ勝手に送らない
+//      （遊ぶ人の名前・引き継ぎの #hk=・記録の中身は入れない）。どれも押した人が自分で選んで進むリンクで、外へ勝手に送らない
 // 決まり: 外へ通信しない。ゲームの関数の名前（toast・buzz など）は上書きしない（Core.toast などで呼ぶ）。
 (function () {
   "use strict";
@@ -1139,6 +1139,13 @@ html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visi
       e.preventDefault();
       open(a.getAttribute("data-share") || null);
     });
+    // 「共有」は2字なので、フッターの字が大きいと幅が 44px に足りない（2026-11-27 古いゲームの QA で見つけた）。押す所は 44px 以上（WCAG 2.5.8・ui-rules U1）
+    if (doc.head && doc.createElement) {
+      const st = doc.createElement("style");
+      st.id = "core-share-min";
+      st.textContent = "[data-share]{min-width:44px;justify-content:center;text-align:center}";
+      doc.head.appendChild(st);
+    }
     return { url, name, tags, tagged, links, copy, send, wire, open };
   })();
 
@@ -1274,7 +1281,7 @@ html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visi
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", () => setTimeout(help, 0)); else setTimeout(help, 0);
 
   // bindFeedback を呼ばないゲーム（形のちがうゲームに sync-template が「感想・質問を送る」を足した所）でも、data-feedback を押せばフォームへ。
-  // a でないもの（button）は新しいタブで開く
+  // a でないもの（button）は新しいタブに出す
   if (doc.addEventListener) doc.addEventListener("click", (e) => {
     const a = e.target && e.target.closest ? e.target.closest("[data-feedback]") : null;
     if (!a || (fbBound && a.tagName === "A")) return; // a は bindFeedback が作る（ゲームの付属情報が入る）
@@ -1306,7 +1313,7 @@ html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visi
   "use strict";
   if (window.Kiroku && window.Kiroku.v) return;
   const doc = document;
-  const KEY = "kiroku-v1", NEWS = "news-v1";
+  const KEY = "kiroku-v1", NEWS = "news-v1"; // gitleaks:allow 記録の名前（鍵ではない）
   // 全ゲーム共通の知らせ（新しいものを上に。日付は日本時間の YYYY-MM-DD）
   const COMMON_NEWS = [
     { d: "2026-11-26", t: "「見やすさ」から、文字の大きさ（小・中・大）と、長く遊んだら知らせる時間を選べるようになりました。どのゲームにも同じ設定が使われます。フッターの「成績」で、遊んだゲームの成績をまとめて見られます。" },
@@ -1314,7 +1321,7 @@ html.a11y-dark :is(button,a,input,select,textarea,summary,[tabindex]):focus-visi
   const read = (k) => { try { const v = JSON.parse(localStorage.getItem(k) || "{}"); return v && typeof v === "object" && !Array.isArray(v) ? v : {}; } catch (e) { return {}; } };
   const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } };
   const n0 = (v) => (window.Core ? Core.num(v) : Math.max(0, Math.floor(+v) || 0));
-  // HTML に入れる文字は必ずここを通す（Core が無いページでも < " などを替える。2026-11-26 CodeQL「DOM text reinterpreted as HTML」）
+  // HTML に入れる文字はいつもここを通す（Core が無いページでも < " などを替える。2026-11-26 CodeQL「DOM text reinterpreted as HTML」）
   const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
   const esc = (t) => String(t == null ? "" : t).replace(/[&<>"']/g, (c) => ESC[c]);
   const today = () => (window.Core ? Core.today() : new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10));
@@ -1506,15 +1513,16 @@ const prevDay = Core.prevDay;
 const md = Core.md;
 const listOf = (mode, date) => (mode === "h" ? G.hardTags(date) : G.dailyTags(date));
 
-// 今日のきほん（Nozick 1974・De Brigard 2010・Weijers 2014 に書いてあること）を日ごとに1つ
+// 今日のきほん（Nozick 1974・De Brigard 2010・Weijers 2014 に書いてあること）を日ごとに1つ。研究の数字は data.js の ST から出す
+const ST = G.ST, pc = G.pc;
 const TIPS = [
   ["経験機械", "ノージックが1974年に出した問い。入ると望む体験がつづき、中では機械だと気づかない。"],
   ["入らない3つの理由", "ノージック：自分でしたい・ある人でありたい・人が作った現実にとじこめられたくない。"],
   ["逆向きの問い", "De Brigard 2010：もう機械の中にいたら、出る？ と聞きかえた。"],
-  ["何も知らせないと", "De Brigard 2010：外のことを知らせないと、出る54%・残る46%（大学生24人）。"],
-  ["外が刑務所なら", "De Brigard 2010：外の本当のあなたは刑務所と知らせると、残るが87%（大学生24人）。"],
-  ["ノージックのまま聞くと", "Weijers 2014：大学1年生79人のうち、入るは13人（約16%）。"],
-  ["知らない人のことなら", "Weijers 2014：知らない人のこととして聞くと、入るのがよいは82人中43人（約52%）。"],
+  ["何も知らせないと", `De Brigard 2010：外のことを知らせないと、出る${pc(100 - ST.dbn.mach)}・残る${pc(ST.dbn.mach)}（${ST.dbn.who}）。`],
+  ["外が刑務所なら", `De Brigard 2010：外の本当のあなたは刑務所と知らせると、残るが${pc(ST.dbneg.mach)}（${ST.dbneg.who}）。`],
+  ["ノージックのまま聞くと", `Weijers 2014：${ST.noz.who}のうち、入るは${ST.noz.k}人（約${pc(ST.noz.mach)}）。`],
+  ["知らない人のことなら", `Weijers 2014：知らない人のこととして聞くと、入るのがよいは${ST.wst.n}人中${ST.wst.k}人（約${pc(ST.wst.mach)}）。`],
   ["いまの所びいき", "人は、いまの状態を変えないほうを選びやすい。現状維持のかたより（status quo bias）という。"],
 ];
 const tipOf = (k) => TIPS[((dayNo(k) - 1) % TIPS.length + TIPS.length) % TIPS.length];
@@ -1583,6 +1591,8 @@ function load() {
   return GameStore.load(KEY, mem, {
     v: 1, fresh, tidy, bank, doneOf, bookOf,
     objs: ["days", "hdays", "adays", "dex", "runs", "mc", "kofi", "ach"],
+    // 同じ回の進み具合：夢の機械に答えた数と、くらべる画面を見たかも数える（考える問題に進んだら、答えた問題の数が大きく効く。CodeRabbit yume-kikai#1）
+    prog: (r) => GameStore.progOf(r) + (r && r.mc && Array.isArray(r.mc.a) ? (r.mc.a.length + (r.mc.seen === 1 ? 1 : 0)) * 100 : 0),
     // 同じ問題の途中なら、両方のまちがい（1段目・2段目）・多いほうのヒントを残す（保存に失敗した側のまちがいを消さない）
     join: (w, o) => {
       if (!(w.cur && o.cur && typeof w.cur === "object" && typeof o.cur === "object" && w.cur.i === o.cur.i && w.cur.tag === o.cur.tag && w.res.length === o.res.length)) return w;
@@ -1751,7 +1761,7 @@ function firstPlay() {
   // 案内を閉じた（Esc も）ら、練習の機械を残さずにホームのいちばん上へ（ふだんの練習の「続きから」を出さない）
   Core.coach.start(FIRST_STEPS, { home, onEnd: (done) => { if (done === false) { save((s) => { const r = s.runs && s.runs.p; if (r && !(r.res || []).length) delete s.runs.p; }); home(); scrollTo(0, 0); } } });
 }
-function startRun(mode, opt) {
+function startRun(mode, opt, notT) {
   const k = todayKey(); let ng = false;
   save((s) => {
     // あとから：取りこぼした日（過去7日・まだ遊んでいない）だけ。その日の今日の回と同じ問題。途中経過は日付ごとに runs["a:日付"]
@@ -1771,7 +1781,7 @@ function startRun(mode, opt) {
     if (doneOf(s.runs[mode])) bank(s, s.runs[mode]); // 別のタブで終えたまま記録していない回は、上書きする前に記録する
     let list, mc;
     if (mode === "d" || mode === "h") list = listOf(mode, k);
-    else if (opt === "mc") { list = []; mc = newMc(G.THEMES[G.seedOf(rid()) % G.THEMES.length].id); } // 練習の夢の機械：お題は毎回ちがう
+    else if (opt === "mc") { const ts = G.THEMES.filter((t) => t.id !== notT); list = []; mc = newMc(ts[G.seedOf(rid()) % ts.length].id); } // 練習の夢の機械：お題は毎回ちがう（もう一度は、いまのお題を除く）
     else if (typeof opt === "string") list = randomTags([opt], 5, rid(), new Set(), null);
     else list = randomTags(idsOf([opt]), 5, rid(), new Set(), null);
     if (mode === "d") mc = newMc(G.themeOf(k));
@@ -1830,10 +1840,10 @@ function linesHtml(h, prev) {
     <div class="me" data-a11y-say>${me}${prev ? `<br>前の日：${esc(prev)}` : ""}</div>
     <p class="note">研究の答え（帯は機械を選んだ人の割合）</p>
     ${rows}
-    <div><b>同じ機械でも、答えが変わる</b>外にいると、入る人は約16%。もう中にいると知らせると、残る人は46%。外が刑務所なら87%。De Brigard 2010 は、いまの暮らしを動かしたくない気持ち（現状維持のかたより）で説明しました。${link(G.SRC.db)}${link(G.SRC.wj)}</div>
+    <div><b>同じ機械でも、答えが変わる</b>外にいると、入る人は約${G.pc(G.ST.noz.mach)}。もう中にいると知らせると、残る人は${G.pc(G.ST.dbn.mach)}。外が刑務所なら${G.pc(G.ST.dbneg.mach)}。De Brigard 2010 は、いまの暮らしを動かしたくない気持ち（現状維持のかたより）で説明しました。${link(G.SRC.db)}${link(G.SRC.wj)}</div>
   </div>`;
 }
-function prevLine(s, h, date) { const ds = Object.keys(s.mc).filter((d) => d !== date).sort(); const d = ds[ds.length - 1]; return d ? `${md(d)} ${mcText(s.mc[d])}` : ""; }
+function prevLine(s, h, date) { const ds = Object.keys(s.mc).filter((d) => d < date).sort(); const d = ds[ds.length - 1]; return d ? `${md(d)} ${mcText(s.mc[d])}` : ""; }
 function mcView(run) {
   Core.screens.mark("mc"); // 「戻る」でホームへ（sync-template の migrateBack）
   cur = null;
@@ -1845,7 +1855,7 @@ function mcView(run) {
     ${footer()}`;
   $("back").onclick = home;
   if ($("hp-go")) $("hp-go").onclick = () => { save((s2) => { const r = s2.runs[MODE]; if (r && r.id === run.id && r.mc) r.mc.seen = 1; }); play(); };
-  if ($("hp-again")) $("hp-again").onclick = () => startRun("p", "mc");
+  if ($("hp-again")) $("hp-again").onclick = () => startRun("p", "mc", run.mc.t); // もう一度は、いまのお題を除いて選ぶ
   if ($("hp-home")) $("hp-home").onclick = home;
   if (!more) save((s2) => { const r = s2.runs[MODE]; if (r && r.id === run.id) { s2.runs[MODE] = null; endRun(s2, run.id); } }); // 練習の機械は、見終えたら終わり
   bindFooter(); toTop();
@@ -1949,8 +1959,9 @@ function chooseWhy(x) {
 function sureCount(ok) { const q = cur.i + ":" + cur.tag; save((s) => { const r = s.runs[MODE]; if (!same(r) || r.dsq === q) return; r.dsq = q; r.ds = r.ds || { n: 0, ok: 0 }; r.ds.n++; if (ok) r.ds.ok++; }); }
 function choose(j) {
   if (cur.done || cur.step === 2) return;
-  const t = cur.P.opts[j];
-  if (!same(load().runs[MODE])) { toast("別の画面で先に進んでいます"); return play(); }
+  const t = cur.P.opts[j], r0 = load().runs[MODE];
+  if (!same(r0)) { toast("別の画面で先に進んでいます"); return play(); }
+  if (r0.cur && r0.cur.i === cur.i && r0.cur.tag === cur.tag && r0.cur.step === 2) { cur.step = 2; return play(); } // 別のタブで2段目へ進んでいたら、古い1段目の答えは数えずに2段目へ（CodeRabbit yume-kikai#1）
   if (t !== cur.P.ans) {
     if (cur.wrong.includes(t)) return;
     buzz(40);
@@ -2033,7 +2044,7 @@ function result(mode, k, first, prec, newAch = []) {
   const s = load(), rec = pr ? prec : bookOf(s, mode)[k];
   if (!rec) return home();
   const h = (mode === "d" || mode === "a") && s.mc[k] ? s.mc[k] : null;
-  const list = pr ? prec.list : (Array.isArray(rec.k) && rec.k.length === rec.m.length ? rec.k.map((id) => Object.prototype.hasOwnProperty.call(G.BY, id) ? id + "|" : null) : listOf(mode, k)), total = rec.m.reduce((a, b) => a + b, 0), late = mode === "a", text = shareText(mode, k, rec, h);
+  const real = pr ? null : listOf(mode, k), list = pr ? prec.list : (Array.isArray(rec.k) && rec.k.length === rec.m.length ? rec.k.map((id, j) => real[j] && real[j].split("|")[0] === id ? real[j] : Object.prototype.hasOwnProperty.call(G.BY, id) ? id + "|" : null) : real), total = rec.m.reduce((a, b) => a + b, 0), late = mode === "a", text = shareText(mode, k, rec, h);
   const showKofi = first && !pr && !late && total === 0 && !s.kofi[k + mode]; // あとから・練習・まちがいのある日には出さない
   if (showKofi) save((s2) => { s2.kofi[k + mode] = 1; });
   app.innerHTML = `
@@ -2044,7 +2055,7 @@ function result(mode, k, first, prec, newAch = []) {
     ${(() => { const nx = nextAch(s); return nx ? `<p class="achnext" id="achnext">🎯 あと${nx.left}${nx.unit}で「${nx.name}」</p>` : ""; })()}
     ${h ? `<p class="note">夢の機械：あなたの答えと研究の答え</p>${linesHtml(h, prevLine(s, h, k))}` : ""}
     <p class="note">今日考えたこと</p>
-    <div class="rlist">${list.map((tag, j) => { const P = tag && G.BY[tag.split("|")[0]]; if (!P || !P.why) return ""; return `<div><span>${starStr(starsOf(rec.m[j]))}</span><span class="w"><b>${esc(P.name)}</b>${esc(P.why)}</span></div>`; }).join("")}</div>
+    <div class="rlist">${list.map((tag, j) => { const P = tag && (tag.endsWith("|") ? G.BY[tag.slice(0, -1)] : G.make(tag)); if (!P || !P.why) return ""; return `<div><span>${starStr(starsOf(rec.m[j]))}</span><span class="w"><b>${esc(P.name)}</b>${esc(P.why)}</span></div>`; }).join("")}</div>
     ${late ? `<p class="note">あとから遊んだ日は、カレンダーに ↺ で残ります（続けた日には数えません）。</p><button class="main alt" id="go-cal">カレンダーへ</button>` : ""}
     ${!pr && !late ? `<div class="share">${esc(text)}</div>
     <button class="main" id="share">結果をシェア</button>
